@@ -39,4 +39,15 @@ class AntemortemDailyRecordResource extends JsonResource
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }
+
+    public static function toOutletSelect($data)
+    {
+        $aResponse = [];
+        foreach ($data as $key => $outlet) {
+            $aResponse[$key]['id'] = $outlet->outlet->id;
+            $aResponse[$key]['code'] = $outlet->outlet->code;
+            $aResponse[$key]['id_outlet'] = $outlet->id_outlet;
+        }
+        return collect($aResponse);
+    }
 }

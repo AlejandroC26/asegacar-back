@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PurposeSeeder::class);
         $this->call(OutletSeeder::class);
         $this->call(AgeSeeder::class);
+        $this->call(MasterTypeSeeder::class);
+        $this->call(CausesSeeder::class);
     }
 }

@@ -19,4 +19,13 @@ class AntemortemDailyRecord extends Model
         'id_color',
         'sacrifice_date',
     ];
+
+    public function guide()
+    {
+        return $this->belongsTo(Guide::class, 'id_guide');
+    }
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class, 'id_outlet');
+    }
 }

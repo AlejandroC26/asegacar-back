@@ -7,14 +7,19 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\ContractsController;
 use App\Http\Controllers\DailyPayrollController;
+use App\Http\Controllers\DailyRoutesController;
 use App\Http\Controllers\FormatCodeController;
+use App\Http\Controllers\FormBenefitOrderController;
 use App\Http\Controllers\GendersController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\MasterTableController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\PostmortemInspectionsController;
+use App\Http\Controllers\RouteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +53,12 @@ Route::resource('colors', ColorsController::class);
 Route::resource('genders', GendersController::class);
 Route::resource('guides', GuideController::class);
 Route::resource('antemortemDailyRecord', AntemortemDailyRecordController::class);
+Route::resource('routes', RouteController::class);
+Route::resource('dailyRoutes', DailyRoutesController::class);
+Route::resource('masterTable', MasterTableController::class);
+Route::resource('formBenefitOrder', FormBenefitOrderController::class);
+Route::resource('postmortemInspections', PostmortemInspectionsController::class);
+
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 
 Route::post('ageBobinsFormat', 'App\Http\Controllers\AgeController@download');
@@ -67,3 +78,10 @@ Route::get('sltCities', 'App\Http\Controllers\CityController@sltCities');
 Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments');
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');
+Route::get('sltRoutes', 'App\Http\Controllers\RouteController@sltRoutes');
+Route::get('sltDailyRoutes', 'App\Http\Controllers\DailyRoutesController@sltDailyRoutes');
+Route::get('sltAntemoremOutlets', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremOutlet');
+Route::get('sltAntemoremAnimals/{id_outlet}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremAnimals');
+Route::get('sltMaster/{type}', 'App\Http\Controllers\MasterTableController@sltMaster');
+Route::get('sltMasterType', 'App\Http\Controllers\MasterTableController@sltMasterType');
+Route::get('sltCauses', 'App\Http\Controllers\PostmortemInspectionsController@sltCauses');

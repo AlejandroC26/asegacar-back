@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\AntemortemDailyRecordExport;
 use App\Http\Requests\AntemortemDailyRecordRequestFormatRequest;
 use App\Http\Requests\StoreAntemortemDailyRecordRequest;
+use App\Http\Requests\UpdateAntemortemDailyRecordRequest;
 use App\Http\Resources\AntemortemDailyRecordResource;
 use App\Models\AntemortemDailyRecord;
 use App\Traits\ApiResponse;
@@ -55,7 +56,7 @@ class AntemortemDailyRecordController extends Controller
         }
     }
 
-    public function update(StoreAntemortemDailyRecordRequest $request, $id)
+    public function update(UpdateAntemortemDailyRecordRequest $request, $id)
     {
         try {
             $record = AntemortemDailyRecord::findOrFail($id);        
@@ -129,6 +130,26 @@ class AntemortemDailyRecordController extends Controller
             ), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltAntemoremOutlet()
+    {
+        try {
+            $route = AntemortemDailyRecord::with('outlet')->whereNotNull('id_outlet')->get();
+            return response()->json(AntemortemDailyRecordResource::toOutletSelect($route));
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltAntemoremAnimals($id)
+    {
+        try {
+            $route = AntemortemDailyRecord::select('id as value', 'code as text')->where('id_outlet', $id)->get();
+            return response()->json($route);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
     }
 }

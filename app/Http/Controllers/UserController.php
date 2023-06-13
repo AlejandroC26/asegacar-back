@@ -24,7 +24,7 @@ class UserController extends Controller
             $users = User::all();
             return response()->json(UserResource::collection($users));
         } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 
