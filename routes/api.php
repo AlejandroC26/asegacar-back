@@ -20,6 +20,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostmortemInspectionsController;
 use App\Http\Controllers\RouteController;
+use App\Http\Controllers\SeizureComparisonController;
+use App\Http\Controllers\VisceraDispatchController;
+use App\Http\Controllers\ZeroGutsToleranceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +61,9 @@ Route::resource('dailyRoutes', DailyRoutesController::class);
 Route::resource('masterTable', MasterTableController::class);
 Route::resource('formBenefitOrder', FormBenefitOrderController::class);
 Route::resource('postmortemInspections', PostmortemInspectionsController::class);
+Route::resource('zeroGutsTolerance', ZeroGutsToleranceController::class);
+Route::resource('visceraDispatch', VisceraDispatchController::class);
+Route::resource('seizureComparison', SeizureComparisonController::class);
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 

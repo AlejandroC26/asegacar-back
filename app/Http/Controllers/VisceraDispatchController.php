@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreZeroGutsToleranceRequest;
-use App\Http\Resources\ZeroGutsToleranceResource;
-use App\Models\ZeroGutsTolerance;
+use App\Http\Requests\StoreVisceraDispatchRequest;
+use App\Http\Resources\VisceraDispatchResource;
+use App\Models\VisceraDispatch;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 
-class ZeroGutsToleranceController extends Controller
+class VisceraDispatchController extends Controller
 {
     use ApiResponse;
     /**
@@ -19,8 +19,8 @@ class ZeroGutsToleranceController extends Controller
     public function index()
     {
         try {
-            $inspections = ZeroGutsTolerance::all();
-            return response()->json(ZeroGutsToleranceResource::collection($inspections));
+            $visceraDispatch = VisceraDispatch::all();
+            return response()->json(VisceraDispatchResource::collection($visceraDispatch));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -42,11 +42,11 @@ class ZeroGutsToleranceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreZeroGutsToleranceRequest $request)
+    public function store(StoreVisceraDispatchRequest $request)
     {
         try {
-            $inspections = ZeroGutsTolerance::create($request->validated());
-            return $this->successResponse($inspections, 'Registro realizado exitosamente');
+            $visceraDispatch = VisceraDispatch::create($request->validated());
+            return $this->successResponse($visceraDispatch, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
@@ -55,14 +55,14 @@ class ZeroGutsToleranceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
+     * @param  \App\Models\VisceraDispatch  $visceraDispatch
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         try {
-            $zeroGutsTolerance = ZeroGutsTolerance::find($id);
-            return $this->successResponse(ZeroGutsToleranceResource::make($zeroGutsTolerance), 'Listado exitosamente');
+            $visceraDispatch = VisceraDispatch::find($id);
+            return $this->successResponse(VisceraDispatchResource::make($visceraDispatch), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -71,10 +71,10 @@ class ZeroGutsToleranceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
+     * @param  \App\Models\VisceraDispatch  $visceraDispatch
      * @return \Illuminate\Http\Response
      */
-    public function edit(ZeroGutsTolerance $zeroGutsTolerance)
+    public function edit(VisceraDispatch $visceraDispatch)
     {
         //
     }
@@ -83,15 +83,15 @@ class ZeroGutsToleranceController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
+     * @param  \App\Models\VisceraDispatch  $visceraDispatch
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreZeroGutsToleranceRequest $request, $id)
+    public function update(StoreVisceraDispatchRequest $request, $id)
     {
         try {
-            $zeroGutsTolerance = ZeroGutsTolerance::findOrFail($id);        
-            $zeroGutsTolerance->update($request->validated());
-            return $this->successResponse($zeroGutsTolerance, 'Actualizado exitosamente');
+            $visceraDispatch = VisceraDispatch::findOrFail($id);        
+            $visceraDispatch->update($request->validated());
+            return $this->successResponse($visceraDispatch, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -100,15 +100,15 @@ class ZeroGutsToleranceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
+     * @param  \App\Models\VisceraDispatch  $visceraDispatch
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
         try {
-            $zeroGutsTolerance = ZeroGutsTolerance::find($id);
-            $zeroGutsTolerance->delete();
-            return $this->successResponse($zeroGutsTolerance, 'Eliminado exitosamente');
+            $visceraDispatch = VisceraDispatch::find($id);
+            $visceraDispatch->delete();
+            return $this->successResponse($visceraDispatch, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

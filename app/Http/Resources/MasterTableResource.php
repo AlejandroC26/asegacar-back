@@ -19,7 +19,7 @@ class MasterTableResource extends JsonResource
             "date" => date_format(date_create($this->date), 'Y-m-d'),
             "id_responsable" => $this->id_responsable,
             "id_master_type" => $this->id_master_type,
-            "responsable" => $this->responsable?->fullname,
+            "responsable" => $this->responsable?->fullname ?? 'N/A',
             "id_verified_by" => $this->id_verified_by,
             "verified_by" => $this->verified_by?->fullname ?? 'N/A',
             "id_supervised_by" => $this->id_supervised_by,
@@ -37,7 +37,7 @@ class MasterTableResource extends JsonResource
         $aResponse = [];
         foreach ($data as $key => $element) {
             $aResponse[$key]['id'] = $element->id;
-            $aResponse[$key]['name'] = date_format(date_create($element->date), 'Y-m-d').' - '.$element->responsable->fullname;
+            $aResponse[$key]['name'] = date_format(date_create($element->date), 'Y-m-d').'  '.$element->responsable?->fullname;
         }
         return collect($aResponse);
     }

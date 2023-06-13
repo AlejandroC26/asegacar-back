@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ZeroGutsToleranceResource extends JsonResource
+class VisceraDispatchResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,25 +18,25 @@ class ZeroGutsToleranceResource extends JsonResource
             'id' => $this->id,
             'id_master' => $this->id_master,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
-            "species" => $this->master->species,
-            "elaborated_by" => $this->master->elaborated_by?->fullname,
-            "verified_by" => $this->master->verified_by?->fullname,
-
+            "elaborated_by" => $this->master->responsable?->fullname,
+            "supervised_by" => $this->master->supervised_by?->fullname,
             'id_antemortem_daily_record' => $this->id_antemortem_daily_record,
             "id_outlet" => $this->antemortem_daily_record->outlet->id,
             "outlet" => $this->antemortem_daily_record->outlet->code,
             "code" => $this->antemortem_daily_record->code,
-            "organ" => $this->organ,
-            "fecal_matter" => $this->fecal_matter,
-            "resume" => $this->resume,
-            "hide" => $this->hide,
-            "hair" => $this->hair,
-            "hem" => $this->hem,
-            "abscess" => $this->abscess,
-            "parasite" => $this->parasite,
-            "others" => $this->others,
-            "correction" => $this->correction,
-            "quantity" => $this->quantity,
+            
+            "head" => $this->head,
+            "small_ints" => $this->small_ints,
+            "large_ints" => $this->large_ints,
+            "panolon" => $this->panolon,
+            "rennet" => $this->rennet,
+            "callus" => $this->callus,
+            "liver" => $this->liver,
+            "lung" => $this->lung,
+            "legs" => $this->legs,
+            "hands" => $this->hands,
+            "udders" => $this->udders,
+            "booklet" => $this->booklet,
             "observations" => $this->observations,
         ];
     }

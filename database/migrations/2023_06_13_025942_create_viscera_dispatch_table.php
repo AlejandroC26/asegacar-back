@@ -13,26 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('zero_guts_tolerance', function (Blueprint $table) {
+        Schema::create('viscera_dispatch', function (Blueprint $table) {
             $table->id();
-            
+
             $table->unsignedBigInteger('id_master')->comment('Id de matriz');
             $table->foreign('id_master')->references('id')->on('master_table');
             $table->unsignedBigInteger('id_antemortem_daily_record')->comment('Id de animal');
             $table->foreign('id_antemortem_daily_record')->references('id')->on('antemortem_daily_records');
-            
-            $table->string('organ')->nullable();
-            $table->string('fecal_matter')->nullable();
-            $table->string('resume')->nullable();
-            $table->string('hide')->nullable();
-            $table->string('hair')->nullable();
-            $table->string('hem')->nullable();
-            $table->string('abscess')->nullable();
-            $table->string('parasite')->nullable();
-            $table->string('others')->nullable();
-            $table->string('correction')->nullable();
-            $table->integer('quantity')->nullable();
-            $table->string('observations')->nullable();
+            $table->string('head')->nullable();
+            $table->string('small_ints')->nullable();
+            $table->string('large_ints')->nullable();
+            $table->string('panolon')->nullable();
+            $table->string('rennet')->nullable();
+            $table->string('callus')->nullable();
+            $table->string('liver')->nullable();
+            $table->string('lung')->nullable();
+            $table->string('legs')->nullable();
+            $table->string('hands')->nullable();
+            $table->string('udders')->nullable();
+            $table->string('booklet')->nullable();
+            $table->text('observations')->nullable();
 
             $table->timestamps();
         });
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('zero_guts_tolerance');
+        Schema::dropIfExists('viscera_dispatch');
     }
 };

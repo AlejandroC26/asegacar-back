@@ -21,6 +21,7 @@ class FormBenefitOrderResource extends JsonResource
             "id_outlet" => $this->antemortem_daily_record->outlet->id,
             "outlet" => $this->antemortem_daily_record->outlet->code,
             "code" => $this->antemortem_daily_record->code,
+            
             "responsable" => $this->master->responsable->fullname,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
             "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
