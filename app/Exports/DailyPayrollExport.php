@@ -19,14 +19,14 @@ class DailyPayrollExport implements FromView, WithColumnFormatting, WithStyles, 
     private $data;
     private $males;
     private $females;
-    private $current_date;
+    private $general;
 
-    public function __construct($data, $males, $females)
+    public function __construct($data, $males, $females, $general)
     {
         $this->data = $data;
         $this->males = $males;
         $this->females = $females;
-        $this->current_date = FormatDateHelper::onGetCurrentDate();
+        $this->general = $general;
     }
 
 
@@ -36,7 +36,7 @@ class DailyPayrollExport implements FromView, WithColumnFormatting, WithStyles, 
             "data" => $this->data,
             "males" => $this->males,
             "females" => $this->females,
-            "current_date" => $this->current_date
+            "general" => $this->general
         ]);
     }
 

@@ -23,7 +23,7 @@
         <td>Página 1</td>
     </tr>
     <tr>
-        <td colspan="3"><b>FECHA: {{ $current_date }}</b></td>
+        <td colspan="3"><b>FECHA: {{ $general['date'] }}</b></td>
         <td><b>CANTIDAD</b></td>
         <td>{{ $males }} </td>
         <td>{{ $females }}  </td>
@@ -53,7 +53,7 @@
         @endphp
     <tr>
         <td></td>
-        <td>{{ $element['outlet'] }}</td>
+        <td>{{ $element['outlet']['code'] }}</td>
         <td>{{ $total }}</td>
         <td>{{ $element['colors'] }}</td>
         <td>{{ $element['genders'] }}</td>

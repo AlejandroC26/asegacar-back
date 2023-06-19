@@ -26,26 +26,12 @@ class StoreDailyPayrollRequest extends FormRequest
     public function rules()
     {
         return [
+            'id_master' => 'required',
             'id_outlet' => 'required',
-            'total_males' => 'required',
-            'total_females' => 'required',
+            'id_gender' => 'required',
+            'id_color' => 'required',
+            'amount' => 'required',
             'special_order' => 'max:1000',
-            'benefit_date' => 'max:1000',
-            'colors' => 'required',
-            'genders' => 'required'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'id_outlet.required' => 'El parametro :attribute es requerido',
-            'total_males.required' => 'El parametro :attribute es requerido',
-            'total_females.required' => 'El parametro :attribute es requerido',
-            'colors.required' => 'El parametro :attribute es requerido',
-            'genders.required' => 'El parametro :attribute es requerido',
-            'special_order.max' => 'El parametro :attribute ha sobrepasado el límite de carácteres',
-            'benefit_date.max' => 'El parametro :attribute ha sobrepasado el límite de carácteres',
         ];
     }
 

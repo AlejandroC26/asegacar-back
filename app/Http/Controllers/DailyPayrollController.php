@@ -22,7 +22,7 @@ class DailyPayrollController extends Controller
     public function index(Request $request)
     {
         try {
-            $dailyPayroll = DailyPayroll::where('benefit_date', $request->date)->get();
+            $dailyPayroll = DailyPayroll::all();
             return response()->json(DailyPayrollResource::collection($dailyPayroll));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -38,28 +38,9 @@ class DailyPayrollController extends Controller
     public function store(StoreDailyPayrollRequest $request)
     {
         try {       
-            $validated = $request->validated();
-            $validated = $request->safe()->except(['genders', 'colors']); 
-           
             DB::beginTransaction();
 
-            if(!$request->benefit_date) 
-                $validated = array_merge($validated, [ "benefit_date" => now() ]);
-
-            $dailyPayroll = DailyPayroll::create($validated); 
-            foreach ($request->colors as $color) {
-                DB::table('daily_payroll_colors')->insert([
-                    'id_daily_payroll' => $dailyPayroll->id,
-                    'id_color' => $color['id']
-                ]);
-            }
-
-            foreach ($request->genders as $gender) {
-                DB::table('daily_payroll_genders')->insert([
-                    'id_daily_payroll' => $dailyPayroll->id,
-                    'id_gender' => $gender['id']
-                ]);
-            }
+            $dailyPayroll = DailyPayroll::create($request->validated()); 
 
             DB::commit();
 
@@ -80,21 +61,6 @@ class DailyPayrollController extends Controller
     {
         try {
             $dailyPayroll = DailyPayroll::find($id);
-
-            $colors = DB::table('daily_payroll_colors')
-                ->select('colors.id', 'colors.name')
-                ->leftJoin('colors', 'colors.id', 'daily_payroll_colors.id_color')
-                ->where(['id_daily_payroll' => $id])
-                ->get();
-
-            $genders = DB::table('daily_payroll_genders')
-                ->select('genders.id', 'genders.name')
-                ->leftJoin('genders', 'genders.id', 'daily_payroll_genders.id_gender')
-                ->where(['id_daily_payroll' => $id])
-                ->get();
-
-            $dailyPayroll['colors'] = $colors;
-            $dailyPayroll['genders'] = $genders;
             return $this->successResponse($dailyPayroll, 'Listado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -118,22 +84,6 @@ class DailyPayrollController extends Controller
             $dailyPayroll = DailyPayroll::find($id);
             $dailyPayroll->update($validated);
 
-            DB::table('daily_payroll_colors')->where(['id_daily_payroll' => $dailyPayroll->id])->delete();
-            foreach ($request->colors as $color) {
-                DB::table('daily_payroll_colors')->insert([
-                    'id_daily_payroll' => $dailyPayroll->id,
-                    'id_color' => $color['id']
-                ]);
-            }
-
-            DB::table('daily_payroll_genders')->where(['id_daily_payroll' => $dailyPayroll->id])->delete();
-            foreach ($request->genders as $gender) {
-                DB::table('daily_payroll_genders')->insert([
-                    'id_daily_payroll' => $dailyPayroll->id,
-                    'id_gender' => $gender['id']
-                ]);
-            }
-
             return $this->successResponse($dailyPayroll, 'Actualizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
@@ -152,9 +102,6 @@ class DailyPayrollController extends Controller
             $dailyPayroll = DailyPayroll::find($id);
             $dailyPayroll->delete();
 
-            DB::table('daily_payroll_colors')->where(['id_daily_payroll' => $dailyPayroll->id])->delete();
-            DB::table('daily_payroll_genders')->where(['id_daily_payroll' => $dailyPayroll->id])->delete();
-
             return $this->successResponse($dailyPayroll, 'Eliminado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
@@ -166,15 +113,31 @@ class DailyPayrollController extends Controller
         try { 
             $total_males = 0;
             $total_females = 0;
-            $dailyPayroll = DailyPayroll::where('benefit_date', $request->sacrifice_date)->get();
+
+            $dailyPayroll = DailyPayroll::with('outlet', 'master.responsable')->select(
+                    'daily_payrolls.id', 
+                    'id_master', 
+                    'id_outlet',
+                    DB::raw("GROUP_CONCAT(CONCAT(amount,' ', colors.name) SEPARATOR ', ') as colors"),
+                    DB::raw("GROUP_CONCAT(CONCAT(amount,' ', genders.name) SEPARATOR ', ') as genders"),
+                    DB::raw("SUM(CASE WHEN id_gender = 1 THEN amount END) AS total_males"),
+                    DB::raw("SUM(CASE WHEN id_gender = 2 THEN amount END) AS total_females"),
+                    'daily_payrolls.created_at'
+                )
+                ->leftJoin('colors', 'colors.id', '=', 'daily_payrolls.id_color')
+                ->leftJoin('genders', 'genders.id', '=', 'daily_payrolls.id_gender')
+                ->groupBy('id_outlet')
+                ->get();
+
+            $total_males = 0;
+            $total_females = 0;
             foreach ($dailyPayroll as $element) {
-                $total_males += $element->total_males;
+                $total_males += $element->total_females;
                 $total_females += $element->total_females;
             }
-
-            $dailyPayroll = DailyPayrollResource::collection($dailyPayroll);
-            $dailyPayroll = json_decode($dailyPayroll->toJson(), true);
-            return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females), 'invoices.xlsx');
+            $general = $dailyPayroll[0] ? $dailyPayroll[0]->master : [];
+            
+            return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);
         }

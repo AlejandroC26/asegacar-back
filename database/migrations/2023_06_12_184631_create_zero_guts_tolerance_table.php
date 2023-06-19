@@ -18,6 +18,7 @@ return new class extends Migration
             
             $table->unsignedBigInteger('id_master')->comment('Id de matriz');
             $table->foreign('id_master')->references('id')->on('master_table');
+            
             $table->unsignedBigInteger('id_antemortem_daily_record')->comment('Id de animal');
             $table->foreign('id_antemortem_daily_record')->references('id')->on('antemortem_daily_records');
             

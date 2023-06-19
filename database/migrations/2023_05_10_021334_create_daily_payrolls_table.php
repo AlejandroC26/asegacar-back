@@ -16,14 +16,21 @@ return new class extends Migration
         Schema::create('daily_payrolls', function (Blueprint $table) {
             $table->id();
 
+            $table->unsignedBigInteger('id_master')->comment('Id de matriz');
+            $table->foreign('id_master')->references('id')->on('master_table');
+
             $table->unsignedBigInteger('id_outlet')->comment('Id de expendio');
             $table->foreign('id_outlet')->references('id')->on('outlets');
 
-            $table->integer('total_males');
-            $table->integer('total_females');
+            $table->unsignedBigInteger('id_gender')->comment('Id del género');
+            $table->foreign('id_gender')->references('id')->on('genders');
+
+            $table->unsignedBigInteger('id_color')->comment('Id de color');
+            $table->foreign('id_color')->references('id')->on('colors');
+
+            $table->integer('amount');
 
             $table->longText('special_order')->nullable()->comment('Orden especial');
-            $table->date('benefit_date');
             
             $table->timestamps();
         });
