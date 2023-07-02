@@ -25,17 +25,6 @@ class ZeroGutsToleranceController extends Controller
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -66,17 +55,6 @@ class ZeroGutsToleranceController extends Controller
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ZeroGutsTolerance $zeroGutsTolerance)
-    {
-        //
     }
 
     /**
@@ -111,6 +89,18 @@ class ZeroGutsToleranceController extends Controller
             return $this->successResponse($zeroGutsTolerance, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function download(Request $request)
+    {
+        try {
+            $zeroGutsTolerance = ZeroGutsTolerance::where('id_master', $request->id_master)->get();
+            $zeroGutsTolerance = ZeroGutsToleranceResource::collection($zeroGutsTolerance);
+            return $zeroGutsTolerance;
+            //return Excel::download(new PostmortemInspectionExport($inspections, '', '', ''), 'invoices.xlsx');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }
