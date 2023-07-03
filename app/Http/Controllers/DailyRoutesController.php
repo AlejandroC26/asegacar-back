@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DailyRoutesExport;
 use App\Http\Requests\StoreDailyRouteRequest;
-use App\Http\Resources\AntemortemDailyRecordResource;
 use App\Http\Resources\DailyRouteResource;
-use App\Models\AntemortemDailyRecord;
 use App\Models\DailyRoutes;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class DailyRoutesController extends Controller
 {
@@ -93,13 +94,27 @@ class DailyRoutesController extends Controller
         }
     }
 
-    /* public function sltDailyRoutes () {
+    public function download(Request $request)
+    {
         try {
-            $route = AntemortemDailyRecord::with('guide')->where('sacrifice_date')->get();
-            $route = AntemortemDailyRecordResource::toSelect($route);
-            return response()->json($route);
+            $dailyRoutes = DailyRoutes::with('route', 'antemortem_daily_record.outlet')
+                ->where('date', $request->date)->get();
+            $response = [];
+            foreach ($dailyRoutes as $route) {
+                if(!array_key_exists($route->route->name, $response)) {
+                    // $temporal['outlet'];
+                    // $temporal['animal'];
+
+                    $response[$route->route->name]['route'] = $route->route->name;
+                    $response[$route->route->name]['data'][] = $route;
+                } 
+            }
+
+            return $dailyRoutes;
+            return $response;
+            return Excel::download(new DailyRoutesExport([], '', '', ''), 'invoices.xlsx');
         } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
-    } */
+    }
 }

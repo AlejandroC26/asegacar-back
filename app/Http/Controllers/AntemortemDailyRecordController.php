@@ -136,7 +136,7 @@ class AntemortemDailyRecordController extends Controller
     public function sltAntemoremOutlet()
     {
         try {
-            $route = AntemortemDailyRecord::with('outlet')->whereNotNull('id_outlet')->get();
+            $route = AntemortemDailyRecord::with('outlet')->whereNotNull('id_outlet')->groupBy('id_outlet')->get();
             return response()->json(AntemortemDailyRecordResource::toOutletSelect($route));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);

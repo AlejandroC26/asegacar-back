@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\City;
-use App\Models\Person;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GuideResource extends JsonResource
@@ -25,11 +23,14 @@ class GuideResource extends JsonResource
             'id_destination' => $this->id_destination,
             'id_owner' => $this->id_owner,
             'id_buyer' => $this->id_buyer,
-            'owner' => Person::find($this->id_owner)->fullname,
-            'buyer' => Person::find($this->id_buyer)->fullname,
+            'owner' => $this->owner->fullname,
+            'buyer' => $this->buyer->fullname,
             'establishment_name' => $this->establishment_name,
-            'source' => City::find($this->id_source)->name,
-            'destination' => City::find($this->id_destination)->name,
+            'state' => $this->state,
+            'source' => $this->source->name,
+            'destination' => $this->destination->name,
+            'id_department_source' => $this->source->id_department,
+            'id_department_destination' => $this->destination->id_department,
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }

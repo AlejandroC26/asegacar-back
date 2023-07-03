@@ -50,7 +50,7 @@ class DailyMatrixController extends Controller
             $benefit_date = strtoupper($text_date).' '.$date->format('d').' DE '.strtoupper($text_month).' DEL '.$date->format('Y');
             return Excel::download(new DailyMatrixExport($dailyMatrix, $format_code, $benefit_date), 'invoices.xlsx');
         } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

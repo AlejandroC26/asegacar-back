@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'id_person' => 1,
             "login" => "admin",
             "password" => Hash::make("admin"),
-            "position" => 'Administrativo'
+            "id_charge" => 1
         ]);
     }
 }

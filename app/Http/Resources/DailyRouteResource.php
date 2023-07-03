@@ -21,6 +21,7 @@ class DailyRouteResource extends JsonResource
             'id_antemortem_daily_record' => $this->id_antemortem_daily_record,
             "id_outlet" => $this->antemortem_daily_record->outlet->id,
             "outlet" => $this->antemortem_daily_record->outlet->code,
+            "# animal" => $this->antemortem_daily_record->code,
             "quantity" => $this->quantity,
             "orders" => $this->orders,
             "date" => date_format(date_create($this->date), 'Y-m-d'),

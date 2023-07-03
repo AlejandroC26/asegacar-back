@@ -29,19 +29,8 @@ class StoreDailyRouteRequest extends FormRequest
             'id_route' => 'required',
             'id_antemortem_daily_record' => 'required',
             'quantity' => 'required',
-            'orders' => 'required',
+            'orders' => 'max:500',
             'date' => 'required',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'id_route.required' => 'El parametro :attribute es requerido',
-            'id_antemortem_daily_record.required' => 'El parametro :attribute es requerido',
-            'quantity.required' => 'El parametro :attribute es requerido',
-            'orders.required' => 'El parametro :attribute es requerido',
-            'date.max' => 'El parametro :attribute es requerido',
         ];
     }
 

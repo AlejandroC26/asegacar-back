@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('id_person')->comment('Id de la persona');
             $table->foreign('id_person')->references('id')->on('persons');
-            $table->enum('position', ['Administrativo', 'Propietario', 'Veterinario']);
+            $table->unsignedBigInteger('id_charge')->comment('Id del cargo');
+            $table->foreign('id_charge')->references('id')->on('charges');
             $table->timestamps();
         });
     }

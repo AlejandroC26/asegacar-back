@@ -7,6 +7,8 @@ use App\Http\Resources\GuideResource;
 use App\Models\Guide;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class GuideController extends Controller
 {
@@ -58,11 +60,10 @@ class GuideController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Guide $guide)
     {
         try {
-            $guide = Guide::find($id);
-            return $this->successResponse($guide, 'Listado exitosamente');
+            return $this->successResponse(GuideResource::make($guide), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -103,10 +104,9 @@ class GuideController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Guide $guide)
     {
         try {
-            $guide = Guide::find($id);
             $guide->delete();
             return $this->successResponse($guide, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
@@ -120,6 +120,19 @@ class GuideController extends Controller
             return response()->json($guides);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function generatePDF($id)
+    {
+        try {
+            $guide = Guide::find($id);
+            $data['person'] = $guide->owner;
+            $data['guide'] = $guide->code;
+            $pdf =  Pdf::loadView('pdf.contract', $data);
+            return $pdf->download('Contrato-deposito-animales.pdf');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

@@ -5,7 +5,6 @@ use App\Http\Controllers\AntemortemDailyRecordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ColorsController;
-use App\Http\Controllers\ContractsController;
 use App\Http\Controllers\DailyPayrollController;
 use App\Http\Controllers\DailyRoutesController;
 use App\Http\Controllers\FormatCodeController;
@@ -50,7 +49,6 @@ Route::resource('outlets', OutletController::class);
 Route::resource('ages', AgeController::class);
 Route::resource('incomes', IncomeController::class);
 Route::resource('formatCodes', FormatCodeController::class);
-Route::resource('contracts', ContractsController::class);
 Route::resource('dailyPayroll', DailyPayrollController::class);
 Route::resource('colors', ColorsController::class);
 Route::resource('genders', GendersController::class);
@@ -69,13 +67,17 @@ Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 
 Route::post('ageBobinsFormat', 'App\Http\Controllers\AgeController@download');
 Route::post('dailyPayrollFormat', 'App\Http\Controllers\DailyPayrollController@download');
-Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
-Route::post('antemortemDailyRecordFormat', 'App\Http\Controllers\AntemortemDailyRecordController@download');
-
-
-Route::get('contractSignature/{nIdContract}', 'App\Http\Controllers\ContractsController@onGetSignature');
-Route::post('contractPDF/{nIdContract}', 'App\Http\Controllers\ContractsController@generatePDF');
 Route::post('dailyMatrixFormat', 'App\Http\Controllers\DailyMatrixController@download');
+Route::post('dailyRoutesFormat', 'App\Http\Controllers\DailyRoutesController@download');
+Route::post('formBenefitOrderFormat', 'App\Http\Controllers\FormBenefitOrderController@download');
+Route::post('postmortemInspectionsFormat', 'App\Http\Controllers\PostmortemInspectionsController@download');
+Route::post('antemortemDailyRecordFormat', 'App\Http\Controllers\AntemortemDailyRecordController@download');
+Route::post('zeroGutsToleranceFormat', 'App\Http\Controllers\ZeroGutsToleranceController@download');
+Route::post('visceraDispatchFormat', 'App\Http\Controllers\VisceraDispatchController@download');
+
+Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
+Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');
+Route::get('sltCharges', 'App\Http\Controllers\UserController@sltCharges');
 Route::get('sltPersons', 'App\Http\Controllers\PersonController@sltPersons');
 Route::get('sltAges', 'App\Http\Controllers\AgeController@sltAges');
 Route::get('sltOutlets', 'App\Http\Controllers\OutletController@sltOutlets');

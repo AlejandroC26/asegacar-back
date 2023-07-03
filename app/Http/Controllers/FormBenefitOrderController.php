@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BenefitOrderExport;
 use App\Http\Requests\StoreFormBenefitOrderRequest;
 use App\Http\Resources\FormBenefitOrderResource;
 use App\Http\Resources\StoreFormBenefitOrder;
 use App\Models\FormBenefitOrder;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormBenefitOrderController extends Controller
 {
@@ -112,6 +114,16 @@ class FormBenefitOrderController extends Controller
             return $this->successResponse($benefitOrder, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function download(Request $request)
+    {
+        try {
+            $benefitOrder = FormBenefitOrder::with('antemortem_daily_record.outlet')->where('id_master', $request->id_master)->get();
+            return Excel::download(new BenefitOrderExport($benefitOrder, '', '', ''), 'invoices.xlsx');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

@@ -113,4 +113,9 @@ class VisceraDispatchController extends Controller
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
     }
+
+    public function download(Request $request)
+    {
+        
+    }
 }

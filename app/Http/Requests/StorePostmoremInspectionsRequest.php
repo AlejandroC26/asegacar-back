@@ -47,30 +47,6 @@ class StorePostmoremInspectionsRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'id_master.required'  => 'El parametro :attribute es requerido',
-            'id_antemortem_daily_record.required'  => 'El parametro :attribute es requerido',
-            'id_intestines_cause.max'  => 'El parametro :attribute es requerido',
-            'intestines_quantity.max'  => 'El parametro :attribute es requerido',
-            'id_livers_cause.max'  => 'El parametro :attribute es requerido',
-            'liver_quantity.max'  => 'El parametro :attribute es requerido',
-            'id_lungs_cause.max'  => 'El parametro :attribute es requerido',
-            'lungs_quantity.max'  => 'El parametro :attribute es requerido',
-            'id_udders_cause.max'  => 'El parametro :attribute es requerido',
-            'udders_quantity.max'  => 'El parametro :attribute es requerido',
-            'id_legs_cause.max'  => 'El parametro :attribute es requerido',
-            'legs_quantity.max'  => 'El parametro :attribute es requerido',
-            'id_purges_cause.max'  => 'El parametro :attribute es requerido',
-            'purges_quantity.max'  => 'El parametro :attribute es requerido',
-            'other_organ.max'  => 'El parametro :attribute es requerido',
-            'id_other_cause.max'  => 'El parametro :attribute es requerido',
-            'other_quantity.max'  => 'El parametro :attribute es requerido',
-            'insp_ganglions.max'  => 'El parametro :attribute es requerido',
-        ];
-    }
-
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json(

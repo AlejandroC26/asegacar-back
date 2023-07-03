@@ -18,8 +18,9 @@ class UserResource extends JsonResource
         return [
             'id' => $this->id,
             'person' => Person::find($this->id_person)->fullname,
-            'position' => $this->position,
+            'id_charge' => $this->id_charge,
             'login' => $this->login,
+            'charge' => $this->charge->name,
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }

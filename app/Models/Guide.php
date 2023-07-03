@@ -20,4 +20,21 @@ class Guide extends Model
         'id_destination',
         'establishment_name'
     ];
+
+        
+    public function owner() { 
+        return $this->belongsTo(Person::class, 'id_owner'); 
+    }
+
+    public function buyer() { 
+        return $this->belongsTo(Person::class, 'id_buyer'); 
+    }
+
+    public function source() { 
+        return $this->belongsTo(City::class, 'id_source'); 
+    }
+
+    public function destination () { 
+        return $this->belongsTo(City::class, 'id_destination'); 
+    }
 }

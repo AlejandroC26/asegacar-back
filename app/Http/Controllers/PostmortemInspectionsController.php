@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PostmortemInspectionExport;
 use App\Http\Requests\StorePostmoremInspectionsRequest;
 use App\Http\Resources\PostmortemInspectionsResource;
 use App\Models\Causes;
 use App\Models\PostmortemInspections;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PostmortemInspectionsController extends Controller
 {
@@ -101,6 +103,17 @@ class PostmortemInspectionsController extends Controller
             return response()->json($causes);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function download(Request $request)
+    {
+        try {
+            $inspections = PostmortemInspections::where('id_master', $request->id_master)->get();
+            $inspections = PostmortemInspectionsResource::collection($inspections);
+            return Excel::download(new PostmortemInspectionExport($inspections, '', '', ''), 'invoices.xlsx');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

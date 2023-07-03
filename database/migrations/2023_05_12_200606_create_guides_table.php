@@ -31,6 +31,8 @@ return new class extends Migration
 
             $table->unsignedBigInteger('id_destination')->comment('Ciudad de destino');
             $table->foreign('id_destination')->references('id')->on('cities');
+
+            $table->boolean('state')->default(1);
             
             $table->timestamps();
         });

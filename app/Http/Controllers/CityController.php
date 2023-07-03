@@ -14,7 +14,7 @@ class CityController extends Controller
 
     public function sltDepartments() {
         try {
-            $departments = Department::where('id', 18)->with('cities')->get();
+            $departments = Department::with('cities')->get();
             return response()->json($departments);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

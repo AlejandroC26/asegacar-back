@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ZeroGutsToleranceExport;
 use App\Http\Requests\StoreZeroGutsToleranceRequest;
 use App\Http\Resources\ZeroGutsToleranceResource;
 use App\Models\ZeroGutsTolerance;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ZeroGutsToleranceController extends Controller
 {
@@ -97,8 +99,7 @@ class ZeroGutsToleranceController extends Controller
         try {
             $zeroGutsTolerance = ZeroGutsTolerance::where('id_master', $request->id_master)->get();
             $zeroGutsTolerance = ZeroGutsToleranceResource::collection($zeroGutsTolerance);
-            return $zeroGutsTolerance;
-            //return Excel::download(new PostmortemInspectionExport($inspections, '', '', ''), 'invoices.xlsx');
+            return Excel::download(new ZeroGutsToleranceExport($zeroGutsTolerance, '', '', ''), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
