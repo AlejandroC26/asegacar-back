@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class VisceraDispatchExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
 
@@ -26,8 +26,8 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
 
     public function view(): View
     {
-        return view('excel.toleranciacerovisceras', [
-            "data" => $this->data
+        return view('excel.verificacionsalidaproductos', [
+            "data" => $this->data,
         ]);
     }
 
@@ -64,23 +64,25 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
         //COL
-        $sheet->getColumnDimension('A')->setWidth(11);
-        $sheet->getColumnDimension('B')->setWidth(15);
-        $sheet->getColumnDimension('C')->setWidth(14);
-        $sheet->getColumnDimension('D')->setWidth(13);
-        $sheet->getColumnDimension('E')->setWidth(14);
-        $sheet->getColumnDimension('F')->setWidth(11);
-        $sheet->getColumnDimension('G')->setWidth(11); 
-        $sheet->getColumnDimension('H')->setWidth(11); 
-        $sheet->getColumnDimension('I')->setWidth(13); 
-        $sheet->getColumnDimension('J')->setWidth(13); 
-        $sheet->getColumnDimension('K')->setWidth(13); 
-        $sheet->getColumnDimension('L')->setWidth(13); 
-        $sheet->getColumnDimension('M')->setWidth(15); 
-        $sheet->getColumnDimension('N')->setWidth(18); 
+        $sheet->getColumnDimension('A')->setWidth(4);
+        $sheet->getColumnDimension('B')->setWidth(7);
+        $sheet->getColumnDimension('C')->setWidth(7);
+        $sheet->getColumnDimension('D')->setWidth(7);
+        $sheet->getColumnDimension('E')->setWidth(7);
+        $sheet->getColumnDimension('F')->setWidth(7);
+        $sheet->getColumnDimension('G')->setWidth(7); 
+        $sheet->getColumnDimension('H')->setWidth(7); 
+        $sheet->getColumnDimension('I')->setWidth(7); 
+        $sheet->getColumnDimension('J')->setWidth(7); 
+        $sheet->getColumnDimension('K')->setWidth(7); 
+        $sheet->getColumnDimension('L')->setWidth(7); 
+        $sheet->getColumnDimension('M')->setWidth(7); 
+        $sheet->getColumnDimension('N')->setWidth(7); 
+        $sheet->getColumnDimension('O')->setWidth(7); 
+        $sheet->getColumnDimension('P')->setWidth(17); 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:N4')->applyFromArray([
+        $sheet->getStyle('A1:P4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -89,11 +91,13 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
 
         // BORDERS
         $lastRow = 4 + count($this->data);
-        $range = 'A1:N'.$lastRow;
+        $range = 'A1:P'.$lastRow;
         $styleArray = [
+            'font' => [ 'size' => 8 ],
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
+                'wrapText' => true,
             ],
             'borders' => [
                 'allBorders' => [
@@ -101,8 +105,12 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
                     'color' => ['argb' => 'FF000000'],
                 ],
             ],
+            
         ];
+
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
         $sheet->getStyle($range)->applyFromArray($styleArray);
+        $sheet->getStyle('B'.($lastRow+1).':P'.$lastRow+3)->applyFromArray($styleArray);
+        $sheet->getStyle('B'.($lastRow+1).':P'.$lastRow+3)->getFont()->setSize(8);
     }
 }

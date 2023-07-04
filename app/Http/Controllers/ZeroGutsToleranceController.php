@@ -49,10 +49,9 @@ class ZeroGutsToleranceController extends Controller
      * @param  \App\Models\ZeroGutsTolerance  $zeroGutsTolerance
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ZeroGutsTolerance $zeroGutsTolerance)
     {
         try {
-            $zeroGutsTolerance = ZeroGutsTolerance::find($id);
             return $this->successResponse(ZeroGutsToleranceResource::make($zeroGutsTolerance), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
@@ -99,7 +98,7 @@ class ZeroGutsToleranceController extends Controller
         try {
             $zeroGutsTolerance = ZeroGutsTolerance::where('id_master', $request->id_master)->get();
             $zeroGutsTolerance = ZeroGutsToleranceResource::collection($zeroGutsTolerance);
-            return Excel::download(new ZeroGutsToleranceExport($zeroGutsTolerance, '', '', ''), 'invoices.xlsx');
+            return Excel::download(new ZeroGutsToleranceExport($zeroGutsTolerance), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

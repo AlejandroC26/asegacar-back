@@ -13,7 +13,6 @@ class SeizureComparison extends Model
 
     protected $fillable = [
         'id_master',
-        'id_antemortem_daily_record',
         'small_ints',
         'large_ints',
         'liver',
@@ -26,6 +25,7 @@ class SeizureComparison extends Model
         'destocking',
     ];
 
-    public function master() { return $this->belongsTo(MasterTable::class, 'id_master'); }
-    public function antemortem_daily_record() { return $this->belongsTo(AntemortemDailyRecord::class, 'id_antemortem_daily_record'); }
+    public function master() { 
+        return $this->belongsTo(MasterTable::class, 'id_master'); 
+    }
 }

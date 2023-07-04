@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreSeizureComparisonRequest extends FormRequest
+class StoreChannelConditioningRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,16 +27,15 @@ class StoreSeizureComparisonRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'small_ints' => 'max:500',
-            'large_ints' => 'max:500',
-            'liver' => 'max:500',
-            'lung' => 'max:500',
-            'udders' => 'max:500',
-            'head' => 'max:500',
-            'hands' => 'max:500',
-            'legs' => 'max:500',
-            'others' => 'max:500',
-            'destocking' => 'max:500',
+            'id_antemortem_daily_record' => 'required',
+            'skin' => 'max:500',
+            'hair' => 'max:500',
+            'hematoma' => 'max:500',
+            'abscess' => 'max:500',
+            'parasite' => 'max:500',
+            'other' => 'max:500',
+            'correction' => 'max:500',
+            'quantity' => 'max:500',
         ];
     }
 

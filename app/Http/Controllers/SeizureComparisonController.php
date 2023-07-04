@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SeizureComparisonExport;
 use App\Http\Requests\StoreSeizureComparisonRequest;
 use App\Http\Resources\SeizureComparisonResource;
 use App\Models\SeizureComparison;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SeizureComparisonController extends Controller
 {
@@ -24,16 +26,6 @@ class SeizureComparisonController extends Controller
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -66,16 +58,6 @@ class SeizureComparisonController extends Controller
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\SeizureComparison  $seizureComparison
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(SeizureComparison $seizureComparison)
-    {
-        //
     }
 
     /**
@@ -110,6 +92,17 @@ class SeizureComparisonController extends Controller
             return $this->successResponse($seizureComparison, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function download(Request $request)
+    {
+        try {
+            $seizureComparison = SeizureComparison::where('id_master', $request->id_master)->get();
+            $seizureComparison = SeizureComparisonResource::collection($seizureComparison);
+            return Excel::download(new SeizureComparisonExport($seizureComparison), 'invoices.xlsx');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

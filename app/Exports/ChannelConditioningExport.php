@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class ChannelConditioningExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
 
@@ -26,7 +26,7 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
 
     public function view(): View
     {
-        return view('excel.toleranciacerovisceras', [
+        return view('excel.acondicionamientodelacanal', [
             "data" => $this->data
         ]);
     }
@@ -80,7 +80,7 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         $sheet->getColumnDimension('N')->setWidth(18); 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:N4')->applyFromArray([
+        $sheet->getStyle('A1:J4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -88,8 +88,8 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         ]);
 
         // BORDERS
-        $lastRow = 4 + count($this->data);
-        $range = 'A1:N'.$lastRow;
+        $lastRow = 5 + count($this->data);
+        $range = 'A1:J'.$lastRow;
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,

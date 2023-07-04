@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\VisceraDispatchExport;
-use App\Http\Requests\StoreVisceraDispatchRequest;
-use App\Http\Resources\VisceraDispatchResource;
-use App\Models\VisceraDispatch;
+use App\Exports\ChannelConditioningExport;
+use App\Http\Requests\StoreChannelConditioningRequest;
+use App\Http\Resources\ChannelConditioningResource;
+use App\Models\ChannelConditioning;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class VisceraDispatchController extends Controller
+class ChannelConditioningController extends Controller
 {
     use ApiResponse;
     /**
@@ -21,8 +21,8 @@ class VisceraDispatchController extends Controller
     public function index()
     {
         try {
-            $visceraDispatch = VisceraDispatch::all();
-            return response()->json(VisceraDispatchResource::collection($visceraDispatch));
+            $channelConditioning = ChannelConditioning::all();
+            return response()->json(ChannelConditioningResource::collection($channelConditioning));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -44,11 +44,11 @@ class VisceraDispatchController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreVisceraDispatchRequest $request)
+    public function store(StoreChannelConditioningRequest $request)
     {
         try {
-            $visceraDispatch = VisceraDispatch::create($request->validated());
-            return $this->successResponse($visceraDispatch, 'Registro realizado exitosamente');
+            $channelConditioning = ChannelConditioning::create($request->validated());
+            return $this->successResponse($channelConditioning, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
@@ -57,43 +57,31 @@ class VisceraDispatchController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\VisceraDispatch  $visceraDispatch
+     * @param  \App\Models\ChannelConditioning  $channelConditioning
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ChannelConditioning $channelConditioning)
     {
         try {
-            $visceraDispatch = VisceraDispatch::find($id);
-            return $this->successResponse(VisceraDispatchResource::make($visceraDispatch), 'Listado exitosamente');
+            return $this->successResponse(ChannelConditioningResource::make($channelConditioning), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\VisceraDispatch  $visceraDispatch
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(VisceraDispatch $visceraDispatch)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\VisceraDispatch  $visceraDispatch
+     * @param  \App\Models\ChannelConditioning  $channelConditioning
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreVisceraDispatchRequest $request, $id)
+    public function update(StoreChannelConditioningRequest $request, ChannelConditioning $channelConditioning)
     {
-        try {
-            $visceraDispatch = VisceraDispatch::findOrFail($id);        
-            $visceraDispatch->update($request->validated());
-            return $this->successResponse($visceraDispatch, 'Actualizado exitosamente');
+        try {     
+            $channelConditioning->update($request->validated());
+            return $this->successResponse($channelConditioning, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -102,15 +90,14 @@ class VisceraDispatchController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\VisceraDispatch  $visceraDispatch
+     * @param  \App\Models\ChannelConditioning  $channelConditioning
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ChannelConditioning $channelConditioning)
     {
-        try {
-            $visceraDispatch = VisceraDispatch::find($id);
-            $visceraDispatch->delete();
-            return $this->successResponse($visceraDispatch, 'Eliminado exitosamente');
+        try {     
+            $channelConditioning->delete();
+            return $this->successResponse($channelConditioning, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
@@ -119,9 +106,9 @@ class VisceraDispatchController extends Controller
     public function download(Request $request)
     {
         try {
-            $visceraDispatch = VisceraDispatch::where('id_master', $request->id_master)->get();
-            $visceraDispatch = VisceraDispatchResource::collection($visceraDispatch);
-            return Excel::download(new VisceraDispatchExport($visceraDispatch), 'invoices.xlsx');
+            $channelConditioning = ChannelConditioning::where('id_master', $request->id_master)->get();
+            $channelConditioning = ChannelConditioningResource::collection($channelConditioning);
+            return Excel::download(new ChannelConditioningExport($channelConditioning), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

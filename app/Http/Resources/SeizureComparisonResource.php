@@ -20,10 +20,6 @@ class SeizureComparisonResource extends JsonResource
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
             "responsable" => $this->master->responsable?->fullname,
             "supervised_by" => $this->master->supervised_by?->fullname,
-            'id_antemortem_daily_record' => $this->id_antemortem_daily_record,
-            "id_outlet" => $this->antemortem_daily_record->outlet->id,
-            "outlet" => $this->antemortem_daily_record->outlet->code,
-            "code" => $this->antemortem_daily_record->code,
 
             "small_ints" => $this->small_ints,
             "large_ints" => $this->large_ints,

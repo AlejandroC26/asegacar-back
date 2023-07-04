@@ -110,7 +110,7 @@ class DailyRoutesController extends Controller
                 } 
             }
 
-            return $dailyRoutes;
+            // return $dailyRoutes;
             return $response;
             return Excel::download(new DailyRoutesExport([], '', '', ''), 'invoices.xlsx');
         } catch (\Throwable $exception) {

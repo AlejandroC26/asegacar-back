@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class SeizureComparisonExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
 
@@ -26,8 +26,8 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
 
     public function view(): View
     {
-        return view('excel.toleranciacerovisceras', [
-            "data" => $this->data
+        return view('excel.comparaciondecomisos', [
+            "data" => $this->data,
         ]);
     }
 
@@ -58,8 +58,6 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         $sheet->getStyle('E1:P1')->getFont()->setSize(15);
         $sheet->getStyle('A4:S5')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A4:S5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:Q5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:L5')->getFont()->setSize(9);
 
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
@@ -74,13 +72,9 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         $sheet->getColumnDimension('H')->setWidth(11); 
         $sheet->getColumnDimension('I')->setWidth(13); 
         $sheet->getColumnDimension('J')->setWidth(13); 
-        $sheet->getColumnDimension('K')->setWidth(13); 
-        $sheet->getColumnDimension('L')->setWidth(13); 
-        $sheet->getColumnDimension('M')->setWidth(15); 
-        $sheet->getColumnDimension('N')->setWidth(18); 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:N4')->applyFromArray([
+        $sheet->getStyle('A1:J4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -89,7 +83,7 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
 
         // BORDERS
         $lastRow = 4 + count($this->data);
-        $range = 'A1:N'.$lastRow;
+        $range = 'A1:J'.$lastRow;
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,

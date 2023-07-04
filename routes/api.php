@@ -4,6 +4,7 @@ use App\Http\Controllers\AgeController;
 use App\Http\Controllers\AntemortemDailyRecordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChannelConditioningController;
 use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\DailyPayrollController;
 use App\Http\Controllers\DailyRoutesController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SeizureComparisonController;
 use App\Http\Controllers\VisceraDispatchController;
 use App\Http\Controllers\ZeroGutsToleranceController;
+use App\Http\Controllers\ZeroToleranceInspectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +64,8 @@ Route::resource('postmortemInspections', PostmortemInspectionsController::class)
 Route::resource('zeroGutsTolerance', ZeroGutsToleranceController::class);
 Route::resource('visceraDispatch', VisceraDispatchController::class);
 Route::resource('seizureComparison', SeizureComparisonController::class);
+Route::resource('zeroToleranceInspection', ZeroToleranceInspectionController::class);
+Route::resource('channelConditioning', ChannelConditioningController::class);
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 
@@ -74,6 +78,9 @@ Route::post('postmortemInspectionsFormat', 'App\Http\Controllers\PostmortemInspe
 Route::post('antemortemDailyRecordFormat', 'App\Http\Controllers\AntemortemDailyRecordController@download');
 Route::post('zeroGutsToleranceFormat', 'App\Http\Controllers\ZeroGutsToleranceController@download');
 Route::post('visceraDispatchFormat', 'App\Http\Controllers\VisceraDispatchController@download');
+Route::post('seizureComparisonFormat', 'App\Http\Controllers\SeizureComparisonController@download');
+Route::post('zeroToleranceInspectionFormat', 'App\Http\Controllers\ZeroToleranceInspectionController@download');
+Route::post('channelConditioningFormat', 'App\Http\Controllers\ChannelConditioningController@download');
 
 Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
 Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');

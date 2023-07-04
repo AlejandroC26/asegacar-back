@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
 
