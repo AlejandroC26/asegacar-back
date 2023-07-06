@@ -87,10 +87,9 @@ class GuideController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreGuideRequest $request, $id)
+    public function update(StoreGuideRequest $request, Guide $guide)
     {
-        try {
-            $guide = Guide::findOrFail($id);        
+        try {   
             $guide->update($request->validated());
             return $this->successResponse($guide, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {

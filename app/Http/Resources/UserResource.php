@@ -17,7 +17,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'person' => Person::find($this->id_person)->fullname,
+            'person' => $this->person->fullname,
             'id_charge' => $this->id_charge,
             'login' => $this->login,
             'charge' => $this->charge->name,

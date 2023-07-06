@@ -17,6 +17,7 @@ class GuideResource extends JsonResource
         return [
             'id' => $this->id,
             'code' => $this->code,
+            'no_animals' => $this->no_animals,
             'date_entry' => $this->date_entry,
             'time_entry' => $this->time_entry,
             'id_source' => $this->id_source,

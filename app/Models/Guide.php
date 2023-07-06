@@ -11,6 +11,7 @@ class Guide extends Model
 
     protected $fillable = [
         'code',
+        'no_animals',
         'date_entry',
         'time_entry',
         'state',

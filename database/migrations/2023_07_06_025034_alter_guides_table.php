@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('master_table', function ($table) {
-
+        Schema::table('guides', function (Blueprint $table) {
+            $table->integer('no_animals')->after('code')->nullable();
         });
     }
 

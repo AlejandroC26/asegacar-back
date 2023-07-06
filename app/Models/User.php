@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
         'id_person',
         'login',
         'password',
-        'position',
+        'id_charge',
     ];
 
     /**
@@ -52,4 +51,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function person() { 
+        return $this->belongsTo(Person::class, 'id_person'); 
+    }
+
+    public function charge() { 
+        return $this->belongsTo(Charge::class, 'id_charge'); 
+    }
 }
