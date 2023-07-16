@@ -100,3 +100,4 @@ Route::get('sltAntemoremAnimals/{id_outlet}', 'App\Http\Controllers\AntemortemDa
 Route::get('sltMaster/{type}', 'App\Http\Controllers\MasterTableController@sltMaster');
 Route::get('sltMasterType', 'App\Http\Controllers\MasterTableController@sltMasterType');
 Route::get('sltCauses', 'App\Http\Controllers\PostmortemInspectionsController@sltCauses');
+Route::get('sltSpecies', 'App\Http\Controllers\GuideController@sltSpecies');

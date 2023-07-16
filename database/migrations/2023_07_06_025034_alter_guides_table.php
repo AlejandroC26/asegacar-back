@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::table('guides', function (Blueprint $table) {
             $table->integer('no_animals')->after('code')->nullable();
+            $table->integer('consecutive')->after('no_animals')->nullable();
+            $table->unsignedBigInteger('id_specie')->comment('Id de especie');
+            $table->foreign('id_specie')->references('id')->on('species');
+            $table->text('file_attached')->nullable();
         });
     }
 

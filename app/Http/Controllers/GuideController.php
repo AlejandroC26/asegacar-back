@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\Guide;
+use App\Models\Specie;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -28,15 +29,6 @@ class GuideController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -67,17 +59,6 @@ class GuideController extends Controller
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -118,7 +99,16 @@ class GuideController extends Controller
             $guides = Guide::select('id', 'code')->get();
             return response()->json($guides);
         } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltSpecies () {
+        try {
+            $guides = Specie::select('id', 'name')->get();
+            return response()->json($guides);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 

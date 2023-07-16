@@ -34,8 +34,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_master_type')->comment('Id tipo de maestra');
             $table->foreign('id_master_type')->references('id')->on('master_types');
             
-            $table->string('species')->nullable();
-
             $table->timestamps();
         });
     }

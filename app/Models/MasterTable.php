@@ -18,7 +18,6 @@ class MasterTable extends Model
         'id_verified_by',
         'id_supervised_by',
         'id_elaborated_by',
-        'species',
     ];
 
     public function responsable() { return $this->belongsTo(Person::class, 'id_responsable'); }

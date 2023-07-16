@@ -13,13 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('contracts', function (Blueprint $table) {
+        Schema::create('species', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_persons')->comment('Id del propietario');
-            $table->foreign('id_persons')->references('id')->on('persons');
-            $table->text('guide_number');
-            $table->date('signature_date');
-            $table->text('signature');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('contracts');
+        Schema::dropIfExists('species');
     }
 };

@@ -19,7 +19,10 @@ class Guide extends Model
         'id_buyer',
         'id_source',
         'id_destination',
-        'establishment_name'
+        'establishment_name',
+        'consecutive',
+        'id_specie',
+        'file_attached'
     ];
 
         

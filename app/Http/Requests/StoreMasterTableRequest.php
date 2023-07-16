@@ -32,20 +32,6 @@ class StoreMasterTableRequest extends FormRequest
             'id_verified_by' => 'max:500',
             'id_supervised_by' => 'max:500',
             'id_elaborated_by' => 'max:500',
-            'species' => 'max:500',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'date.required' => 'El parametro :attribute es requerido',
-            'id_master_type.required' => 'El parametro :attribute es requerido',
-            'id_responsable.max' => 'El parametro :attribute es requerido',
-            'id_verified_by.max' => 'El parametro :attribute es requerido',
-            'id_supervised_by.max' => 'El parametro :attribute es requerido',
-            'id_elaborated_by.max' => 'El parametro :attribute es requerido',
-            'species.max' => 'El parametro :attribute es requerido',
         ];
     }
 

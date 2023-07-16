@@ -26,7 +26,6 @@ class MasterTableResource extends JsonResource
             "supervised_by" => $this->supervised_by?->fullname ?? 'N/A',
             "id_elaborated_by" => $this->id_elaborated_by,
             "elaborated_by" => $this->elaborated_by?->fullname ?? 'N/A',
-            "species" => $this->species ?? 'N/A',
             "type" => $this->type->name,
             "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];

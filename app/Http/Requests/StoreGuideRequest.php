@@ -35,6 +35,9 @@ class StoreGuideRequest extends FormRequest
             'id_source' => 'required',
             'id_destination' => 'required',
             'establishment_name' => 'required',
+            'consecutive' => 'required',
+            'id_specie' => 'required',
+            'file_attached' => 'mimes:pdf',
         ];
     }
 
