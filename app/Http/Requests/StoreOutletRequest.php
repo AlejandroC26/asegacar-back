@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreDailyPayrollRequest extends FormRequest
+class StoreOutletRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,17 +26,12 @@ class StoreDailyPayrollRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required',
-            'id_responsable' => 'required',
-            'id_guide' => 'required',
-            'special_order' => 'max:1000',
-            
-            'entries' => 'required|array',
-            'entries.*.id_outlet' => 'required',
-            'entries.*.id_color' => 'required',
-            'entries.*.id_gender' => 'required',
-            // 'id_color' => 'required',
-            // 'amount' => 'required',
+            'code' => 'unique:outlets|required',
+            'customer' => 'max:255',
+            'primary_phone' => 'max:255',
+            'secondary_phone' => 'max:255',
+            'establishment_name' => 'required',
+            'establishment_address' => 'max:255',
         ];
     }
 

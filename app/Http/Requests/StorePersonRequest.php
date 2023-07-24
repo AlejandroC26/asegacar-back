@@ -30,7 +30,9 @@ class StorePersonRequest extends FormRequest
             'document' => 'required',
             'expedition_city' => 'required',
             'adress' => 'max:255',
-            'phone' => 'max:255'
+            'phone' => 'max:255',
+            'signature' => 'mimes:jpg,jpeg,png',
+            'authorization' => 'mimes:pdf',
         ];
     }
 

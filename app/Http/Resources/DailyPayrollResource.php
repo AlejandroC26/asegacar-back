@@ -18,20 +18,19 @@ class DailyPayrollResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'id_master' => $this->id_master,
-            "responsable" => $this->master->responsable?->fullname,
-            "date" => date_format(date_create($this->master->date), 'Y-m-d'),
-            "outlet" => $this->outlet->code,
-
-            "id_gender" => $this->id_color,
-            "id_color" => $this->id_color,
-
-            "gender" => $this->gender->name,
-            "color" => $this->color->name,
-
-            'amount' => $this->amount,
-            'special_order' => $this->special_order ?? 'N/A',
-            //'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
+            "responsable" => $this->responsable?->fullname,
+            "date" => date_format(date_create($this->date), 'Y-m-d'),
+            "entries" => count($this->dailyPayrolls)
         ];
+    }
+
+    public static function toSelect($data)
+    {
+        $aResponse = [];
+        foreach ($data as $key => $element) {
+            $aResponse[$key]['id'] = $element->id;
+            $aResponse[$key]['name'] = date_format(date_create($element->date), 'Y-m-d').'  '.$element->responsable?->fullname;
+        }
+        return collect($aResponse);
     }
 }

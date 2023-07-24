@@ -13,20 +13,23 @@ class MasterTable extends Model
 
     protected $fillable = [
         'date',
+        'id_guide',
         'id_master_type',
         'id_responsable',
         'id_verified_by',
         'id_supervised_by',
         'id_elaborated_by',
+        'state',
     ];
 
-    public function responsable() { return $this->belongsTo(Person::class, 'id_responsable'); }
+    public function responsable() { 
+        return $this->belongsTo(Person::class, 'id_responsable'); 
+    }
     public function verified_by() { return $this->belongsTo(Person::class, 'id_verified_by'); }
     public function supervised_by() { return $this->belongsTo(Person::class, 'id_supervised_by'); }
     public function elaborated_by() { return $this->belongsTo(Person::class, 'id_elaborated_by'); }
 
-    public function type()
-    {
+    public function type() {
         return $this->belongsTo(MasterType::class, 'id_master_type');
     }
 }

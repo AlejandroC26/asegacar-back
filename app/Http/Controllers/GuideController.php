@@ -9,7 +9,8 @@ use App\Models\Specie;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
 class GuideController extends Controller
 {
@@ -39,7 +40,12 @@ class GuideController extends Controller
     public function store(StoreGuideRequest $request)
     {
         try {
-            $guide = Guide::create($request->validated());
+            $sFileName = '';
+            if($request->file('file_attached')) {
+                $sFileName = 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
+                $request->file('file_attached')->storeAs('public/guide', $sFileName);
+            }  
+            $guide = Guide::create(array_merge($request->validated(), ['file_attached' => $sFileName]));
             return $this->successResponse($guide, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -71,7 +77,12 @@ class GuideController extends Controller
     public function update(StoreGuideRequest $request, Guide $guide)
     {
         try {   
-            $guide->update($request->validated());
+            $sFileName = $guide->file_attached;
+            if($request->file('file_attached')) {
+                $sFileName = $sFileName || 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
+                $request->file('file_attached')->storeAs('public/guide', $sFileName);
+            }  
+            $guide->update(array_merge($request->validated(), ['file_attached' => $sFileName]));
             return $this->successResponse($guide, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
@@ -107,6 +118,20 @@ class GuideController extends Controller
         try {
             $guides = Specie::select('id', 'name')->get();
             return response()->json($guides);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
+    public function downloadGuide($id) {
+        try {
+            $oGuide = Guide::find($id);
+            if(!$oGuide->file_attached) {
+                return $this->errorResponse("File doesnt't found", ["The file does not found"]);
+            }
+            $sPath = storage_path('app/public/guide/'.$oGuide->file_attached);
+            $headers = [ 'Content-Type' => 'application/pdf' ];
+            return response()->download($sPath, 'guide.pdf', $headers);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

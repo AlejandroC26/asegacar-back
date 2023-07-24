@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('expedition_city');
             $table->string('adress');
             $table->string('phone');
+            $table->string('signature')->nullable();
+            $table->string('authorization')->nullable();
             $table->timestamps();
         });
     }

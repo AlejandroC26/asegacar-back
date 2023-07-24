@@ -21,6 +21,8 @@ class PersonResource extends JsonResource
             'expedition_city' => $this->expedition_city,
             'adress' => $this->adress,
             'phone' => $this->phone,
+            'signature' => $this->signature,
+            'authorization' => $this->authorization,
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }

@@ -27,7 +27,20 @@ class PersonController extends Controller
     public function store(StorePersonRequest $request)
     {
         try {        
-            $person = Person::create($request->validated());
+            $sSignatureName = '';
+            $sAuthorizationName = '';
+            if($request->file('signature')) {
+                $sSignatureName = 'signature_'.date("Ymd_Hms").'.'.$request->file('signature')->extension();
+                $request->file('signature')->storeAs('public/signatures', $sSignatureName);
+            }  
+            if($request->file('authorization')) {
+                $sAuthorizationName = 'authorization_'.date("Ymd_Hms").'.'.$request->file('authorization')->extension();
+                $request->file('authorization')->storeAs('public/authorizations', $sAuthorizationName);
+            }  
+            $person = Person::create(array_merge($request->validated(), [
+                'signature' => $sSignatureName,
+                'authorization' => $sAuthorizationName
+            ]));
             return $this->successResponse($person, 'Registro realizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -45,7 +58,24 @@ class PersonController extends Controller
     public function update(StorePersonRequest $request, Person $person)
     {
         try {                
-            $person->update($request->validated());
+            $sSignatureName = $person->signature;
+            $sAuthorizationName = $person->authorization;
+                        
+            if($request->file('signature')) {
+                $sSignatureName = $sSignatureName ?? 'signature_'.date("Ymd_Hms").'.'.$request->file('signature')->extension();
+                $request->file('signature')->storeAs('public/signatures', $sSignatureName);
+            }  
+
+            if($request->file('authorization')) {
+                $sAuthorizationName = $sAuthorizationName ?? 'authorization_'.date("Ymd_Hms").'.'.$request->file('authorization')->extension();
+                $request->file('authorization')->storeAs('public/authorizations', $sAuthorizationName);
+            }  
+
+            $person->update(array_merge($request->validated(), [
+                'signature' => $sSignatureName,
+                'authorization' => $sAuthorizationName
+            ]));
+            
             return $this->successResponse($person, 'Registro actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
@@ -68,6 +98,15 @@ class PersonController extends Controller
             return $this->successResponse($person, 'Registro eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function onGetSignature()
+    {
+        try {
+
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

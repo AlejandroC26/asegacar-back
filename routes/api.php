@@ -68,6 +68,7 @@ Route::resource('zeroToleranceInspection', ZeroToleranceInspectionController::cl
 Route::resource('channelConditioning', ChannelConditioningController::class);
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
+Route::get('signature/{nIdPerson}', 'App\Http\Controllers\PersonController@sltPersons');
 
 Route::post('ageBobinsFormat', 'App\Http\Controllers\AgeController@download');
 Route::post('dailyPayrollFormat', 'App\Http\Controllers\DailyPayrollController@download');
@@ -84,6 +85,7 @@ Route::post('channelConditioningFormat', 'App\Http\Controllers\ChannelConditioni
 
 Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
 Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');
+Route::post('guidePDF/{nIdGuide}', 'App\Http\Controllers\GuideController@downloadGuide');
 Route::get('sltCharges', 'App\Http\Controllers\UserController@sltCharges');
 Route::get('sltPersons', 'App\Http\Controllers\PersonController@sltPersons');
 Route::get('sltAges', 'App\Http\Controllers\AgeController@sltAges');
@@ -101,3 +103,4 @@ Route::get('sltMaster/{type}', 'App\Http\Controllers\MasterTableController@sltMa
 Route::get('sltMasterType', 'App\Http\Controllers\MasterTableController@sltMasterType');
 Route::get('sltCauses', 'App\Http\Controllers\PostmortemInspectionsController@sltCauses');
 Route::get('sltSpecies', 'App\Http\Controllers\GuideController@sltSpecies');
+Route::get('sltDailyPayrolls', 'App\Http\Controllers\DailyPayrollController@sltDailyPayrolls');

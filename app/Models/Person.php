@@ -17,5 +17,7 @@ class Person extends Model
         'expedition_city',
         'adress',
         'phone',
+        'signature',
+        'authorization',
     ];
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOutletRequest;
 use App\Http\Resources\OutletResource;
 use App\Models\Outlet;
 use Illuminate\Http\Request;
@@ -22,56 +23,26 @@ class OutletController extends Controller
         }
     }
 
-    public function store(Request $request) {
+    public function store(StoreOutletRequest $request) {
         try {
-            $validator = Validator::make($request->all(), [
-                'description' => 'required|max:255',
-            ]);
-            
-            if($validator->fails()) 
-                return response()->json(['message' => 'Field validation failed: '.$validator->errors()->toJson()],400);
-        
-            $outlet = Outlet::create([
-                "description" => $request->description
-            ]);
-
+            $outlet = Outlet::create($request->validated());
             return $this->successResponse($outlet, 'Registro realizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
     }
 
-    public function show ($id) {
+    public function show (Outlet $outlet) {
         try {
-            $outlet = Outlet::find($id);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Usuario listado exitosamente',
-                'data' => $outlet
-            ]);
+            return $this->successResponse($outlet, 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
 
-    public function update(Request $request, $id) {
-        try {
-            $outlet = Outlet::find($id);
-            
-            if(!$outlet)
-                return response()->json(['message' => 'User does not found']);
-    
-            $validator = Validator::make($request->all(), [
-                'description' => 'required|max:255',
-            ]);
-    
-            if($validator->fails()) 
-                return response()->json(['message' => 'Field validation failed: '.$validator->errors()->toJson()],400);
-            
-            $outlet->update([
-                'description' => $request->description
-            ]);
-
+    public function update(StoreOutletRequest $request, Outlet $outlet) {
+        try {    
+            $outlet->update($request->validated());
             return $this->successResponse($outlet, 'Actualizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
@@ -87,15 +58,10 @@ class OutletController extends Controller
         }
     }
 
-    public function destroy($id) {
+    public function destroy(Outlet $outlet) {
         try {
-            $outlet = Outlet::find($id);
             $outlet->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Usuario eliminado exitosamente',
-                'data' => $outlet
-            ]);
+            return $this->successResponse($outlet, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

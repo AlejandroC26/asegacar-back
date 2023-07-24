@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('daily_payrolls', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('id_master')->comment('Id de matriz');
-            $table->foreign('id_master')->references('id')->on('master_table');
+            $table->unsignedBigInteger('id_dp_master')->comment('Id de maestra');
+            $table->foreign('id_dp_master')->references('id')->on('daily_payroll_master');
 
             $table->unsignedBigInteger('id_outlet')->comment('Id de expendio');
             $table->foreign('id_outlet')->references('id')->on('outlets');
@@ -29,8 +29,6 @@ return new class extends Migration
             $table->foreign('id_color')->references('id')->on('colors');
 
             $table->integer('amount');
-
-            $table->longText('special_order')->nullable()->comment('Orden especial');
             
             $table->timestamps();
         });

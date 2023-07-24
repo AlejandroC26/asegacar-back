@@ -41,4 +41,9 @@ class Guide extends Model
     public function destination () { 
         return $this->belongsTo(City::class, 'id_destination'); 
     }
+
+    public function specie()
+    {
+        return $this->belongsTo(Specie::class, 'id_specie');
+    }
 }

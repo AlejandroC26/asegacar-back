@@ -30,9 +30,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_elaborated_by')->nullable();
             $table->foreign('id_elaborated_by')->references('id')->on('persons');
 
-            
             $table->unsignedBigInteger('id_master_type')->comment('Id tipo de maestra');
             $table->foreign('id_master_type')->references('id')->on('master_types');
+
+            $table->boolean('state')->default(1);
             
             $table->timestamps();
         });

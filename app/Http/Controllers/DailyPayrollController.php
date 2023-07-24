@@ -6,6 +6,8 @@ use App\Exports\DailyPayrollExport;
 use App\Http\Requests\StoreDailyPayrollRequest;
 use App\Http\Resources\DailyPayrollResource;
 use App\Models\DailyPayroll;
+use App\Models\DailyPayrollMaster;
+use App\Models\MasterType;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
@@ -22,8 +24,8 @@ class DailyPayrollController extends Controller
     public function index(Request $request)
     {
         try {
-            $dailyPayroll = DailyPayroll::all();
-            return response()->json(DailyPayrollResource::collection($dailyPayroll));
+            $aMasterTable = DailyPayrollMaster::all();
+            return response()->json(DailyPayrollResource::collection($aMasterTable));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -40,11 +42,20 @@ class DailyPayrollController extends Controller
         try {       
             DB::beginTransaction();
 
-            $dailyPayroll = DailyPayroll::create($request->validated()); 
+            $oMasterTable = DailyPayrollMaster::create($request->only([
+                'date', 'id_guide', 'id_responsable', 'entries'
+            ]));
+
+            foreach ($request->validated()['entries'] as $entrie) {
+                DailyPayroll::create(array_merge($entrie, [
+                    'id_dp_master' => $oMasterTable->id,
+                    'amount' => 1
+                ]));
+            }
 
             DB::commit();
 
-            return $this->successResponse($dailyPayroll, 'Registro realizado exitosamente', 200);
+            return $this->successResponse([], 'Registro realizado exitosamente', 200);
         } catch (\Throwable $exception) {
             DB::rollBack();
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -60,8 +71,9 @@ class DailyPayrollController extends Controller
     public function show($id)
     {
         try {
-            $dailyPayroll = DailyPayroll::find($id);
-            return $this->successResponse($dailyPayroll, 'Listado exitosamente', 200);
+            $aMasterTable = DailyPayrollMaster::find($id);
+            $aMasterTable['entries'] = $aMasterTable->dailyPayrolls;
+            return $this->successResponse($aMasterTable, 'Listado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -77,14 +89,20 @@ class DailyPayrollController extends Controller
     public function update(StoreDailyPayrollRequest $request, $id)
     {
         try {
-            
-            $validated = $request->validated();
-            $validated = $request->safe()->except(['genders', 'colors']); 
-            
-            $dailyPayroll = DailyPayroll::find($id);
-            $dailyPayroll->update($validated);
 
-            return $this->successResponse($dailyPayroll, 'Actualizado exitosamente', 200);
+            $oMasterTable = DailyPayrollMaster::find($id);
+            $oMasterTable->update($request->only([
+                'date', 'id_guide', 'id_responsable', 'entries'
+            ]));
+            DailyPayroll::where('id_dp_master', $id)->delete();
+            foreach ($request->validated()['entries'] as $entrie) {
+                DailyPayroll::create(array_merge($entrie, [
+                    'id_dp_master' => $oMasterTable->id,
+                    'amount' => 1
+                ]));
+            }
+
+            return $this->successResponse($oMasterTable, 'Actualizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -99,12 +117,23 @@ class DailyPayrollController extends Controller
     public function destroy($id)
     {
         try {
-            $dailyPayroll = DailyPayroll::find($id);
-            $dailyPayroll->delete();
+            DailyPayroll::where('id_dp_master', $id)->delete();
+            DailyPayrollMaster::where('id', $id)->delete();
 
-            return $this->successResponse($dailyPayroll, 'Eliminado exitosamente', 200);
+            return $this->successResponse([], 'Eliminado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltDailyPayrolls()
+    {
+        try {
+            $dailyPayrolls = DailyPayrollMaster::with('responsable')->get();
+            $dailyPayrolls = DailyPayrollResource::toSelect($dailyPayrolls);
+            return response()->json($dailyPayrolls);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 
@@ -116,7 +145,7 @@ class DailyPayrollController extends Controller
 
             $dailyPayroll = DailyPayroll::with('outlet', 'master.responsable')->select(
                     'daily_payrolls.id', 
-                    'id_master', 
+                    'id_dp_master', 
                     'id_outlet',
                     DB::raw("GROUP_CONCAT(CONCAT(amount,' ', colors.name) SEPARATOR ', ') as colors"),
                     DB::raw("GROUP_CONCAT(CONCAT(amount,' ', genders.name) SEPARATOR ', ') as genders"),
@@ -127,6 +156,7 @@ class DailyPayrollController extends Controller
                 ->leftJoin('colors', 'colors.id', '=', 'daily_payrolls.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'daily_payrolls.id_gender')
                 ->groupBy('id_outlet')
+                ->where('id_dp_master', $request->id_master)
                 ->get();
 
             $total_males = 0;
