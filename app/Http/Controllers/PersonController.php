@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePersonRequest;
 use App\Models\Person;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponse;
+use App\Http\Requests\StorePersonRequest;
 use App\Http\Resources\PersonResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PersonController extends Controller
 {
@@ -101,10 +100,26 @@ class PersonController extends Controller
         }
     }
 
-    public function onGetSignature()
+    public function onGetSignature($id)
     {
         try {
+            $person = Person::find($id);
+            $sPath = storage_path('app/public/signatures/'.$person->signature);
+            $sFileContent = File::get($sPath);
+            $sMime = mime_content_type($sPath);
+            $sBase64 = base64_encode($sFileContent);
+            return response()->json(['data' => 'data:' . $sMime . ';base64,' . $sBase64]);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
 
+    public function onGetAuthorization($id)
+    {
+        try {
+            $person = Person::find($id);
+            $sPath = storage_path('app/public/authorizations/'.$person->authorization);
+            return response()->file($sPath);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

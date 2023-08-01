@@ -68,7 +68,8 @@ Route::resource('zeroToleranceInspection', ZeroToleranceInspectionController::cl
 Route::resource('channelConditioning', ChannelConditioningController::class);
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
-Route::get('signature/{nIdPerson}', 'App\Http\Controllers\PersonController@sltPersons');
+Route::get('signature/{nIdPerson}', 'App\Http\Controllers\PersonController@onGetSignature');
+Route::get('authorization/{nIdPerson}', 'App\Http\Controllers\PersonController@onGetAuthorization');
 
 Route::post('ageBobinsFormat', 'App\Http\Controllers\AgeController@download');
 Route::post('dailyPayrollFormat', 'App\Http\Controllers\DailyPayrollController@download');
