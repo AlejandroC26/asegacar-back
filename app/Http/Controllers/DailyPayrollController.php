@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDailyPayrollRequest;
 use App\Http\Resources\DailyPayrollResource;
 use App\Models\DailyPayroll;
 use App\Models\DailyPayrollMaster;
+use App\Models\Guide;
 use App\Models\MasterType;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
@@ -42,15 +43,25 @@ class DailyPayrollController extends Controller
         try {       
             DB::beginTransaction();
 
-            $oMasterTable = DailyPayrollMaster::create($request->only([
-                'date', 'id_guide', 'id_responsable', 'entries'
-            ]));
+            $oMasterTable = DailyPayrollMaster::create(
+                $request->except(['entries'])
+            );
+
+            $oGuide = Guide::find($request->id_guide);
+
+            if($oGuide->no_animals !== count($request->validated()['entries'])) {
+                return $this->errorResponse('The record could not be saved', ['You must record the number of animals assigned to the guide.'], 409);
+            }
 
             foreach ($request->validated()['entries'] as $entrie) {
-                DailyPayroll::create(array_merge($entrie, [
+                $oUniqueCode = DailyPayroll::where([
                     'id_dp_master' => $oMasterTable->id,
-                    'amount' => 1
-                ]));
+                    'code' => $entrie['code'],
+                ])->first();
+                if($oUniqueCode) {
+                    return $this->errorResponse('The record could not be saved', ['The code must be unique in the spreadsheet.'], 409);
+                }
+                DailyPayroll::create(array_merge($entrie, ['id_dp_master' => $oMasterTable->id,]));
             }
 
             DB::commit();
@@ -91,15 +102,25 @@ class DailyPayrollController extends Controller
         try {
 
             $oMasterTable = DailyPayrollMaster::find($id);
-            $oMasterTable->update($request->only([
-                'date', 'id_guide', 'id_responsable', 'entries'
-            ]));
+            
+            if($oMasterTable?->guide->no_animals !== count($request->validated()['entries'])) {
+                return $this->errorResponse('The record could not be saved', ['You must record the number of animals assigned to the guide.'], 409);
+            }
+
+            $oMasterTable->update(
+                $request->except(['entries'])
+            );
+            
             DailyPayroll::where('id_dp_master', $id)->delete();
             foreach ($request->validated()['entries'] as $entrie) {
-                DailyPayroll::create(array_merge($entrie, [
+                $oUniqueCode = DailyPayroll::where([
                     'id_dp_master' => $oMasterTable->id,
-                    'amount' => 1
-                ]));
+                    'code' => $entrie['code'],
+                ])->first();
+                if($oUniqueCode) {
+                    return $this->errorResponse('The record could not be updated', ['The code must be unique in the spreadsheet.'], 409);
+                }
+                DailyPayroll::create(array_merge($entrie, ['id_dp_master' => $oMasterTable->id]));
             }
 
             return $this->successResponse($oMasterTable, 'Actualizado exitosamente', 200);
@@ -147,16 +168,17 @@ class DailyPayrollController extends Controller
                     'daily_payrolls.id', 
                     'id_dp_master', 
                     'id_outlet',
-                    DB::raw("GROUP_CONCAT(CONCAT(amount,' ', colors.name) SEPARATOR ', ') as colors"),
-                    DB::raw("GROUP_CONCAT(CONCAT(amount,' ', genders.name) SEPARATOR ', ') as genders"),
-                    DB::raw("SUM(CASE WHEN id_gender = 1 THEN amount END) AS total_males"),
-                    DB::raw("SUM(CASE WHEN id_gender = 2 THEN amount END) AS total_females"),
+                    DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
+                    DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
+                    DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
+                    DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
+                    DB::raw("GROUP_CONCAT(special_order SEPARATOR ', ')	AS special_order"),
                     'daily_payrolls.created_at'
                 )
                 ->leftJoin('colors', 'colors.id', '=', 'daily_payrolls.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'daily_payrolls.id_gender')
-                ->groupBy('id_outlet')
                 ->where('id_dp_master', $request->id_master)
+                ->groupBy('id_outlet')
                 ->get();
 
             $total_males = 0;

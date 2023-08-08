@@ -15,9 +15,12 @@ class DailyPayrollMaster extends Model
         'date',
         'id_responsable',
         'id_guide',
-        'special_order',
         'state'
     ];
+
+    public function guide() { 
+        return $this->belongsTo(Guide::class, 'id_guide'); 
+    }
 
     public function responsable() { 
         return $this->belongsTo(Person::class, 'id_responsable'); 

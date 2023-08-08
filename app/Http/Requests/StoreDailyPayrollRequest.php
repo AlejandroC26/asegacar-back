@@ -28,15 +28,17 @@ class StoreDailyPayrollRequest extends FormRequest
         return [
             'date' => 'required',
             'id_responsable' => 'required',
-            'id_guide' => 'required',
-            'special_order' => 'max:1000',
+            'id_guide' => 'required',        
             
             'entries' => 'required|array',
-            'entries.*.id_outlet' => 'required',
-            'entries.*.id_color' => 'required',
+            'entries.*.code' => 'required',
             'entries.*.id_gender' => 'required',
-            // 'id_color' => 'required',
-            // 'amount' => 'required',
+            'entries.*.id_color' => 'required',
+            'entries.*.id_age' => 'required',
+            'entries.*.id_purpose' => 'required',
+            'entries.*.id_outlet' => 'max:500',
+            'entries.*.sacrifice_date' => 'max:500',
+            'entries.*.special_order' => 'max:1000',
         ];
     }
 

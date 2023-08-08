@@ -23,7 +23,6 @@ return new class extends Migration
             $table->unsignedBigInteger('id_guide')->nullable()->comment('Id guía');
             $table->foreign('id_guide')->references('id')->on('guides');
 
-            $table->text('special_order')->nullable();
             $table->boolean('state')->default(1);
             $table->timestamps();
         });

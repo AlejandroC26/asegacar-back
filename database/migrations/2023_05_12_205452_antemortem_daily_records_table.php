@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_guide')->comment('Id de la guía');
             $table->foreign('id_guide')->references('id')->on('guides');
+            
             $table->string('code');
             
             $table->unsignedBigInteger('id_gender')->comment('Id del género');

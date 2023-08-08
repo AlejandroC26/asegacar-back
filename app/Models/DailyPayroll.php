@@ -10,11 +10,15 @@ class DailyPayroll extends Model
     use HasFactory;
 
     protected $fillable = [
+        'code',
         'id_dp_master',
         'id_outlet',
         'id_gender',
         'id_color',
-        'amount',
+        'id_age',
+        'id_purpose',
+        'sacrifice_date',
+        'special_order'
     ];
 
     public function master() 

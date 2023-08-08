@@ -16,10 +16,12 @@ return new class extends Migration
         Schema::create('daily_payrolls', function (Blueprint $table) {
             $table->id();
 
+            $table->string('code');
+
             $table->unsignedBigInteger('id_dp_master')->comment('Id de maestra');
             $table->foreign('id_dp_master')->references('id')->on('daily_payroll_master');
 
-            $table->unsignedBigInteger('id_outlet')->comment('Id de expendio');
+            $table->unsignedBigInteger('id_outlet')->nullable()->comment('Id de expendio');
             $table->foreign('id_outlet')->references('id')->on('outlets');
 
             $table->unsignedBigInteger('id_gender')->comment('Id del género');
@@ -28,8 +30,16 @@ return new class extends Migration
             $table->unsignedBigInteger('id_color')->comment('Id de color');
             $table->foreign('id_color')->references('id')->on('colors');
 
-            $table->integer('amount');
+            $table->unsignedBigInteger('id_age')->comment('Id de edad');
+            $table->foreign('id_age')->references('id')->on('ages');
+
+            $table->unsignedBigInteger('id_purpose')->comment('Id de propósito');
+            $table->foreign('id_purpose')->references('id')->on('purposes');
+
+            $table->date('sacrifice_date')->nullable()->comment('Fecha de sacrificio');
             
+            $table->text('special_order')->nullable();
+
             $table->timestamps();
         });
     }
