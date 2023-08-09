@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_route')->comment('Id de la ruta');
             $table->foreign('id_route')->references('id')->on('routes');
 
-            $table->unsignedBigInteger('id_antemortem_daily_record')->comment('Id de animal');
-            $table->foreign('id_antemortem_daily_record')->references('id')->on('antemortem_daily_records');
+            $table->unsignedBigInteger('id_daily_payroll')->comment('Id de animal');
+            $table->foreign('id_daily_payroll')->references('id')->on('daily_payrolls');
 
             $table->integer('quantity');
             $table->longText('orders')->nullable();

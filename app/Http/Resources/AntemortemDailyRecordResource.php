@@ -26,6 +26,7 @@ class AntemortemDailyRecordResource extends JsonResource
             'id_guide' => $this->id_guide,
             'id_gender' => $this->id_gender,
             'id_purpose' => $this->id_purpose,
+            'id_age' => $this->id_age,
             'code' => $this->code,
             'guide' => Guide::find($this->id_guide)->code,
             'date_entry' => Guide::find($this->id_guide)->date_entry,

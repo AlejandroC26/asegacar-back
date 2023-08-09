@@ -26,26 +26,8 @@ class UpdateAntemortemDailyRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_guide' => 'required',
-            'code' => 'required',
-            'id_gender' => 'required',
-            'id_age' => 'required',
-            'id_purpose' => 'required',
-            'id_color' => 'required',
-            'sacrifice_date' => 'required',
+            'sacrifice_date' => 'required|date',
             'id_outlet' => 'required',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'id_guide.required' => 'El parametro :attribute es requerido',
-            'code.required' => 'El parametro :attribute es requerido',
-            'id_gender.required' => 'El parametro :attribute es requerido',
-            'id_age.required' => 'El parametro :attribute es requerido',
-            'id_outlet.required' => 'El parametro :attribute es requerido',
-            'sacrifice_date.required' => 'El parametro :attribute es requerido',
         ];
     }
 

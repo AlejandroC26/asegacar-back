@@ -22,7 +22,7 @@ class DailyRoutesController extends Controller
     public function index()
     {
         try {
-            $routes = DailyRoutes::with('route', 'antemortem_daily_record.outlet')->get();
+            $routes = DailyRoutes::with('route', 'daily_payroll.outlet')->get();
             return response()->json(DailyRouteResource::collection($routes));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -97,7 +97,7 @@ class DailyRoutesController extends Controller
     public function download(Request $request)
     {
         try {
-            $dailyRoutes = DailyRoutes::with('route', 'antemortem_daily_record.outlet')
+            $dailyRoutes = DailyRoutes::with('route', 'daily_payroll.outlet')
                 ->where('date', $request->date)->get();
             $response = [];
             foreach ($dailyRoutes as $route) {

@@ -110,6 +110,7 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
             ],
         ];
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:J3')->applyFromArray($styleArray);
         $sheet->getStyle($range)->applyFromArray($styleArray);
 
         $backgroundKey = 6;

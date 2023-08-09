@@ -6,7 +6,7 @@ use App\Exports\AgeBobinsExport;
 use App\Helpers\FormatDateHelper;
 use App\Http\Resources\AgeResource;
 use App\Models\Age;
-use App\Models\AntemortemDailyRecord;
+use App\Models\DailyPayroll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponse;
@@ -113,7 +113,8 @@ class AgeController extends Controller
             $oDate["month"] = strtoupper(FormatDateHelper::onNumberToMonth(intval($date->format('m'))));
             $oDate["year"]  = $date->format('Y');
 
-            $aRecords = AntemortemDailyRecord::whereBetween('sacrifice_date', [$first_date, $last_date])->get();
+            $aRecords = DailyPayroll::whereBetween('sacrifice_date', [$first_date, $last_date])->get();
+
             $aResults = [];
             $oTotals = [
                 "males" => [
