@@ -178,16 +178,18 @@ class DailyPayrollController extends Controller
                 ->leftJoin('colors', 'colors.id', '=', 'daily_payrolls.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'daily_payrolls.id_gender')
                 ->where('id_dp_master', $request->id_master)
+                ->whereNotNull('id_outlet')
                 ->groupBy('id_outlet')
                 ->get();
+
 
             $total_males = 0;
             $total_females = 0;
             foreach ($dailyPayroll as $element) {
-                $total_males += $element->total_females;
-                $total_females += $element->total_females;
+                $total_males += intval($element->total_males);
+                $total_females += intval($element->total_females);
             }
-            $general = $dailyPayroll[0] ? $dailyPayroll[0]->master : [];
+            $general = DailyPayrollMaster::find($request->id_master);
             
             return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

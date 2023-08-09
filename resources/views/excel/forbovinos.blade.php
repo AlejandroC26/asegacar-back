@@ -53,7 +53,7 @@
         @endphp
     <tr>
         <td></td>
-        <td>{{ $element['outlet']['code'] }}</td>
+        <td>{{ $element['outlet']['code'] ?? '' }}</td>
         <td>{{ $total }}</td>
         <td>{{ $element['colors'] }}</td>
         <td>{{ $element['genders'] }}</td>
