@@ -11,8 +11,10 @@ use App\Models\Guide;
 use App\Models\MasterType;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Database\Eloquent\Builder;
 
 class DailyPayrollController extends Controller
 {
@@ -54,10 +56,10 @@ class DailyPayrollController extends Controller
             }
 
             foreach ($request->validated()['entries'] as $entrie) {
-                $oUniqueCode = DailyPayroll::where([
-                    'id_dp_master' => $oMasterTable->id,
-                    'code' => $entrie['code'],
-                ])->first();
+                $oUniqueCode = DailyPayroll::whereHas('master', function(Builder $query) use ($request){
+                    $query->whereYear('date', $request->date);
+                    $query->whereMonth('date', Carbon::createFromFormat('Y-m-d', $request->date)->month);
+                })->where(['code' => $entrie['code']])->first();
                 if($oUniqueCode) {
                     return $this->errorResponse('The record could not be saved', ['The code must be unique in the spreadsheet.'], 409);
                 }
@@ -113,10 +115,10 @@ class DailyPayrollController extends Controller
             
             DailyPayroll::where('id_dp_master', $id)->delete();
             foreach ($request->validated()['entries'] as $entrie) {
-                $oUniqueCode = DailyPayroll::where([
-                    'id_dp_master' => $oMasterTable->id,
-                    'code' => $entrie['code'],
-                ])->first();
+                $oUniqueCode = DailyPayroll::whereHas('master', function(Builder $query) use ($request){
+                    $query->whereYear('date', $request->date);
+                    $query->whereMonth('date', Carbon::createFromFormat('Y-m-d', $request->date)->month);
+                })->where(['code' => $entrie['code']])->first();
                 if($oUniqueCode) {
                     return $this->errorResponse('The record could not be updated', ['The code must be unique in the spreadsheet.'], 409);
                 }

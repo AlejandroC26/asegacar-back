@@ -36,8 +36,8 @@
     </tr>
     @foreach($data as $element)
     <tr>
-        <td>{{ $element->antemortem_daily_record->outlet->code }}</td>
-        <td>{{ $element->antemortem_daily_record->code- }}</td>
+        <td>{{ $element->dailyPayroll->outlet->code }}</td>
+        <td>{{ $element->dailyPayroll->code- }}</td>
         <td>{{ $element->milk }}</td>
         <td>{{ $element->fecal_matter }}</td>
         <td>{{ $element->rumen_content }}</td>

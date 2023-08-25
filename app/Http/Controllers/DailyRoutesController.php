@@ -6,7 +6,9 @@ use App\Exports\DailyRoutesExport;
 use App\Http\Requests\StoreDailyRouteRequest;
 use App\Http\Resources\DailyRouteResource;
 use App\Models\DailyRoutes;
+use App\Models\Route;
 use App\Traits\ApiResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,7 +24,7 @@ class DailyRoutesController extends Controller
     public function index()
     {
         try {
-            $routes = DailyRoutes::with('route', 'daily_payroll.outlet')->get();
+            $routes = DailyRoutes::with('route')->get();
             return response()->json(DailyRouteResource::collection($routes));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -97,22 +99,18 @@ class DailyRoutesController extends Controller
     public function download(Request $request)
     {
         try {
-            $dailyRoutes = DailyRoutes::with('route', 'daily_payroll.outlet')
-                ->where('date', $request->date)->get();
-            $response = [];
-            foreach ($dailyRoutes as $route) {
-                if(!array_key_exists($route->route->name, $response)) {
-                    // $temporal['outlet'];
-                    // $temporal['animal'];
 
-                    $response[$route->route->name]['route'] = $route->route->name;
-                    $response[$route->route->name]['data'][] = $route;
-                } 
+            $routes = Route::whereHas('dailyRoutes', function(Builder $query) use ($request) {
+                $query->where('date', $request->date);
+            })->with(['dailyRoutes' => function($query) use ($request) {
+                $query->where('date', $request->date);
+            }])->get();
+
+            if(!count($routes)) {
+                return $this->errorResponse('The report could not be showed', ['There are not records saved']);
             }
-
-            // return $dailyRoutes;
-            return $response;
-            return Excel::download(new DailyRoutesExport([], '', '', ''), 'invoices.xlsx');
+            
+            return Excel::download(new DailyRoutesExport($routes, $request->date), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

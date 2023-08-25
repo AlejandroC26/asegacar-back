@@ -27,7 +27,7 @@ class StoreChannelConditioningRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_daily_payroll' => 'required',
             'skin' => 'max:500',
             'hair' => 'max:500',
             'hematoma' => 'max:500',

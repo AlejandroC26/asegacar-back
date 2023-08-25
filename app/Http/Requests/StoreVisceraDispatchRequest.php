@@ -27,7 +27,7 @@ class StoreVisceraDispatchRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_daily_payroll' => 'required',
             'head' => 'max:500',
             'small_ints' => 'max:500',
             'large_ints' => 'max:500',
@@ -48,7 +48,7 @@ class StoreVisceraDispatchRequest extends FormRequest
     {
         return [
             'id_master.required' => 'El parametro :attribute es requerido',
-            'id_antemortem_daily_record.required' => 'El parametro :attribute es requerido',
+            'id_daily_payroll.required' => 'El parametro :attribute es requerido',
         ];
     }
 

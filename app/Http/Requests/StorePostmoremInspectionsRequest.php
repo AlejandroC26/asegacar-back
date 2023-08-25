@@ -27,7 +27,7 @@ class StorePostmoremInspectionsRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_daily_payroll' => 'required',
             'id_intestines_cause' => 'max:500',
             'intestines_quantity' => 'max:500',
             'id_livers_cause' => 'max:500',

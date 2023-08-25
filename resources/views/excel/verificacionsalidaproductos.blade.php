@@ -42,8 +42,8 @@
     @foreach($data as $key => $element)
     <tr>
         <td>{{ $key + 1 }}</td>
-        <td>{{ $element->antemortem_daily_record->outlet->code }}</td>
-        <td>{{ $element->antemortem_daily_record->code }}</td>
+        <td>{{ $element->dailyPayroll->outlet->code }}</td>
+        <td>{{ $element->dailyPayroll->code }}</td>
         <td>{{ $element->head }}</td>
         <td>{{ $element->small_ints }}</td>
         <td>{{ $element->large_ints }}</td>

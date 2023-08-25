@@ -27,37 +27,38 @@ return new class extends Migration
         return <<<SQL
             CREATE VIEW `daily_matrix_view` AS 
                 SELECT 
-                    guides.date_entry, 
-                    adr.code as asigned_code,
-                    guides. code as no_guide,
-                    guides.time_entry,
-                    ages.description as age,
-                    genders.id as id_gender,
-                    genders.name as gender,
-                    outlets.code as outlet,
-                    purposes.name as purpose,
-                    colors.name as color,
-                    outlets.code as no_outlet,
-                    adr.sacrifice_date,
-                    guides.id_buyer,
-                    guides.id_owner,
-                    owner.fullname as owner,
-                    owner.document as owner_document,
-                    buyer.fullname as buyer,
-                    guides.establishment_name,
-                    source_city.name as source_city,
-                    source_department.name as source_department
-                FROM guides
-                left join antemortem_daily_records adr on adr.id_guide = guides.id
-                left join genders on genders.id = adr.id_gender
-                left join ages on ages.id = adr.id_age
-                left join purposes on purposes.id = adr.id_purpose
-                left join colors on colors.id = adr.id_color
-                left join outlets on outlets.id = adr.id_outlet
-                left join cities source_city on source_city.id = guides.id_source
-                left join departments source_department on source_department.id = source_city.id_department
-                left join persons as buyer on buyer.id = guides.id_buyer
-                left join persons as owner on owner.id = guides.id_owner
+                    `guides`.`date_entry` AS `date_entry`,
+                    `dp`.`code` AS `asigned_code`,
+                    `guides`.`code` AS `no_guide`,
+                    `guides`.`time_entry` AS `time_entry`,
+                    `ages`.`description` AS `age`,
+                    `genders`.`id` AS `id_gender`,
+                    `genders`.`name` AS `gender`,
+                    `outlets`.`code` AS `outlet`,
+                    `purposes`.`name` AS `purpose`,
+                    `colors`.`name` AS `color`,
+                    `dp`.`sacrifice_date` AS `sacrifice_date`,
+                    `guides`.`id_buyer` AS `id_buyer`,
+                    `guides`.`id_owner` AS `id_owner`,
+                    `owner`.`fullname` AS `owner`,
+                    `owner`.`document` AS `owner_document`,
+                    `buyer`.`fullname` AS `buyer`,
+                    `guides`.`establishment_name` AS `establishment_name`,
+                    `source_city`.`name` AS `source_city`,
+                    `source_department`.`name` AS `source_department`
+                FROM
+                    (((((((((((`daily_payrolls` `dp`
+                    LEFT JOIN `daily_payroll_master` `dpm` ON ((`dpm`.`id` = `dp`.`id_dp_master`)))
+                    LEFT JOIN `guides` ON ((`guides`.`id` = `dpm`.`id_guide`)))
+                    LEFT JOIN `purposes` ON ((`purposes`.`id` = `dp`.`id_purpose`)))
+                    LEFT JOIN `ages` ON ((`ages`.`id` = `dp`.`id_age`)))
+                    LEFT JOIN `colors` ON ((`colors`.`id` = `dp`.`id_color`)))
+                    LEFT JOIN `genders` ON ((`genders`.`id` = `dp`.`id_gender`)))
+                    LEFT JOIN `outlets` ON ((`outlets`.`id` = `dp`.`id_outlet`)))
+                    LEFT JOIN `cities` `source_city` ON ((`source_city`.`id` = `guides`.`id_source`)))
+                    LEFT JOIN `departments` `source_department` ON ((`source_department`.`id` = `source_city`.`id_department`)))
+                    LEFT JOIN `persons` `buyer` ON ((`buyer`.`id` = `guides`.`id_buyer`)))
+                    LEFT JOIN `persons` `owner` ON ((`owner`.`id` = `guides`.`id_owner`)))
             SQL;
     }
     

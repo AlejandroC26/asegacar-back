@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreZeroGutsToleranceRequest extends FormRequest
+class StoreVehicleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,28 +26,14 @@ class StoreZeroGutsToleranceRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
-            'id_daily_payroll' => 'required',
-            'organ' => 'max:500',
-            'fecal_matter' => 'max:500',
-            'resume' => 'max:500',
-            'hide' => 'max:500',
-            'hair' => 'max:500',
-            'hem' => 'max:500',
-            'abscess' => 'max:500',
-            'parasite' => 'max:500',
-            'others' => 'max:500',
-            'correction' => 'max:500',
-            'quantity' => 'max:500',
-            'observations' => 'max:500',
+            'name' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'id_master.required' => 'El parametro :attribute es requerido',
-            'id_daily_payroll.required' => 'El parametro :attribute es requerido',
+            'name.required' => 'El parametro :attribute es requerido',
         ];
     }
 

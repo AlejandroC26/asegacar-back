@@ -27,7 +27,8 @@ class StoreDailyRouteRequest extends FormRequest
     {
         return [
             'id_route' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_outlet' => 'required',
+            'id_vehicle' => 'required',
             'quantity' => 'required',
             'orders' => 'max:500',
             'date' => 'required',

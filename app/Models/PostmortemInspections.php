@@ -11,7 +11,7 @@ class PostmortemInspections extends Model
 
     protected $fillable = [
         'id_master',
-        'id_antemortem_daily_record',
+        'id_daily_payroll',
         'id_intestines_cause',
         'intestines_quantity',
         'id_livers_cause',
@@ -30,7 +30,7 @@ class PostmortemInspections extends Model
         'insp_ganglions',
     ];
     public function master() { return $this->belongsTo(MasterTable::class, 'id_master'); }
-    public function antemortem_daily_record() { return $this->belongsTo(AntemortemDailyRecord::class, 'id_antemortem_daily_record'); }
+    public function dailyPayroll() { return $this->belongsTo(DailyPayroll::class, 'id_daily_payroll'); }
     public function intestines_cause() { return $this->belongsTo(Causes::class, 'id_intestines_cause'); }
     public function livers_cause() { return $this->belongsTo(Causes::class, 'id_livers_cause'); }
     public function lungs_cause() { return $this->belongsTo(Causes::class, 'id_lungs_cause'); }

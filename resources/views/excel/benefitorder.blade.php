@@ -30,10 +30,10 @@
     @foreach($data as $key => $income)
     <tr>
         <td>{{ $key+1 }}</td>
-        <td>{{ $income->antemortem_daily_record->outlet->code }}</td>
+        <td>{{ $income->dailyPayroll->outlet->code }}</td>
         <td 
             colspan="3"
-        >{{ $income->antemortem_daily_record->code }}</td>
+        >{{ $income->dailyPayroll->code }}</td>
         <td></td>
     </tr>
     @endforeach

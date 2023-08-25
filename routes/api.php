@@ -21,6 +21,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostmortemInspectionsController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SeizureComparisonController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VisceraDispatchController;
 use App\Http\Controllers\ZeroGutsToleranceController;
 use App\Http\Controllers\ZeroToleranceInspectionController;
@@ -44,6 +45,8 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('refresh', 'refresh');
 });
 
+
+Route::resource('vehicles', VehicleController::class);
 Route::resource('persons', PersonController::class);
 Route::resource('users', UserController::class);
 Route::resource('purposes', PurposeController::class);
@@ -97,6 +100,7 @@ Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');
 Route::get('sltRoutes', 'App\Http\Controllers\RouteController@sltRoutes');
+Route::get('sltVehicles', 'App\Http\Controllers\VehicleController@sltVehicles');
 Route::get('sltDailyRoutes', 'App\Http\Controllers\DailyRoutesController@sltDailyRoutes');
 Route::get('sltAntemoremOutlets', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremOutlet');
 Route::get('sltAntemoremAnimals/{id_outlet}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremAnimals');

@@ -11,7 +11,7 @@ class ZeroToleranceInspection extends Model
 
     protected $fillable = [
         'id_master',
-        'id_antemortem_daily_record',
+        'id_daily_payroll',
         'milk',
         'fecal_matter',
         'rumen_content',
@@ -20,5 +20,5 @@ class ZeroToleranceInspection extends Model
     ];
 
     public function master() { return $this->belongsTo(MasterTable::class, 'id_master'); }
-    public function antemortem_daily_record() { return $this->belongsTo(AntemortemDailyRecord::class, 'id_antemortem_daily_record'); }
+    public function dailyPayroll() { return $this->belongsTo(DailyPayroll::class, 'id_daily_payroll'); }
 }

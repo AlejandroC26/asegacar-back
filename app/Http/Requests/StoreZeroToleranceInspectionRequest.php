@@ -27,7 +27,7 @@ class StoreZeroToleranceInspectionRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_daily_payroll' => 'required',
             'milk' => 'max:500',
             'fecal_matter' => 'max:500',
             'rumen_content' => 'max:500',

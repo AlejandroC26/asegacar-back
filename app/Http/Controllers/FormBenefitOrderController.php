@@ -22,7 +22,7 @@ class FormBenefitOrderController extends Controller
     public function index()
     {
         try {
-            $benefitOrder = FormBenefitOrder::with('master.responsable', 'antemortem_daily_record')->get();
+            $benefitOrder = FormBenefitOrder::all();
             return response()->json(FormBenefitOrderResource::collection($benefitOrder));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -120,7 +120,7 @@ class FormBenefitOrderController extends Controller
     public function download(Request $request)
     {
         try {
-            $benefitOrder = FormBenefitOrder::with('antemortem_daily_record.outlet')->where('id_master', $request->id_master)->get();
+            $benefitOrder = FormBenefitOrder::where('id_master', $request->id_master)->get();
             return Excel::download(new BenefitOrderExport($benefitOrder, '', '', ''), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

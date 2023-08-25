@@ -27,7 +27,7 @@ class StoreFormBenefitOrderRequest extends FormRequest
     {
         return [
             'id_master' => 'required',
-            'id_antemortem_daily_record' => 'required',
+            'id_daily_payroll' => 'required',
         ];
     }
 
@@ -35,7 +35,7 @@ class StoreFormBenefitOrderRequest extends FormRequest
     {
         return [
             'id_master.required' => 'El parametro :attribute es requerido',
-            'id_antemortem_daily_record.required' => 'El parametro :attribute es requerido',
+            'id_daily_payroll.required' => 'El parametro :attribute es requerido',
         ];
     }
 

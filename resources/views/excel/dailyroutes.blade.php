@@ -6,7 +6,7 @@
             Sistema Integral de Gestión de la Calidad <br>e inocuidad de los alimentos.
             
         </td>
-        <td>
+        <td colspan="2">
             <b>PBA</b> <br>
             Planta de Beneficio Animal
         </td>
@@ -15,28 +15,68 @@
         <td colspan="3">código: PBA-PE-GC-GCL-MT01</td>
         <td>versión: 2</td>
         <td><center>fecha de emisión: JULIO 2022</center></td>
-        <td>Página 1</td>
+        <td colspan="2">Página 1</td>
     </tr>
     <tr></tr>
     <tr>
         <td></td>
-        <td colspan="5">
-            MARTES 11 DE ENERO 2022
+        <td colspan="6">
+            {{ $date }}
         </td>
     </tr>
     <tr>
         <td></td>
         <td>FAMA</td>
-        <td colspan="2"># ANIMALES</td>
+        <td># ANIMALES</td>
         <td colspan="2">ORDENES</td>
+        <td>TOTAL CANALES</td>
+        <td>VEHICULOS</td>
     </tr>
-    <tr>
-        <td>TOTAL</td>
-        <td colspan="5"></td>
-    </tr>
+    @php
+        $total_sacrificios = 0;
+    @endphp
+    @foreach($data as $route)
+        @php
+            $rows = count($route->dailyRoutes);
+            $total_canales = 0;
+            $vehicles = []
+        @endphp
+        @foreach ($route->dailyRoutes as $dr)
+        @php
+            $total_canales += $dr->quantity;
+            $total_sacrificios += $dr->quantity;
+            $vehicles[] = $dr->vehicle->name;
+        @endphp
+        @endforeach
+        <tr>
+            <td rowspan="{{$rows}}">
+                {{ $route->name }}
+            </td>
+            <td>{{ $route->dailyRoutes[0]->outlet->code }}</td>
+            <td>{{ $route->dailyRoutes[0]->quantity }}</td>
+            <td colspan="2">{{ $route->dailyRoutes[0]->orders }}</td>
+            <td rowspan="{{$rows}}">{{ $total_canales }}</td>
+            <td rowspan="{{$rows}}">
+                @foreach (array_unique($vehicles) as $vehicle)
+                    {{ $vehicle }} <br>
+                @endforeach
+            </td>
+        </tr>
+        @for ($i = 1; $i < $rows; $i++)
+        @php
+            $element = $route->dailyRoutes[$i];
+        @endphp
+        <tr>
+            <td>{{ $element->outlet->code }}</td>
+            <td>{{ $element->quantity }}</td>
+            <td colspan="2">{{ $element->orders }}</td>
+        </tr>
+        @endfor
+    @endforeach
     <tr></tr>
     <tr>
-        <td colspan="5">TOTAL SACRIFICIO DIA</td>
         <td></td>
+        <td colspan="5">TOTAL SACRIFICIO DIA</td>
+        <td>{{ $total_sacrificios }}</td>
     </tr>
 </table>

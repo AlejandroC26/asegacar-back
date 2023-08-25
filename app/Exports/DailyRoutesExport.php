@@ -17,16 +17,12 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
-    private $males;
-    private $females;
-    private $general;
+    private $date;
 
-    public function __construct($data, $males, $females, $general)
+    public function __construct($data, $date)
     {
         $this->data = $data;
-        $this->males = $males;
-        $this->females = $females;
-        $this->general = $general;
+        $this->date = $date;
     }
 
 
@@ -34,9 +30,7 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
     {
         return view('excel.dailyroutes', [
             "data" => $this->data,
-            "males" => $this->males,
-            "females" => $this->females,
-            "general" => $this->general
+            "date" => $this->date
         ]);
     }
 
@@ -79,25 +73,32 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
         $sheet->getColumnDimension('C')->setWidth(18);
         $sheet->getColumnDimension('D')->setWidth(18);
         $sheet->getColumnDimension('E')->setWidth(18);
-        $sheet->getColumnDimension('F')->setWidth(18);
+        $sheet->getColumnDimension('F')->setWidth(14);
+        $sheet->getColumnDimension('G')->setWidth(18);
 
 
-        $sheet->getStyle('A1:F4')->applyFromArray([
+        $sheet->getStyle('A1:G4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
         
-        $sheet->getStyle('A4:F6')->applyFromArray([
+        $sheet->getStyle('A4:G6')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
         // BORDERS
-        $lastRow = 5 + count($this->data);
-        $range = 'A4:F'.$lastRow;
+
+        $totalRows = 0;
+        foreach ($this->data as $route) {
+            $totalRows += count($route->dailyRoutes);
+        }
+        $lastRow = 5 + $totalRows;
+        $range = 'B4:G'.$lastRow;
+
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -111,7 +112,8 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
             ],
         ];
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A1:F2')->applyFromArray($styleArray);
+        $sheet->getStyle('A1:G2')->applyFromArray($styleArray);
         $sheet->getStyle($range)->applyFromArray($styleArray);
+        $sheet->getStyle('B'.($lastRow+2).':G'.($lastRow+2))->applyFromArray($styleArray);
     }
 }

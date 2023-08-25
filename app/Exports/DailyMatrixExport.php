@@ -19,14 +19,12 @@ use Carbon\Carbon;
 class DailyMatrixExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
-    private $format_code;
     private $benefit_date;
 
 
-    public function __construct($data, $format_code, $benefit_date)
+    public function __construct($data, $benefit_date)
     {
         $this->data = $data;
-        $this->format_code = $format_code;
         $this->benefit_date = $benefit_date;
     }
 
@@ -36,12 +34,10 @@ class DailyMatrixExport implements FromView, WithColumnFormatting, WithStyles, W
         $cur_date = Carbon::parse(now());
         $issue_date = mb_strtoupper(FormatDateHelper::onNumberToMonth(intval($cur_date->format('m')))).' '.$cur_date->format('Y');
 
-        $format_code = $this->format_code;
         $benefit_date = $this->benefit_date;
 
         return view('excel.dailymatrix', [
             "data" => $this->data,
-            "format_code" =>$format_code,
             "issue_date" => $issue_date,
             "benefit_date" => $benefit_date
         ]);

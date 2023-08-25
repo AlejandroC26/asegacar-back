@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('seizure_comparison', function (Blueprint $table) {
-            $table->dropForeign('seizure_comparison_id_antemortem_daily_record_foreign');
-            $table->dropColumn('id_antemortem_daily_record');
+        Schema::create('vehicles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('vehicles');
     }
 };

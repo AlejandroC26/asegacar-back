@@ -20,10 +20,10 @@ class PostmortemInspectionsResource extends JsonResource
             "responsable" => $this->master->responsable?->fullname,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
 
-            'id_antemortem_daily_record' => $this->id_antemortem_daily_record,
-            "id_outlet" => $this->antemortem_daily_record->outlet->id,
-            "outlet" => $this->antemortem_daily_record->outlet->code,
-            "code" => $this->antemortem_daily_record->code,
+            'id_daily_payroll' => $this->id_daily_payroll,
+            "id_outlet" => $this->dailyPayroll->outlet->id,
+            "outlet" => $this->dailyPayroll->outlet->code,
+            "code" => $this->dailyPayroll->code,
 
             'id_intestines_cause' => $this->id_intestines_cause,
             'intestines_cause' => $this->intestines_cause?->name,

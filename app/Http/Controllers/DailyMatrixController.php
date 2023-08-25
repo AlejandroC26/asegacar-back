@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exports\DailyMatrixExport;
 use App\Helpers\FormatDateHelper;
-use App\Models\FormatCode;
 use Carbon\Carbon;
 
 use App\Traits\ApiResponse;
@@ -34,7 +33,6 @@ class DailyMatrixController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'benefit_date' => 'required|max:255',
-                'format_code' => 'required|max:255',
             ]);
             if($validator->fails()) 
                 return response()->json(['message' => 'Field validation failed', 'errors' => $validator->errors()],400);
@@ -46,9 +44,8 @@ class DailyMatrixController extends Controller
             $date = Carbon::parse($request->benefit_date);
             $text_date = FormatDateHelper::onNumberToDay($date->dayOfWeek);
             $text_month = FormatDateHelper::onNumberToMonth(intval($date->format('m')));
-            $format_code = FormatCode::find($request->format_code)->code;
             $benefit_date = strtoupper($text_date).' '.$date->format('d').' DE '.strtoupper($text_month).' DEL '.$date->format('Y');
-            return Excel::download(new DailyMatrixExport($dailyMatrix, $format_code, $benefit_date), 'invoices.xlsx');
+            return Excel::download(new DailyMatrixExport($dailyMatrix, $benefit_date), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

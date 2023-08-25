@@ -11,7 +11,8 @@ class DailyRoutes extends Model
 
     protected $fillable = [
         'id_route',
-        'id_daily_payroll',
+        'id_outlet',
+        'id_vehicle',
         'quantity',
         'orders',
         'date'
@@ -22,8 +23,13 @@ class DailyRoutes extends Model
         return $this->belongsTo(Route::class, 'id_route');
     }
 
-    public function daily_payroll()
+    public function outlet()
     {
-        return $this->belongsTo(DailyPayroll::class, 'id_daily_payroll');
+        return $this->belongsTo(Outlet::class, 'id_outlet');
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class, 'id_vehicle');
     }
 }

@@ -17,10 +17,10 @@ class FormBenefitOrderResource extends JsonResource
         return [
             "id" => $this->id,
             "id_master" => $this->id_master,
-            'id_antemortem_daily_record' => $this->id_antemortem_daily_record,
-            "id_outlet" => $this->antemortem_daily_record->outlet->id,
-            "outlet" => $this->antemortem_daily_record->outlet->code,
-            "code" => $this->antemortem_daily_record->code,
+            'id_daily_payroll' => $this->id_daily_payroll,
+            "id_outlet" => $this->dailyPayroll->outlet->id,
+            "outlet" => $this->dailyPayroll->outlet->code,
+            "code" => $this->dailyPayroll->code,
             
             "responsable" => $this->master->responsable->fullname,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),

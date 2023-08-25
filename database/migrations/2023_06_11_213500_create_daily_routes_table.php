@@ -19,10 +19,14 @@ return new class extends Migration
             $table->unsignedBigInteger('id_route')->comment('Id de la ruta');
             $table->foreign('id_route')->references('id')->on('routes');
 
-            $table->unsignedBigInteger('id_daily_payroll')->comment('Id de animal');
-            $table->foreign('id_daily_payroll')->references('id')->on('daily_payrolls');
+            $table->unsignedBigInteger('id_outlet')->comment('Id de expendio');
+            $table->foreign('id_outlet')->references('id')->on('outlets');
 
-            $table->integer('quantity');
+            $table->unsignedBigInteger('id_vehicle')->comment('Id de vehiculo');
+            $table->foreign('id_vehicle')->references('id')->on('vehicles');
+
+            $table->float('quantity', 6, 1);
+            
             $table->longText('orders')->nullable();
             $table->date('date');
             $table->timestamps();

@@ -7,11 +7,13 @@ use App\Http\Requests\AntemortemDailyRecordRequestFormatRequest;
 use App\Http\Requests\StoreAntemortemDailyRecordRequest;
 use App\Http\Requests\UpdateAntemortemDailyRecordRequest;
 use App\Http\Resources\AntemortemDailyRecordResource;
-use App\Models\AntemortemDailyRecord;
 use App\Models\DailyPayroll;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class AntemortemDailyRecordController extends Controller
 {
@@ -64,7 +66,17 @@ class AntemortemDailyRecordController extends Controller
     public function update(UpdateAntemortemDailyRecordRequest $request, $id)
     {
         try {
-            $record = DailyPayroll::findOrFail($id);        
+            $record = DailyPayroll::findOrFail($id);
+
+            $oUniqueCode = DailyPayroll::whereHas('master', function(Builder $query) use ($record){
+                $query->whereYear('date', $record->master->date);
+                $query->whereMonth('date', Carbon::createFromFormat('Y-m-d', $record->master->date)->month);
+            })->where(['code' => $record->code])->whereNotNull('id_outlet')->first();
+            
+            if($oUniqueCode) {
+                return $this->errorResponse('The record could not be updated', ['The code must be unique in the spreadsheet.'], 409);
+            }
+            
             $record->update($request->validated());
             return $this->successResponse($record, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
