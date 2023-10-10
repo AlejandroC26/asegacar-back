@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreVehicleRequest extends FormRequest
+class StoreAntemortemInspectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +26,12 @@ class StoreVehicleRequest extends FormRequest
     public function rules()
     {
         return [
-            'plate' => 'required',
-            'driver_name' => 'required',
-            'driver_document' => 'nullable|min:8',
-            'refrigerated' => 'required',
-            'isothermal' => 'required',
-            'temperature' => 'nullable'
+            'date' => 'required',
+            'corral_number' => 'required',
+            'id_daily_payroll' => 'required',
+            'id_veterinary' => 'required|exists:users,id',
+            'corral_entry' => 'required',
+            'time_entry' => 'required'
         ];
     }
 

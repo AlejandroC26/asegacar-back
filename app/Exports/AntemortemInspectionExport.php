@@ -12,19 +12,22 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ChannelConditioningExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class AntemortemInspectionExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
+    private $request;
     private $data;
 
-    public function __construct($data)
+    public function __construct($request, $data)
     {
+        $this->request = $request;
         $this->data = $data;
     }
 
 
     public function view(): View
     {
-        return view('excel.acondicionamientodelacanal', [
+        return view('excel.inspeccionantemortem', [
+            "request" => $this->request,
             "data" => $this->data
         ]);
     }
@@ -42,65 +45,68 @@ class ChannelConditioningExport implements FromView, WithColumnFormatting, WithS
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
         $drawing->setPath(public_path('/assets/logo.png'));
-        $drawing->setHeight(110);
+        $drawing->setHeight(80);
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(5);
-        $drawing->setCoordinates('A1');
+        $drawing->setCoordinates('B1');
 
         return $drawing;
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:S4')->getFont()->setName('Arial');
-        $sheet->getStyle('E1:P1')->getFont()->setSize(15);
-        $sheet->getStyle('A4:S5')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('A4:S5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:Q5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:L5')->getFont()->setSize(9);
-
+        $sheet->getStyle('A4:H17')->getAlignment()->setWrapText(true);
         // ROW
-        $sheet->getRowDimension(1)->setRowHeight(90);
+        $sheet->getRowDimension(1)->setRowHeight(70);
+        $sheet->getRowDimension(6)->setRowHeight(30);
+        $sheet->getRowDimension(16)->setRowHeight(30);
+        $sheet->getRowDimension(17)->setRowHeight(30);
         //COL
         $sheet->getColumnDimension('A')->setWidth(11);
         $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(14);
-        $sheet->getColumnDimension('D')->setWidth(13);
+        $sheet->getColumnDimension('D')->setWidth(14);
         $sheet->getColumnDimension('E')->setWidth(14);
-        $sheet->getColumnDimension('F')->setWidth(11);
+        $sheet->getColumnDimension('F')->setWidth(14);
         $sheet->getColumnDimension('G')->setWidth(11); 
-        $sheet->getColumnDimension('H')->setWidth(11); 
-        $sheet->getColumnDimension('I')->setWidth(13); 
-        $sheet->getColumnDimension('J')->setWidth(13); 
-        $sheet->getColumnDimension('K')->setWidth(13); 
-        $sheet->getColumnDimension('L')->setWidth(13); 
-        $sheet->getColumnDimension('M')->setWidth(15); 
-        $sheet->getColumnDimension('N')->setWidth(18); 
+        $sheet->getColumnDimension('H')->setWidth(14); 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:J4')->applyFromArray([
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER,
-            ],
-        ]);
-
-        // BORDERS
-        $lastRow = 5 + count($this->data);
-        $range = 'A1:J'.$lastRow;
-        $styleArray = [
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_CENTER,
-                'vertical' => Alignment::VERTICAL_CENTER,
-            ],
+        $sheet->getStyle('A1:H6')->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
                     'color' => ['argb' => 'FF000000'],
                 ],
             ],
-        ];
-        $sheet->getStyle($range)->getAlignment()->setWrapText(true);
-        $sheet->getStyle($range)->applyFromArray($styleArray);
+        ]);
+        
+        $sheet->getStyle('A6:H6')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        $sheet->getStyle('A1:H2')->applyFromArray([
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
+        $lastRow = 6 + count($this->data);
+        $sheet->getStyle("A7:H$lastRow")->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
     }
 }

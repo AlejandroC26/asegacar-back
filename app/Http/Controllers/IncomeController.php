@@ -24,12 +24,7 @@ class IncomeController extends Controller
     public function store(StoreIncomeRequest $request) {
         try {            
             $income = Income::create($request->validated());
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Registro realizado exitosamente',
-                'data' => $income
-            ]);
+            return $this->successResponse($income, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
@@ -38,11 +33,7 @@ class IncomeController extends Controller
     public function show ($id) {
         try {
             $income = Income::find($id);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Usuario listado exitosamente',
-                'data' => $income
-            ]);
+            return $this->successResponse($income, 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -57,11 +48,7 @@ class IncomeController extends Controller
             
             $income->update($request->validated());
             
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Actualizado exitosamente',
-                'data' => $income
-            ]);
+            return $this->successResponse($income, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -71,11 +58,7 @@ class IncomeController extends Controller
         try {
             $income = Income::find($id);
             $income->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Usuario eliminado exitosamente',
-                'data' => $income
-            ]);
+            return $this->successResponse($income, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponse;
 use App\Http\Resources\UserResource;
 use App\Models\Charge;
+use App\Models\Person;
 
 class UserController extends Controller
 {
@@ -78,6 +79,18 @@ class UserController extends Controller
         try {
             $user->delete();
             return $this->successResponse($user, 'Registro eliminado exitosamente');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltUsers()
+    {
+        try {
+            $users = User::select('users.id', 'persons.fullname as name')
+                ->join('persons', 'persons.id', 'users.id_person')
+                ->get();
+            return response()->json($users);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgeController;
+use App\Http\Controllers\AntemoretemInspectionController;
 use App\Http\Controllers\AntemortemDailyRecordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\ChannelConditioningController;
 use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\DailyPayrollController;
 use App\Http\Controllers\DailyRoutesController;
+use App\Http\Controllers\EmergencyCoilEntryController;
 use App\Http\Controllers\FormatCodeController;
 use App\Http\Controllers\FormBenefitOrderController;
 use App\Http\Controllers\GendersController;
@@ -15,12 +17,14 @@ use App\Http\Controllers\GuideController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\MasterTableController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\ParturientFemalesController;
 use App\Http\Controllers\PurposeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PostmortemInspectionsController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\SeizureComparisonController;
+use App\Http\Controllers\SuspiciousAnimalsController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\VisceraDispatchController;
 use App\Http\Controllers\ZeroGutsToleranceController;
@@ -69,6 +73,10 @@ Route::resource('visceraDispatch', VisceraDispatchController::class);
 Route::resource('seizureComparison', SeizureComparisonController::class);
 Route::resource('zeroToleranceInspection', ZeroToleranceInspectionController::class);
 Route::resource('channelConditioning', ChannelConditioningController::class);
+Route::resource('antemortemInspection', AntemoretemInspectionController::class);
+Route::resource('parturientFemales', ParturientFemalesController::class);
+Route::resource('suspiciousAnimals', SuspiciousAnimalsController::class);
+Route::resource('emergencyCoilEntry', EmergencyCoilEntryController::class);
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 Route::get('signature/{nIdPerson}', 'App\Http\Controllers\PersonController@onGetSignature');
@@ -86,10 +94,15 @@ Route::post('visceraDispatchFormat', 'App\Http\Controllers\VisceraDispatchContro
 Route::post('seizureComparisonFormat', 'App\Http\Controllers\SeizureComparisonController@download');
 Route::post('zeroToleranceInspectionFormat', 'App\Http\Controllers\ZeroToleranceInspectionController@download');
 Route::post('channelConditioningFormat', 'App\Http\Controllers\ChannelConditioningController@download');
+Route::post('antemortemInspectionFormat', 'App\Http\Controllers\AntemoretemInspectionController@download');
+Route::post('parturientFemalesFormat/{nId}', 'App\Http\Controllers\ParturientFemalesController@download');
+Route::post('suspiciousAnimalsFormat/{nId}', 'App\Http\Controllers\SuspiciousAnimalsController@download');
+Route::post('emergencyCoilEntryFormat/{nId}', 'App\Http\Controllers\EmergencyCoilEntryController@download');
 
 Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
 Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');
 Route::post('guidePDF/{nIdGuide}', 'App\Http\Controllers\GuideController@downloadGuide');
+Route::get('sltUsers', 'App\Http\Controllers\UserController@sltUsers');
 Route::get('sltCharges', 'App\Http\Controllers\UserController@sltCharges');
 Route::get('sltPersons', 'App\Http\Controllers\PersonController@sltPersons');
 Route::get('sltAges', 'App\Http\Controllers\AgeController@sltAges');
@@ -109,3 +122,5 @@ Route::get('sltMasterType', 'App\Http\Controllers\MasterTableController@sltMaste
 Route::get('sltCauses', 'App\Http\Controllers\PostmortemInspectionsController@sltCauses');
 Route::get('sltSpecies', 'App\Http\Controllers\GuideController@sltSpecies');
 Route::get('sltDailyPayrolls', 'App\Http\Controllers\DailyPayrollController@sltDailyPayrolls');
+Route::get('sltPayrrollsGuide/{id_guide}', 'App\Http\Controllers\DailyPayrollController@sltPayrrollsGuide');
+Route::get('sltAntemortemVeterinary', 'App\Http\Controllers\AntemoretemInspectionController@sltAntemortemVeterinary');

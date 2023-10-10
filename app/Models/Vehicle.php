@@ -10,6 +10,11 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'plate',
+        'driver_name',
+        'driver_document',
+        'refrigerated',
+        'isothermal',
+        'temperature'
     ];
 }

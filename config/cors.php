@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://asegacar.planhf.com'],
+    'allowed_origins' => ['*'],
 
     'allowed_headers' => ['*'],
 

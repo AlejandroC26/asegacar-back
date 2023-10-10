@@ -160,6 +160,25 @@ class DailyPayrollController extends Controller
         }
     }
 
+    public function sltPayrrollsGuide($id)
+    {
+        try {
+            $dailyPayrolls = DailyPayroll::whereHas('master', function(Builder $query) use ($id) {
+                $query->where('id_guide', $id);
+            })->get();
+
+            $dailyPayrolls = $dailyPayrolls->map(function($dailyPayroll) {
+                return [
+                    'value' => $dailyPayroll['id'],
+                    'text' => $dailyPayroll['code']
+                ];
+            });
+            return response()->json($dailyPayrolls);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
     public function download(Request $request)
     {
         try { 

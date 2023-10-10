@@ -16,7 +16,12 @@ class VehicleResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "name" => $this->name,
+            "plate" => $this->plate,
+            "driver_name" => $this->driver_name,
+            "driver_document" => $this->driver_document,
+            "refrigerated" => $this->refrigerated,
+            "isothermal" => $this->isothermal,
+            "temperature" => $this->temperature,
             "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }

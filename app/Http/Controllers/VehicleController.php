@@ -31,18 +31,18 @@ class VehicleController extends Controller
         }
     }
 
-    public function show (Vehicle $outlet) {
+    public function show (Vehicle $vehicle) {
         try {
-            return $this->successResponse($outlet, 'Listado exitosamente');
+            return $this->successResponse($vehicle, 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
 
-    public function update(StoreVehicleRequest $request, Vehicle $outlet) {
+    public function update(StoreVehicleRequest $request, Vehicle $vehicle) {
         try {    
-            $outlet->update($request->validated());
-            return $this->successResponse($outlet, 'Actualizado exitosamente', 200);
+            $vehicle->update($request->validated());
+            return $this->successResponse($vehicle, 'Actualizado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -50,17 +50,17 @@ class VehicleController extends Controller
 
     public function sltVehicles() {
         try {
-            $vehicles = Vehicle::select('id', 'name')->get();
+            $vehicles = Vehicle::select('id', 'plate as name')->get();
             return response()->json($vehicles);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
     }
 
-    public function destroy(Vehicle $outlet) {
+    public function destroy(Vehicle $vehicle) {
         try {
-            $outlet->delete();
-            return $this->successResponse($outlet, 'Eliminado exitosamente');
+            $vehicle->delete();
+            return $this->successResponse($vehicle, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
