@@ -19,7 +19,7 @@
     </tr>
     <tr>
         <td colspan="1"><b>FECHA: </b></td>
-        <td colspan="9"></td>
+        <td colspan="9">{{ $general['date'] }}</td>
     </tr>
     <tr>
         <td><strong>INT. DELGADO</strong></td>
@@ -49,8 +49,8 @@
     @endforeach
     <tr><td></td></tr>
     <tr>
-        <td colspan="4">RESPONSABLE: ________________</td>
+        <td colspan="4">RESPONSABLE: {{ $general['responsable'] }}</td>
         <td colspan="2"></td>
-        <td colspan="4">SUPERVISO: _______________</td>
+        <td colspan="4">SUPERVISO: {{ $general['supervised_by'] }}</td>
     </tr>
 </table>

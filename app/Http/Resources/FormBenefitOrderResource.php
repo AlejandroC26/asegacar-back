@@ -24,7 +24,6 @@ class FormBenefitOrderResource extends JsonResource
             
             "responsable" => $this->master->responsable->fullname,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
-            "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }
 }

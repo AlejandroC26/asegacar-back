@@ -25,7 +25,7 @@ class DailyRoutesController extends Controller
     {
         try {
             $routes = DailyRoutes::with('route')->get();
-            return response()->json(DailyRouteResource::collection($routes));
+            return $this->successResponse(DailyRouteResource::collection($routes));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

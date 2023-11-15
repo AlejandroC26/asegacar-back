@@ -51,4 +51,51 @@
         $key += 1;
     @endphp
     @endforeach
+
+    <tr>
+        <td colspan="8"></td>
+    </tr>
+    <tr>
+        <td colspan="8">
+            <b>ANIMALES SOSPECHOSOS</b>
+        </td>
+    </tr>
+    @php
+        $males = 0;
+        $females = 0;
+    @endphp
+    @foreach ($request->suspiciousAnimals as $animal)
+    @php
+    $males += $animal['male'];
+    $females += $animal['female'];    
+    @endphp
+    @endforeach
+    <tr>
+        <td colspan="2"><b>HEMBRAS: {{ $females }}</b> </td>
+        <td colspan="2"><b>MACHOS: {{ $males }}</b> </td>
+        <td colspan="4"><b>TOTAL BOBINOS: {{ count($request->suspiciousAnimals) }}</b></td>
+    </tr>
+    <tr>
+        <td colspan="2"><b>SEXO</b></td>
+        <td rowspan="2"><b># DE GUIA <br>SANITARIA</b></td>
+        <td colspan="2" rowspan="2"><b>HALLAZGOS Y<br>OBSERVACIONES</b></td>
+        <td rowspan="2"><b>DECISION</b></td>
+        <td rowspan="2"><b>CAUSA DE<br>DECOMISO</b></td>
+        <td rowspan="2"><b>CORRAL</b></td>
+    </tr>
+    <tr>
+        <td><b>MACHO</b></td>
+        <td><b>HEMBRA</b></td>
+    </tr>
+    @foreach ($request->suspiciousAnimals as $animal)
+    <tr>
+        <td>{{ $animal['male'] ? 'X' : '' }}</td>
+        <td>{{ $animal['female'] ? 'X' : '' }}</td>
+        <td>{{ $animal['guide'] }}</td>
+        <td colspan="2">{{ $animal['findings_and_observations'] }}</td>
+        <td>{{ $animal['decision'] }}</td>
+        <td>{{ $animal['cause_forfeiture'] }}</td>
+        <td>{{ $animal['corral'] }}</td>
+    </tr>
+    @endforeach
 </table>

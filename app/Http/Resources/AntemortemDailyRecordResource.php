@@ -37,7 +37,6 @@ class AntemortemDailyRecordResource extends JsonResource
             'outlet' => Outlet::find($this->id_outlet)->code ?? '0',
             'purpose' => Purpose::find($this->id_purpose)->name,
             'sacrifice_date' => $this->sacrifice_date ? date_format(date_create($this->sacrifice_date), 'Y-m-d') : 'N/A',
-            'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }
 
@@ -46,7 +45,7 @@ class AntemortemDailyRecordResource extends JsonResource
         $aResponse = [];
         foreach ($data as $key => $outlet) {
             $aResponse[$key]['id'] = $outlet->outlet->id;
-            $aResponse[$key]['code'] = $outlet->outlet->code;
+            $aResponse[$key]['name'] = $outlet->outlet->code;
             $aResponse[$key]['id_outlet'] = $outlet->id_outlet;
         }
         return collect($aResponse);

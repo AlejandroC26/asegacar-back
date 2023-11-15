@@ -27,7 +27,6 @@ class StoreDailyPayrollRequest extends FormRequest
     {
         return [
             'date' => 'required',
-            'id_responsable' => 'required',
             'id_guide' => 'required',        
             
             'entries' => 'required|array',

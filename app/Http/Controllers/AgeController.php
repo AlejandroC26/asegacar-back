@@ -115,6 +115,13 @@ class AgeController extends Controller
 
             $aRecords = DailyPayroll::whereBetween('sacrifice_date', [$first_date, $last_date])->get();
 
+            
+            if(!count($aRecords)) {
+                return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
+            }
+
+            $sResponsable = $aRecords[0]?->master?->responsable?->fullname;
+
             $aResults = [];
             $oTotals = [
                 "males" => [
@@ -202,7 +209,7 @@ class AgeController extends Controller
                     }
                 }
             }
-            return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate), 'invoices.xlsx');
+            return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $sResponsable), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be downloaded', $exception->getMessage(), 422);
         }

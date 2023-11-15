@@ -6,6 +6,8 @@ use App\Exports\ChannelConditioningExport;
 use App\Http\Requests\StoreChannelConditioningRequest;
 use App\Http\Resources\ChannelConditioningResource;
 use App\Models\ChannelConditioning;
+use App\Models\GeneralParam;
+use App\Models\MasterTable;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,7 +24,7 @@ class ChannelConditioningController extends Controller
     {
         try {
             $channelConditioning = ChannelConditioning::all();
-            return response()->json(ChannelConditioningResource::collection($channelConditioning));
+            return $this->successResponse(ChannelConditioningResource::collection($channelConditioning));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -47,7 +49,30 @@ class ChannelConditioningController extends Controller
     public function store(StoreChannelConditioningRequest $request)
     {
         try {
-            $channelConditioning = ChannelConditioning::create($request->validated());
+            $errors = [];
+
+            $id_responsable = GeneralParam::onGetResponsable();
+            $id_verified_by = GeneralParam::onGetVerifiedBy();
+            $id_supervised_by = GeneralParam::onGetSupervisedBy();
+
+            if(!$id_responsable) 
+                $errors[] = 'Configura un responsable en la tabla de firmas para continuar';
+            if(!$id_verified_by)
+                $errors[] = 'Configura a la persona verificadora en la tabla de firmas para continuar';
+            if(!$id_supervised_by)
+                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            
+            if(count($errors)) 
+                return $this->errorResponse('The record could not be saved', $errors, 409);
+
+            $master = MasterTable::create(['date' => $request->date, 
+                'id_responsable' => $id_responsable,
+                'id_verified_by' => $id_verified_by,
+                'id_supervised_by' => $id_supervised_by,
+                'id_master_type' => 6,
+            ]);
+
+            $channelConditioning = ChannelConditioning::create(array_merge($request->validated(), ['id_master' => $master->id]));
             return $this->successResponse($channelConditioning, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -97,6 +122,9 @@ class ChannelConditioningController extends Controller
     {
         try {     
             $channelConditioning->delete();
+            if(count($channelConditioning->master->channelConditions) <= 1) {
+                $channelConditioning->master->delete();
+            }
             return $this->successResponse($channelConditioning, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);

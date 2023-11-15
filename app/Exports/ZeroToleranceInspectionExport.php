@@ -17,17 +17,20 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
+    private $general;
 
-    public function __construct($data)
+    public function __construct($data, $general)
     {
         $this->data = $data;
+        $this->general = $general;
     }
 
 
     public function view(): View
     {
-        return view('excel.toleranciacerovisceras', [
-            "data" => $this->data
+        return view('excel.inspeccioncerotolerancia', [
+            "data" => $this->data,
+            "general" => $this->general
         ]);
     }
 
@@ -55,11 +58,10 @@ class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, W
     public function styles(Worksheet $sheet)
     {
         $sheet->getStyle('A1:S4')->getFont()->setName('Arial');
-        $sheet->getStyle('E1:P1')->getFont()->setSize(15);
+        $sheet->getStyle('E1:P1')->getFont()->setSize(12);
         $sheet->getStyle('A4:S5')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A4:S5')->getFont()->setSize(10);
         $sheet->getStyle('L4:Q5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:L5')->getFont()->setSize(9);
 
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
@@ -69,18 +71,22 @@ class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, W
         $sheet->getColumnDimension('C')->setWidth(14);
         $sheet->getColumnDimension('D')->setWidth(13);
         $sheet->getColumnDimension('E')->setWidth(14);
-        $sheet->getColumnDimension('F')->setWidth(11);
+        $sheet->getColumnDimension('F')->setWidth(13);
         $sheet->getColumnDimension('G')->setWidth(11); 
-        $sheet->getColumnDimension('H')->setWidth(11); 
+        $sheet->getColumnDimension('H')->setWidth(5); 
         $sheet->getColumnDimension('I')->setWidth(13); 
         $sheet->getColumnDimension('J')->setWidth(13); 
-        $sheet->getColumnDimension('K')->setWidth(13); 
-        $sheet->getColumnDimension('L')->setWidth(13); 
-        $sheet->getColumnDimension('M')->setWidth(15); 
-        $sheet->getColumnDimension('N')->setWidth(18); 
+        $sheet->getColumnDimension('K')->setWidth(8); 
+        $sheet->getColumnDimension('L')->setWidth(8); 
+        $sheet->getColumnDimension('M')->setWidth(8); 
+        $sheet->getColumnDimension('N')->setWidth(8); 
+        $sheet->getColumnDimension('O')->setWidth(18); 
+        $sheet->getColumnDimension('P')->setWidth(18); 
+        $sheet->getColumnDimension('Q')->setWidth(18); 
+        $sheet->getColumnDimension('R')->setWidth(18); 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:N4')->applyFromArray([
+        $sheet->getStyle('A1:R4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -88,13 +94,25 @@ class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, W
         ]);
 
         // BORDERS
-        $lastRow = 4 + count($this->data);
-        $range = 'A1:N'.$lastRow;
-        $styleArray = [
+        $FirstlastRow = 5 + count($this->data['zeroToleranceInspection']);
+        $SecondlastRow = 5 + count($this->data['channelConditioning']);
+        
+        $lastRow = max($FirstlastRow, $SecondlastRow);
+
+        $range = 'A1:R'.$lastRow;
+        $alignmentCenter = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
+        ];
+        $alignmentLeft = [
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_LEFT,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ];
+        $borders = [ 
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -102,7 +120,12 @@ class ZeroToleranceInspectionExport implements FromView, WithColumnFormatting, W
                 ],
             ],
         ];
+         
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
-        $sheet->getStyle($range)->applyFromArray($styleArray);
+        $sheet->getStyle("A1:R2")->applyFromArray($borders);
+        $sheet->getStyle("A4:G$FirstlastRow")->applyFromArray($borders);
+        $sheet->getStyle("I4:R$SecondlastRow")->applyFromArray($borders);
+        $sheet->getStyle($range)->applyFromArray($alignmentCenter);
+        $sheet->getStyle("A3:R3")->applyFromArray($alignmentLeft);
     }
 }

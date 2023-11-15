@@ -27,7 +27,7 @@ class StorePersonRequest extends FormRequest
     {
         return [
             'fullname' => 'required|string|max:255',
-            'document' => 'required',
+            'document' => 'required|unique:persons,document',
             'expedition_city' => 'required',
             'adress' => 'max:255',
             'phone' => 'max:255',

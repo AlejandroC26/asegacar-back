@@ -26,7 +26,7 @@ class StoreFormBenefitOrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'id_daily_payroll' => 'required',
         ];
     }
@@ -34,8 +34,8 @@ class StoreFormBenefitOrderRequest extends FormRequest
     public function messages()
     {
         return [
-            'id_master.required' => 'El parametro :attribute es requerido',
-            'id_daily_payroll.required' => 'El parametro :attribute es requerido',
+            'date.required' => 'El parametro de fecha es requerido',
+            'id_daily_payroll.required' => 'Selecciona un animal',
         ];
     }
 

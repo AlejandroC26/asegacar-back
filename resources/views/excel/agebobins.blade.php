@@ -119,4 +119,9 @@
         <td><b>TOTAL</b></td>
         <td>{{ $total_guides }}</td>
     </tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"><b>RESPONSABLE</b></td>
+        <td colspan="2">{{ $responsable }}</td>
+    </tr>
 </table>

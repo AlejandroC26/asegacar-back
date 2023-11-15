@@ -26,7 +26,7 @@ class StoreChannelConditioningRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'id_daily_payroll' => 'required',
             'skin' => 'max:500',
             'hair' => 'max:500',

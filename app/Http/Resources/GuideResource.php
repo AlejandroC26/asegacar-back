@@ -35,6 +35,7 @@ class GuideResource extends JsonResource
             'destination' => $this->destination->name,
             'id_department_source' => $this->source->id_department,
             'id_department_destination' => $this->destination->id_department,
+            'file_attached' => $this->file_attached,
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }

@@ -17,17 +17,20 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
+    private $general;
 
-    public function __construct($data)
+    public function __construct($data, $general)
     {
         $this->data = $data;
+        $this->general = $general;
     }
 
 
     public function view(): View
     {
         return view('excel.toleranciacerovisceras', [
-            "data" => $this->data
+            "data" => $this->data,
+            "general" => $this->general
         ]);
     }
 

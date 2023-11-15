@@ -20,7 +20,7 @@ class RouteController extends Controller
     {
         try {
             $routes = Route::all();
-            return response()->json(RouteResource::collection($routes));
+            return $this->successResponse(RouteResource::collection($routes));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

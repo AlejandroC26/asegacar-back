@@ -26,7 +26,7 @@ class StoreVisceraDispatchRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'id_daily_payroll' => 'required',
             'head' => 'max:500',
             'small_ints' => 'max:500',

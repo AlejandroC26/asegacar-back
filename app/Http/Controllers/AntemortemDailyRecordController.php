@@ -22,7 +22,11 @@ class AntemortemDailyRecordController extends Controller
     public function index()
     {
         try {
-            
+            $records = DailyPayroll::select('daily_payrolls.*', 'id_guide')
+            ->join('daily_payroll_master', 'daily_payroll_master.id', 'daily_payrolls.id_dp_master')
+            ->whereNull('sacrifice_date')->get();
+
+            return $this->successResponse(AntemortemDailyRecordResource::collection($records));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -108,7 +112,7 @@ class AntemortemDailyRecordController extends Controller
 				$arrayGuides[] = $guide->id;
 			}
     
-            $records = DailyPayroll::select('daily_payrolls.*', 'id_guide')
+            $dailyrecords = DailyPayroll::select('daily_payrolls.*', 'id_guide')
                 ->join('daily_payroll_master', 'daily_payroll_master.id', 'daily_payrolls.id_dp_master')
                 ->where('sacrifice_date', $request->sacrifice_date)
                 ->orWhere(function ($query) use ($arrayGuides) {
@@ -116,7 +120,7 @@ class AntemortemDailyRecordController extends Controller
                         ->whereNull('sacrifice_date');
                 })->get();
             
-            $records = AntemortemDailyRecordResource::collection($records);
+            $records = AntemortemDailyRecordResource::collection($dailyrecords);
             $records = json_decode($records->toJson(), true);
 
             $aData = [];
@@ -153,10 +157,14 @@ class AntemortemDailyRecordController extends Controller
                     $aData[$record['id_guide']]["records"][] = $tmpArray; 
                 }
             }
+
+            $general['date'] = $request->sacrifice_date;
+            $general['responsable'] = $dailyrecords[0]?->master?->responsable?->fullname;
+
             return Excel::download(new AntemortemDailyRecordExport(
                 array_values($aData), 
                 $nTotal, 
-                $request->sacrifice_date
+                $general
             ), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);
@@ -176,7 +184,7 @@ class AntemortemDailyRecordController extends Controller
     public function sltAntemoremAnimals($id)
     {
         try {
-            $route = DailyPayroll::select('id as value', 'code as text')->where('id_outlet', $id)->get();
+            $route = DailyPayroll::select('id', 'code as name')->where('id_outlet', $id)->get();
             return response()->json($route);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);

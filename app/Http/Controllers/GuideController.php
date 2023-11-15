@@ -24,7 +24,7 @@ class GuideController extends Controller
     {
         try {
             $guides = Guide::all();
-            return response()->json(GuideResource::collection($guides));
+            return $this->successResponse(GuideResource::collection($guides));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -107,7 +107,7 @@ class GuideController extends Controller
 
     public function sltGuides () {
         try {
-            $guides = Guide::select('id', 'code')->get();
+            $guides = Guide::select('id', 'code as name')->get();
             return response()->json($guides);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

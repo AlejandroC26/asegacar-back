@@ -23,22 +23,25 @@ class AntemortemInspectionResource extends JsonResource
             'guide' => $this->dailyPayroll->master->guide->code,
             'id_daily_payroll' => $this->id_daily_payroll,
             'animal_code' => $this->dailyPayroll->code,
+            'veterinary' => $this->veterinary->person->fullname ?? '',
+            'time_entry' => date_format(date_create($this->time_entry), 'H:i'),
             'corral_entry' => date_format(date_create($this->corral_entry), 'H:i'),
             'id_veterinary' => $this->id_veterinary,
-            'veterinary' => $this->veterinary->person->fullname ?? '',
-            'time_entry' => $this->time_entry,
             'time_off' => self::timeOff($this->corral_entry, $this->time_entry)
         ];
     }
 
-    static function timeOff($fecha, $hora) {
-        $horaInicio = DateTime::createFromFormat('H:i:s', $fecha);
-        $horaFin = DateTime::createFromFormat('H:i:s', $hora);
+    static function timeOff($horaSacrificio, $horaIngreso) {
+        $horaSacrificio = DateTime::createFromFormat('H:i:s', $horaSacrificio);
+        $horaIngreso = DateTime::createFromFormat('H:i:s', $horaIngreso);
         
-        $diferencia = $horaInicio->diff($horaFin);
+        $diferencia = $horaIngreso->diff($horaSacrificio);
         
         $horas = $diferencia->h;
         $minutos = $diferencia->i;
+
+        if($horaIngreso > $horaSacrificio) 
+            $horas += 12;
         
         if ($horas > 0) {
             $horas = 24 - $horas;

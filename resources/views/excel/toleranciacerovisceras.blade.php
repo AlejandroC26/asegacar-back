@@ -44,10 +44,10 @@
             <td colspan="2">Página 1</td>
         </tr>
         <tr>
-            <td colspan="2"><b>FECHA: </b></td>
-            <td colspan="5"></td>
+            <td colspan="2"><b>FECHA:</b></td>
+            <td colspan="5">{{ $general['date'] }}</td>
             <td colspan="2"><b>ESPECIE: </b></td>
-            <td colspan="5"></td>
+            <td colspan="5">{{ $general['specie'] }}</td>
         </tr>
         <tr>
             <td><strong>CÓDIGO Exp.</strong></td>
@@ -94,9 +94,9 @@
         </tr>
         <tr>
             <td></td>
-            <td colspan="5">ELABORO: ________________</td>
+            <td colspan="5"><b>ELABORO: {{ $general['elaborated_by'] }}</b></td>
             <td colspan="2"></td>
-            <td colspan="5">VERIFICÓ: _______________</td>
+            <td colspan="5"><b>VERIFICÓ: {{ $general['verified_by'] }}</b></td>
         </tr>
     </table>
 </body>

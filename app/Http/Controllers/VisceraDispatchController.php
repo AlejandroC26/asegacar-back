@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Exports\VisceraDispatchExport;
+use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StoreVisceraDispatchRequest;
 use App\Http\Resources\VisceraDispatchResource;
+use App\Models\GeneralParam;
+use App\Models\MasterTable;
 use App\Models\VisceraDispatch;
 use App\Traits\ApiResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,7 +26,7 @@ class VisceraDispatchController extends Controller
     {
         try {
             $visceraDispatch = VisceraDispatch::all();
-            return response()->json(VisceraDispatchResource::collection($visceraDispatch));
+            return $this->successResponse(VisceraDispatchResource::collection($visceraDispatch));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -47,7 +51,27 @@ class VisceraDispatchController extends Controller
     public function store(StoreVisceraDispatchRequest $request)
     {
         try {
-            $visceraDispatch = VisceraDispatch::create($request->validated());
+            $errors = [];
+
+            $id_supervised_by = GeneralParam::onGetSupervisedBy();
+            $id_elaborated_by = GeneralParam::onGetElaboratedBy();
+
+            if(!$id_supervised_by)
+                $errors[] = 'Configura a la persona que supervisa en la tabla de firmas para continuar';
+            if(!$id_elaborated_by)
+                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            
+            if(count($errors)) 
+                return $this->errorResponse('The record could not be saved', $errors, 409);
+
+            $master = MasterTable::create(['date' => $request->date, 
+                'id_supervised_by' => $id_supervised_by,
+                'id_elaborated_by' => $id_elaborated_by,
+                'id_specie' => $request->id_specie,
+                'id_master_type' => 7,
+            ]);
+
+            $visceraDispatch = VisceraDispatch::create(array_merge($request->validated(), ['id_master' => $master->id]));
             return $this->successResponse($visceraDispatch, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -71,17 +95,6 @@ class VisceraDispatchController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\VisceraDispatch  $visceraDispatch
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(VisceraDispatch $visceraDispatch)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -91,7 +104,8 @@ class VisceraDispatchController extends Controller
     public function update(StoreVisceraDispatchRequest $request, $id)
     {
         try {
-            $visceraDispatch = VisceraDispatch::findOrFail($id);        
+            $visceraDispatch = VisceraDispatch::findOrFail($id);      
+            $visceraDispatch->master->update(['date' => $request->date]); 
             $visceraDispatch->update($request->validated());
             return $this->successResponse($visceraDispatch, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
@@ -110,6 +124,9 @@ class VisceraDispatchController extends Controller
         try {
             $visceraDispatch = VisceraDispatch::find($id);
             $visceraDispatch->delete();
+            if(count($visceraDispatch->master->visceraDispatches) <= 1) {
+                $visceraDispatch->master->delete();
+            }
             return $this->successResponse($visceraDispatch, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
@@ -119,9 +136,20 @@ class VisceraDispatchController extends Controller
     public function download(Request $request)
     {
         try {
-            $visceraDispatch = VisceraDispatch::where('id_master', $request->id_master)->get();
+            $visceraDispatch = VisceraDispatch::whereHas('master', function (Builder $query) use ($request) {
+                $query->where('date', $request->date);
+            })->get();
             $visceraDispatch = VisceraDispatchResource::collection($visceraDispatch);
-            return Excel::download(new VisceraDispatchExport($visceraDispatch), 'invoices.xlsx');
+
+            if(!count($visceraDispatch)) {
+                return $this->errorResponse('The report could not be showed', ['There are not records saved']);
+            }
+
+            $general['date'] = FormatDateHelper::onGetTextDate($request->date);
+            $general['supervised_by'] = $visceraDispatch[0]?->master->supervised_by->fullname;
+            $general['elaborated_by'] = $visceraDispatch[0]?->master->elaborated_by->fullname;
+
+            return Excel::download(new VisceraDispatchExport($visceraDispatch, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

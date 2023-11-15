@@ -17,7 +17,7 @@ class SuspiciousAnimalsController extends Controller
     {
         try {
             $suspiciousAnimals = SuspiciousAnimals::all();
-            return response()->json(SuspiciousAnimalsResource::collection($suspiciousAnimals));
+            return $this->successResponse(SuspiciousAnimalsResource::collection($suspiciousAnimals));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -33,30 +33,30 @@ class SuspiciousAnimalsController extends Controller
         }
     }
 
-    public function show (SuspiciousAnimals $suspiciousAnimals)
+    public function show (SuspiciousAnimals $suspiciousAnimal)
     {
         try {
-            return $this->successResponse(SuspiciousAnimalsResource::make($suspiciousAnimals), 'Listado exitosamente');
+            return $this->successResponse(SuspiciousAnimalsResource::make($suspiciousAnimal), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
 
-    public function update (StoreSuspiciousAnimalsRequest $request, SuspiciousAnimals $suspiciousAnimals)
+    public function update (StoreSuspiciousAnimalsRequest $request, SuspiciousAnimals $suspiciousAnimal)
     {
         try {   
-            $suspiciousAnimals->update($request->validated());
-            return $this->successResponse($suspiciousAnimals, 'Actualizado exitosamente');
+            $suspiciousAnimal->update($request->validated());
+            return $this->successResponse($suspiciousAnimal, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
 
-    public function destroy (SuspiciousAnimals $suspiciousAnimals)
+    public function destroy (SuspiciousAnimals $suspiciousAnimal)
     {
         try {
-            $suspiciousAnimals->delete();
-            return $this->successResponse($suspiciousAnimals, 'Eliminado exitosamente');
+            $suspiciousAnimal->delete();
+            return $this->successResponse($suspiciousAnimal, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

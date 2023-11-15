@@ -35,11 +35,15 @@ class DailyMatrixController extends Controller
                 'benefit_date' => 'required|max:255',
             ]);
             if($validator->fails()) 
-                return response()->json(['message' => 'Field validation failed', 'errors' => $validator->errors()],400);
+                return $this->errorResponse('Field validation failed', $validator->errors(), 400);
     
             $dailyMatrix = DB::table('daily_matrix_view')
                 ->where('sacrifice_date', $request->benefit_date)
                 ->get();
+
+            if(!count($dailyMatrix)) {
+                return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
+            }
 
             $date = Carbon::parse($request->benefit_date);
             $text_date = FormatDateHelper::onNumberToDay($date->dayOfWeek);

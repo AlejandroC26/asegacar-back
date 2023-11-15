@@ -16,7 +16,7 @@ class ParturientFemalesController extends Controller
     {
         try {
             $parturientFemales = ParturientFemales::all();
-            return response()->json(ParturiantFemalesResource::collection($parturientFemales));
+            return $this->successResponse(ParturiantFemalesResource::collection($parturientFemales));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

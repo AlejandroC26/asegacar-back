@@ -19,11 +19,11 @@ class DailyRouteResource extends JsonResource
             "id_route" => $this->route->id,
             "route" => $this->route->name,
             "id_outlet" => $this->outlet->id,
-            "vehicle" => $this->vehicle->name,
+            "vehicle" => $this->vehicle->plate,
             "outlet" => $this->outlet->code,
             "id_vehicle" => $this->id_vehicle,
             "quantity" => $this->quantity,
-            "orders" => $this->orders,
+            "orders" => $this->orders ?? '',
             "date" => date_format(date_create($this->date), 'Y-m-d'),
             "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];

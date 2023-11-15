@@ -82,5 +82,12 @@ class FormatDateHelper
         ];
         return $aMonths[$number];
     }
+
+    public static function onGetTextDate($date) {
+        $date = Carbon::parse($date);
+        $text_date = FormatDateHelper::onNumberToDay($date->dayOfWeek);
+        $text_month = FormatDateHelper::onNumberToMonth(intval($date->format('m')));
+        return strtoupper($text_date).' '.$date->format('d').' DE '.strtoupper($text_month).' DEL '.$date->format('Y');
+    }
 }
 

@@ -61,4 +61,16 @@
         <td></td>
     </tr>
     @endforeach
+    <tr>
+    </tr>
+    <tr>
+        <td></td>
+        <td><b>RESPONSABLE</b></td>
+        <td colspan="2">{{ $general['responsable'] ?? '' }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td colspan="2"><b>AUX. ADMINISTRATIVO</b></td>
+    </tr>
 </table>

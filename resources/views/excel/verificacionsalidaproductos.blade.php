@@ -19,7 +19,7 @@
     </tr>
     <tr>
         <td colspan="2"><b>FECHA: </b></td>
-        <td colspan="14"></td>
+        <td colspan="14">{{ $general['date'] }}</td>
     </tr>
     <tr>
         <td></td>
@@ -113,14 +113,14 @@
     <tr><td></td></tr>
     <tr>
         <td></td>
-        <td colspan="5">ELABORO: ________________</td>
+        <td colspan="5">ELABORO: {{ $general['elaborated_by'] }}</td>
         <td colspan="4"></td>
-        <td colspan="5">SUPERVISO: _______________</td>
+        <td colspan="5">SUPERVISO: {{ $general['supervised_by'] }}</td>
     </tr>
-    <tr>
+    {{--  <tr>
         <td></td>
         <td colspan="5">CARGO: ________________</td>
         <td colspan="4"></td>
         <td colspan="5">CARGO: _______________</td>
-    </tr>
+    </tr>  --}}
 </table>

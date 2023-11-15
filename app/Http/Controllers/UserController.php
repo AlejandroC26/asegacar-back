@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         try {
             $users = User::all();
-            return response()->json(UserResource::collection($users));
+            return $this->successResponse(UserResource::collection($users));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

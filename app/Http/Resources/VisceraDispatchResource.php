@@ -18,7 +18,7 @@ class VisceraDispatchResource extends JsonResource
             'id' => $this->id,
             'id_master' => $this->id_master,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
-            "elaborated_by" => $this->master->responsable?->fullname,
+            "elaborated_by" => $this->master->elaborated_by?->fullname,
             "supervised_by" => $this->master->supervised_by?->fullname,
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,

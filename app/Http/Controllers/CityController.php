@@ -14,16 +14,16 @@ class CityController extends Controller
 
     public function sltDepartments() {
         try {
-            $departments = Department::with('cities')->get();
+            $departments = Department::all();
             return response()->json($departments);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 
-    public function sltCities() {
+    public function sltCities($id_department) {
         try {
-            $cities = City::select('id', 'name')->get();
+            $cities = City::select('id', 'name')->where('id_department', $id_department)->get();
             return response()->json($cities);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

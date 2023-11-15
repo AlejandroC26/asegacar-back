@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Person;
 use App\Traits\ApiResponse;
 use App\Http\Requests\StorePersonRequest;
+use App\Http\Requests\UpdatePersonsRequest;
 use App\Http\Resources\PersonResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -17,7 +18,7 @@ class PersonController extends Controller
     {
         try {
             $persons = Person::all();
-            return response()->json(PersonResource::collection($persons));
+            return $this->successResponse(PersonResource::collection($persons));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
@@ -54,19 +55,19 @@ class PersonController extends Controller
         }
     }
 
-    public function update(StorePersonRequest $request, Person $person)
+    public function update(UpdatePersonsRequest $request, Person $person)
     {
         try {                
             $sSignatureName = $person->signature;
             $sAuthorizationName = $person->authorization;
                         
             if($request->file('signature')) {
-                $sSignatureName = $sSignatureName ?? 'signature_'.date("Ymd_Hms").'.'.$request->file('signature')->extension();
+                $sSignatureName = empty($sSignatureName) ? 'signature_'.date("Ymd_Hms").'.'.$request->file('signature')->extension() : $sSignatureName;
                 $request->file('signature')->storeAs('public/signatures', $sSignatureName);
             }  
 
             if($request->file('authorization')) {
-                $sAuthorizationName = $sAuthorizationName ?? 'authorization_'.date("Ymd_Hms").'.'.$request->file('authorization')->extension();
+                $sAuthorizationName = empty($sAuthorizationName) ? 'authorization_'.date("Ymd_Hms").'.'.$request->file('authorization')->extension() : $sAuthorizationName;
                 $request->file('authorization')->storeAs('public/authorizations', $sAuthorizationName);
             }  
 

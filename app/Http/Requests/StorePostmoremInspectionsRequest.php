@@ -26,7 +26,7 @@ class StorePostmoremInspectionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'id_daily_payroll' => 'required',
             'id_intestines_cause' => 'max:500',
             'intestines_quantity' => 'max:500',

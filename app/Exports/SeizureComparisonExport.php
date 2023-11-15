@@ -17,10 +17,12 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class SeizureComparisonExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
 {
     private $data;
+    private $general;
 
-    public function __construct($data)
+    public function __construct($data, $general)
     {
         $this->data = $data;
+        $this->general = $general;
     }
 
 
@@ -28,6 +30,7 @@ class SeizureComparisonExport implements FromView, WithColumnFormatting, WithSty
     {
         return view('excel.comparaciondecomisos', [
             "data" => $this->data,
+            "general" => $this->general
         ]);
     }
 

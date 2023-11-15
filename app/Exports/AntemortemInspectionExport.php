@@ -108,5 +108,24 @@ class AntemortemInspectionExport implements FromView, WithColumnFormatting, With
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
+
+        // LAST TABLE
+        $initTable = $lastRow+2;
+        $finshTable = $initTable+3;
+        $finshTable += count($this->request->suspiciousAnimals);
+
+        $sheet->getStyle("A$initTable:H$finshTable")->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+            'alignment' => [
+                'horizontal' => Alignment::HORIZONTAL_CENTER,
+                'vertical' => Alignment::VERTICAL_CENTER,
+            ],
+        ]);
+
     }
 }

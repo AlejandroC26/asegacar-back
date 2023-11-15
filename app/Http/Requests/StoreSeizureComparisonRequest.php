@@ -26,7 +26,7 @@ class StoreSeizureComparisonRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'small_ints' => 'max:500',
             'large_ints' => 'max:500',
             'liver' => 'max:500',

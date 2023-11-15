@@ -18,8 +18,8 @@
         <td colspan="4">Página 1</td>
     </tr>
     <tr>
-        <td colspan="7"><b>FECHA: </b></td>
-        <td colspan="12"><b>RESPONSABLE: </b></td>
+        <td colspan="7"><b>FECHA: {{ $general['date'] }}</b></td>
+        <td colspan="12"><b>RESPONSABLE: {{ $general['responsable'] }}</b></td>
     </tr>
     <tr>
         <td rowspan="2" colspan="2">NUMERO EXPENDIO</td>
@@ -147,5 +147,6 @@
         <td></td>
         <td>DESHIDRATACION</td>
         <td><strong>21</strong></td>
+        <td colspan="8"></td>
     </tr>
 </table>

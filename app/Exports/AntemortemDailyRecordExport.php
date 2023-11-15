@@ -21,13 +21,13 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
     private $data;
     private $total;
     private $current_date;
-    private $benefit_date;
+    private $general;
 
-    public function __construct($data, $total, $benefit_date)
+    public function __construct($data, $total, $general)
     {
         $this->data = $data;
         $this->total = $total;
-        $this->benefit_date = $benefit_date;
+        $this->general = $general;
         $this->current_date = FormatDateHelper::onGetCurrentDate();
     }
 
@@ -37,7 +37,7 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
         return view('excel.registrodiarioantemoren', [
             "data" => $this->data,
             "current_date" => $this->current_date,
-            "benefit_date" => $this->benefit_date
+            "general" => $this->general
         ]);
     }
 
@@ -96,7 +96,7 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
         ]);
         // BORDERS
         $lastRow = 5 + $this->total;
-        $range = 'A4:J'.$lastRow;
+        $range = 'A4:J'.$lastRow + 2;
         $styleArray = [
             'borders' => [
                 'allBorders' => [

@@ -17,7 +17,7 @@ class OutletController extends Controller
     {
         try {
             $outlets = Outlet::all();
-            return response()->json(OutletResource::collection($outlets));
+            return $this->successResponse(OutletResource::collection($outlets));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -51,7 +51,7 @@ class OutletController extends Controller
 
     public function sltOutlets() {
         try {
-            $outlets = Outlet::select('id', 'code')->get();
+            $outlets = Outlet::select('id', 'code as name')->get();
             return response()->json($outlets);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);

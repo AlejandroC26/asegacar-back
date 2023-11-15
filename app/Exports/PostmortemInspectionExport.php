@@ -116,7 +116,15 @@ class PostmortemInspectionExport implements FromView, WithColumnFormatting, With
                 ],
             ],
         ];
+
+
+        
+
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
         $sheet->getStyle($range)->applyFromArray($styleArray);
+
+        $secondTableInit = $lastRow+2;
+        $secondTableFinish = $lastRow+7;
+        $sheet->getStyle("B$secondTableInit:K$secondTableFinish")->applyFromArray($styleArray);
     }
 }

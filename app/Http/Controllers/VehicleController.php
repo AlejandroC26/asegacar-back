@@ -16,7 +16,7 @@ class VehicleController extends Controller
     {
         try {
             $vehicles = Vehicle::all();
-            return response()->json(VehicleResource::collection($vehicles));
+            return $this->successResponse(VehicleResource::collection($vehicles));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

@@ -6,8 +6,11 @@ use App\Exports\AntemortemInspectionExport;
 use App\Http\Requests\StoreAntemortemInspectionRequest;
 use App\Http\Resources\AntemortemInspectionResource;
 use App\Models\AntemortemInspection;
+use App\Models\InspectionSuspiciousAnimal;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
@@ -18,7 +21,7 @@ class AntemoretemInspectionController extends Controller
     {
         try {
             $antemortemInspections = AntemortemInspection::all();
-            return response()->json(AntemortemInspectionResource::collection($antemortemInspections));
+            return $this->successResponse(AntemortemInspectionResource::collection($antemortemInspections));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -66,13 +69,44 @@ class AntemoretemInspectionController extends Controller
     public function download(Request $request)
     {
         try {
-            $antemortemInspection = AntemortemInspection::where($request->only(['date', 'id_veterinary', 'time_entry']))->get();
+            $time_entry = Carbon::createFromFormat('H:i', $request->time_entry);
+            $time_entry = $time_entry->format('H:i:s', $time_entry);
+            $antemortemInspection = AntemortemInspection::where([
+                'date' => $request->date,
+                'id_veterinary' => $request->id_veterinary,
+                'time_entry' => $time_entry
+            ])->get();
+
             $antemortemInspectionResource = AntemortemInspectionResource::collection($antemortemInspection);
+
+            if(!count($antemortemInspection)) {
+                return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
+            } 
+
             $resultArray = json_decode(json_encode($antemortemInspectionResource), true);
 
-            $veterinary = User::find($request->id_veterinary);
+            $guides = collect($resultArray)->pluck('id_guide');
+            
+            $suspiciousAnimals = InspectionSuspiciousAnimal::whereHas('dailyPayroll.master', function (Builder $query) use ($guides) {
+                $query->whereIn('id_guide', $guides);
+            })->get();
 
-            $request->request->add(['veterinary' => $veterinary->person->fullname]);
+            $suspiciousAnimals = $suspiciousAnimals->map(function ($animal) {
+                $response['male'] = ($animal->dailyPayroll->id_gender === 1) ? 1 : 0;
+                $response['female'] = ($animal->dailyPayroll->id_gender === 2) ? 1 : 0;
+                $response['guide'] = $animal->dailyPayroll->master->guide->code;
+                $response['findings_and_observations'] = $animal->findings_and_observations;
+                $response['decision'] = $animal->decision;
+                $response['cause_forfeiture'] = $animal->cause_forfeiture;
+                $response['corral'] = $animal->corral;
+                return $response;
+            });
+
+            $veterinary = User::find($request->id_veterinary);
+            $request->request->add([
+                'veterinary' => $veterinary->person->fullname, 
+                'suspiciousAnimals' => $suspiciousAnimals
+            ]);
 
             return Excel::download(new AntemortemInspectionExport($request, collect($resultArray)), 'invoices.xlsx');
         } catch (\Throwable $exception) {

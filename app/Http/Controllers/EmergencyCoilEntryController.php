@@ -16,7 +16,7 @@ class EmergencyCoilEntryController extends Controller
     {
         try {
             $emergencyCoilEntry = EmergencyCoilEntry::all();
-            return response()->json(EmergencyCoilEntryResource::collection($emergencyCoilEntry));
+            return $this->successResponse(EmergencyCoilEntryResource::collection($emergencyCoilEntry));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

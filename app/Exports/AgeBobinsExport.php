@@ -17,12 +17,14 @@ class AgeBobinsExport implements FromView, WithColumnFormatting, WithStyles, Wit
     private $data;
     private $totals;
     private $dates;
+    private $responsable;
 
-    public function __construct($data, $totals, $dates)
+    public function __construct($data, $totals, $dates, $responsable)
     {
         $this->data = $data;
         $this->totals = $totals;
         $this->dates = $dates;
+        $this->responsable = $responsable;
     }
 
 
@@ -31,7 +33,8 @@ class AgeBobinsExport implements FromView, WithColumnFormatting, WithStyles, Wit
         return view('excel.agebobins', [
             "data" => $this->data,
             "totals" => $this->totals,
-            "dates" => $this->dates
+            "dates" => $this->dates,
+            "responsable" => $this->responsable
         ]);
     }
 

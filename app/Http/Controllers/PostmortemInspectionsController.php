@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PostmortemInspectionExport;
+use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StorePostmoremInspectionsRequest;
 use App\Http\Resources\PostmortemInspectionsResource;
 use App\Models\Causes;
+use App\Models\GeneralParam;
+use App\Models\MasterTable;
 use App\Models\PostmortemInspections;
 use App\Traits\ApiResponse;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -23,7 +27,7 @@ class PostmortemInspectionsController extends Controller
     {
         try {
             $inspections = PostmortemInspections::all();
-            return response()->json(PostmortemInspectionsResource::collection($inspections));
+            return $this->successResponse(PostmortemInspectionsResource::collection($inspections));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -38,7 +42,14 @@ class PostmortemInspectionsController extends Controller
     public function store(StorePostmoremInspectionsRequest $request)
     {
         try {
-            $inspections = PostmortemInspections::create($request->validated());
+            $responsable_id = GeneralParam::onGetResponsable();
+            if(!$responsable_id) {
+                return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
+            }
+            $master = MasterTable::create(['date' => $request->date, 'id_responsable' => $responsable_id, 'id_master_type' => 3]);
+            $inspections = PostmortemInspections::create(array_merge($request->except(['date']), [
+                'id_master' => $master->id
+            ]));
             return $this->successResponse($inspections, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -72,6 +83,7 @@ class PostmortemInspectionsController extends Controller
     {
         try {
             $inspections = PostmortemInspections::findOrFail($id);        
+            $inspections->master->update(['date' => $request->date]);
             $inspections->update($request->validated());
             return $this->successResponse($inspections, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
@@ -90,6 +102,9 @@ class PostmortemInspectionsController extends Controller
         try {
             $inspections = PostmortemInspections::find($id);
             $inspections->delete();
+            if(count($inspections->master->postMortemInspections) <= 1) {
+                $inspections->master->delete();
+            }
             return $this->successResponse($inspections, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
@@ -109,9 +124,19 @@ class PostmortemInspectionsController extends Controller
     public function download(Request $request)
     {
         try {
-            $inspections = PostmortemInspections::where('id_master', $request->id_master)->get();
+            $inspections = PostmortemInspections::whereHas('master', function (Builder $query) use ($request) {
+                $query->where('date', $request->date);
+            })->get();
             $inspections = PostmortemInspectionsResource::collection($inspections);
-            return Excel::download(new PostmortemInspectionExport($inspections, '', '', ''), 'invoices.xlsx');
+
+            if(!count($inspections)) {
+                return $this->errorResponse('The report could not be showed', ['There are not records saved']);
+            }
+
+            $general['date'] = FormatDateHelper::onGetTextDate($request->date);
+            $general['responsable'] = $inspections[0]?->master?->responsable?->fullname;
+
+            return Excel::download(new PostmortemInspectionExport($inspections, '', '', $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

@@ -19,7 +19,7 @@
         <td>Página 1</td>
     </tr>
     <tr>
-        <td colspan="6"><b>FECHA: VIERNES 16 DE DICIEMBRE DE 2022</b></td>
+        <td colspan="6"><b>FECHA: {{ $general['date'] }}</b></td>
     </tr>
     <tr>
         <td></td>
@@ -41,7 +41,7 @@
         <td colspan="2">______________________________</td>
     </tr>
     <tr>
-        <td colspan="2"><strong></strong></td>
+        <td colspan="2"><strong>{{ $general['responsable'] }}</strong></td>
     </tr>
     <tr>
         <td colspan="2"><strong>JEFE OPERATIVO</strong></td>

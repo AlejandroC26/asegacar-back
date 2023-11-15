@@ -13,8 +13,10 @@ use App\Http\Controllers\EmergencyCoilEntryController;
 use App\Http\Controllers\FormatCodeController;
 use App\Http\Controllers\FormBenefitOrderController;
 use App\Http\Controllers\GendersController;
+use App\Http\Controllers\GeneralParamsController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\InspectionSuspiciousAnimalController;
 use App\Http\Controllers\MasterTableController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ParturientFemalesController;
@@ -49,7 +51,6 @@ Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::post('refresh', 'refresh');
 });
 
-
 Route::resource('vehicles', VehicleController::class);
 Route::resource('persons', PersonController::class);
 Route::resource('users', UserController::class);
@@ -77,6 +78,12 @@ Route::resource('antemortemInspection', AntemoretemInspectionController::class);
 Route::resource('parturientFemales', ParturientFemalesController::class);
 Route::resource('suspiciousAnimals', SuspiciousAnimalsController::class);
 Route::resource('emergencyCoilEntry', EmergencyCoilEntryController::class);
+Route::resource('generalParams', GeneralParamsController::class);
+Route::resource('inspectionSuspiciousAnimals', InspectionSuspiciousAnimalController::class);
+
+
+
+Route::get('/getpermissions', 'App\Http\Controllers\AuthController@getpermissions');
 
 Route::get('dailyMatrix', 'App\Http\Controllers\DailyMatrixController@index');
 Route::get('signature/{nIdPerson}', 'App\Http\Controllers\PersonController@onGetSignature');
@@ -108,7 +115,7 @@ Route::get('sltPersons', 'App\Http\Controllers\PersonController@sltPersons');
 Route::get('sltAges', 'App\Http\Controllers\AgeController@sltAges');
 Route::get('sltOutlets', 'App\Http\Controllers\OutletController@sltOutlets');
 Route::get('sltPurposes', 'App\Http\Controllers\PurposeController@sltPurposes');
-Route::get('sltCities', 'App\Http\Controllers\CityController@sltCities');
+Route::get('sltCities/{idDepartment}', 'App\Http\Controllers\CityController@sltCities');
 Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments');
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');

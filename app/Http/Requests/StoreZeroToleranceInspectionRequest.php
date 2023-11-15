@@ -26,7 +26,7 @@ class StoreZeroToleranceInspectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_master' => 'required',
+            'date' => 'required|date',
             'id_daily_payroll' => 'required',
             'milk' => 'max:500',
             'fecal_matter' => 'max:500',
