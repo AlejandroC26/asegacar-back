@@ -27,7 +27,7 @@ class StoreGuideRequest extends FormRequest
     {
         return [
             'code' => 'required',
-            'no_animals' => 'required',
+            'no_animals' => 'required|integer',
             'date_entry' => 'required',
             'time_entry' => 'required',
             'id_owner' => 'required',
@@ -35,7 +35,6 @@ class StoreGuideRequest extends FormRequest
             'id_source' => 'required',
             'id_destination' => 'required',
             'establishment_name' => 'required',
-            'consecutive' => 'required',
             'id_specie' => 'required',
             'file_attached' => 'mimes:pdf',
         ];

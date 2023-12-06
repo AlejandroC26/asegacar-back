@@ -25,6 +25,9 @@ class Guide extends Model
         'file_attached'
     ];
 
+    public function dailyPayrrolls() {
+        return $this->hasManyThrough(DailyPayroll::class, DailyPayrollMaster::class, 'id_guide', 'id_dp_master');
+    }
         
     public function owner() { 
         return $this->belongsTo(Person::class, 'id_owner'); 

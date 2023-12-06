@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGuideRequest;
 use App\Http\Resources\GuideResource;
+use App\Models\DailyPayroll;
 use App\Models\Guide;
 use App\Models\Specie;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class GuideController extends Controller
 {
@@ -41,11 +42,42 @@ class GuideController extends Controller
     {
         try {
             $sFileName = '';
+            $consecutive = '';
+            $unfinishedGuides = 0;
+            $sCurrentDate = Carbon::now();
+            
+            $monthGuides = Guide::whereYear('date_entry', $sCurrentDate->year)
+                ->whereMonth('date_entry', $sCurrentDate->month)
+                ->get();
+
+            foreach ($monthGuides as $guide) {
+                $guideRecords = DailyPayroll::whereHas('master.guide', function(Builder $query) use ($sCurrentDate, $guide) {
+                    $query->where('id', $guide->id);
+                    $query->whereYear('date_entry', $sCurrentDate->year);
+                    $query->whereMonth('date_entry', $sCurrentDate->month);
+                })->count();
+                
+                if($guideRecords < $guide->no_animals) $unfinishedGuides += 1;
+            }
+
+            if($unfinishedGuides) 
+                return $this->errorResponse('Empty records', ['Hay animales pendientes por asignar a las guías, registra los animales faltantes e intenta nuevamente']);
+
+            $monthRecords = DailyPayroll::whereHas('master.guide', function(Builder $query) use ($sCurrentDate) {
+                $query->whereYear('date_entry', $sCurrentDate->year);
+                $query->whereMonth('date_entry', $sCurrentDate->month);
+            })->count();
+
+            $consecutive = $monthRecords.' - '. $monthRecords + $request->no_animals;
+            
             if($request->file('file_attached')) {
                 $sFileName = 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
                 $request->file('file_attached')->storeAs('public/guide', $sFileName);
             }  
-            $guide = Guide::create(array_merge($request->validated(), ['file_attached' => $sFileName]));
+            $guide = Guide::create(array_merge($request->validated(), [
+                'file_attached' => $sFileName,
+                'consecutive' => $consecutive
+            ]));
             return $this->successResponse($guide, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -108,6 +140,15 @@ class GuideController extends Controller
     public function sltGuides () {
         try {
             $guides = Guide::select('id', 'code as name')->get();
+            return response()->json($guides);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltNotFullGuideOf($relation) {
+        try {
+            $guides = Guide::select('id', 'code as name')->has($relation, '<', DB::raw('no_animals'))->get();
             return response()->json($guides);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

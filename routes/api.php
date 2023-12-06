@@ -118,6 +118,7 @@ Route::get('sltPurposes', 'App\Http\Controllers\PurposeController@sltPurposes');
 Route::get('sltCities/{idDepartment}', 'App\Http\Controllers\CityController@sltCities');
 Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments');
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
+Route::get('sltNotFullGuideOf/{relation}', 'App\Http\Controllers\GuideController@sltNotFullGuideOf');
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');
 Route::get('sltRoutes', 'App\Http\Controllers\RouteController@sltRoutes');
 Route::get('sltVehicles', 'App\Http\Controllers\VehicleController@sltVehicles');
