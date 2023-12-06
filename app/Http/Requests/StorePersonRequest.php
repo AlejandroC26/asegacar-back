@@ -28,9 +28,9 @@ class StorePersonRequest extends FormRequest
         return [
             'fullname' => 'required|string|max:255',
             'document' => 'required|unique:persons,document',
-            'expedition_city' => 'required',
-            'adress' => 'max:255',
-            'phone' => 'max:255',
+            'expedition_city' => 'nullable',
+            'adress' => 'nullable',
+            'phone' => 'nullable',
             'signature' => 'mimes:jpg,jpeg,png',
             'authorization' => 'mimes:pdf',
         ];
