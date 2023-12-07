@@ -118,17 +118,23 @@ Route::get('sltPurposes', 'App\Http\Controllers\PurposeController@sltPurposes');
 Route::get('sltCities/{idDepartment}', 'App\Http\Controllers\CityController@sltCities');
 Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments');
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
-Route::get('sltNotFullGuideOf/{relation}', 'App\Http\Controllers\GuideController@sltNotFullGuideOf');
+Route::get('sltGuideForDailyPayroll', 'App\Http\Controllers\GuideController@sltGuideForDailyPayroll');
+
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');
 Route::get('sltRoutes', 'App\Http\Controllers\RouteController@sltRoutes');
 Route::get('sltVehicles', 'App\Http\Controllers\VehicleController@sltVehicles');
 Route::get('sltDailyRoutes', 'App\Http\Controllers\DailyRoutesController@sltDailyRoutes');
-Route::get('sltAntemoremOutlets', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremOutlet');
-Route::get('sltAntemoremAnimals/{id_outlet}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremAnimals');
+
 Route::get('sltMaster/{type}', 'App\Http\Controllers\MasterTableController@sltMaster');
 Route::get('sltMasterType', 'App\Http\Controllers\MasterTableController@sltMasterType');
 Route::get('sltCauses', 'App\Http\Controllers\PostmortemInspectionsController@sltCauses');
 Route::get('sltSpecies', 'App\Http\Controllers\GuideController@sltSpecies');
 Route::get('sltDailyPayrolls', 'App\Http\Controllers\DailyPayrollController@sltDailyPayrolls');
-Route::get('sltPayrrollsGuide/{id_guide}', 'App\Http\Controllers\DailyPayrollController@sltPayrrollsGuide');
 Route::get('sltAntemortemVeterinary', 'App\Http\Controllers\AntemoretemInspectionController@sltAntemortemVeterinary');
+
+Route::get('sltGuideThroughMaster/{table}', 'App\Http\Controllers\GuideController@sltGuideThroughMaster');
+Route::get('sltPayrrollsGuide/{relation}/{id_guide}', 'App\Http\Controllers\DailyPayrollController@sltPayrrollsGuide');
+
+Route::get('sltAntemoremOutlets/{relation}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremOutlet');
+Route::get('sltAntemoremAnimals/{relation}/{id_outlet}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremAnimals');
+

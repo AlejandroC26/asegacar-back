@@ -2,11 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Outlet;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\DB;
 
-class DailyPayrollResource extends JsonResource
+class ShowDailyPayrollResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,19 +18,9 @@ class DailyPayrollResource extends JsonResource
             'id' => $this->id,
             "responsable" => $this->responsable?->fullname,
             "date" => date_format(date_create($this->date), 'Y-m-d'),
+            'id_guide' => $this->id_guide,
             "guide" => $this->guide->code,
-            "consecutive" => $this->guide->consecutive,
-            "entries" => count($this->dailyPayrolls)
+            "entries" => $this->dailyPayrolls
         ];
-    }
-
-    public static function toSelect($data)
-    {
-        $aResponse = [];
-        foreach ($data as $key => $element) {
-            $aResponse[$key]['id'] = $element->id;
-            $aResponse[$key]['name'] = date_format(date_create($element->date), 'Y-m-d').'  '.$element->responsable?->fullname;
-        }
-        return collect($aResponse);
     }
 }

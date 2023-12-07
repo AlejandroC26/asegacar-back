@@ -57,7 +57,7 @@
     </tr>
     <tr>
         <td colspan="8">
-            <b>ANIMALES SOSPECHOSOS</b>
+            <b>HALLASGOS /ANTEMORTEM</b>
         </td>
     </tr>
     @php

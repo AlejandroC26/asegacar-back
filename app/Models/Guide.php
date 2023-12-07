@@ -25,7 +25,11 @@ class Guide extends Model
         'file_attached'
     ];
 
-    public function dailyPayrrolls() {
+    public function masters() {
+        return $this->hasMany(DailyPayrollMaster::class, 'id_guide');
+    }
+
+    public function dailyPayrolls() {
         return $this->hasManyThrough(DailyPayroll::class, DailyPayrollMaster::class, 'id_guide', 'id_dp_master');
     }
         

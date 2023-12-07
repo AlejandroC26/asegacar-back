@@ -171,21 +171,21 @@ class AntemortemDailyRecordController extends Controller
         }
     }
 
-    public function sltAntemoremOutlet()
+    public function sltAntemoremOutlet($relation)
     {
         try {
-            $route = DailyPayroll::with('outlet')->whereNotNull('id_outlet')->groupBy('id_outlet')->get();
-            return response()->json(AntemortemDailyRecordResource::toOutletSelect($route));
+            $outlets = DailyPayroll::whereNotNull('id_outlet')->whereDoesntHave($relation)->groupBy('id_outlet')->get();
+            return response()->json(AntemortemDailyRecordResource::toOutletSelect($outlets));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }
     }
 
-    public function sltAntemoremAnimals($id)
+    public function sltAntemoremAnimals($relation, $id)
     {
         try {
-            $route = DailyPayroll::select('id', 'code as name')->where('id_outlet', $id)->get();
-            return response()->json($route);
+            $animals = DailyPayroll::select('id', 'code as name')->whereDoesntHave($relation)->where('id_outlet', $id)->get();
+            return response()->json($animals);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

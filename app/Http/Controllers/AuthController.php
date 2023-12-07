@@ -134,7 +134,7 @@ class AuthController extends Controller
                             "route" => 'inspeccionantemortem',
                         ],
                         [
-                            "label" => 'Inspección Antemortem/Animales Sospechosos',
+                            "label" => 'Hallazgos / Antemortem',
                             "route" => 'inspeccionantemortemsospechosos',
                         ],
                         [

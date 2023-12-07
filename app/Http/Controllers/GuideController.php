@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGuideRequest;
+use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\DailyPayroll;
 use App\Models\Guide;
@@ -43,32 +44,14 @@ class GuideController extends Controller
         try {
             $sFileName = '';
             $consecutive = '';
-            $unfinishedGuides = 0;
             $sCurrentDate = Carbon::now();
             
-            $monthGuides = Guide::whereYear('date_entry', $sCurrentDate->year)
+            $monthGuides = Guide::select(DB::raw('SUM(no_animals) as total_animals'))->whereYear('date_entry', $sCurrentDate->year)
                 ->whereMonth('date_entry', $sCurrentDate->month)
-                ->get();
+                ->first();
 
-            foreach ($monthGuides as $guide) {
-                $guideRecords = DailyPayroll::whereHas('master.guide', function(Builder $query) use ($sCurrentDate, $guide) {
-                    $query->where('id', $guide->id);
-                    $query->whereYear('date_entry', $sCurrentDate->year);
-                    $query->whereMonth('date_entry', $sCurrentDate->month);
-                })->count();
-                
-                if($guideRecords < $guide->no_animals) $unfinishedGuides += 1;
-            }
-
-            if($unfinishedGuides) 
-                return $this->errorResponse('Empty records', ['Hay animales pendientes por asignar a las guías, registra los animales faltantes e intenta nuevamente']);
-
-            $monthRecords = DailyPayroll::whereHas('master.guide', function(Builder $query) use ($sCurrentDate) {
-                $query->whereYear('date_entry', $sCurrentDate->year);
-                $query->whereMonth('date_entry', $sCurrentDate->month);
-            })->count();
-
-            $consecutive = $monthRecords.' - '. $monthRecords + $request->no_animals;
+            $monthAnimals = $monthGuides->total_animals ?? 0;
+            $consecutive = $monthAnimals+1 .' - '. $monthAnimals + $request->no_animals;
             
             if($request->file('file_attached')) {
                 $sFileName = 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
@@ -106,7 +89,7 @@ class GuideController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreGuideRequest $request, Guide $guide)
+    public function update(UpdateGuideRequest $request, Guide $guide)
     {
         try {   
             $sFileName = $guide->file_attached;
@@ -146,14 +129,32 @@ class GuideController extends Controller
         }
     }
 
-    public function sltNotFullGuideOf($relation) {
+    public function sltGuideForDailyPayroll() {
         try {
-            $guides = Guide::select('id', 'code as name')->has($relation, '<', DB::raw('no_animals'))->get();
+            $guides = Guide::select('id', 'code as name')->has('dailyPayrolls', '<', DB::raw('no_animals'))->get();
             return response()->json($guides);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
+
+    public function sltGuideThroughMaster($relation) {
+        try {
+            $guides = DB::table('guides')
+                ->select('guides.id', 'guides.code as name', 'guides.no_animals as total', DB::raw("COUNT($relation.id) as serach_total"))
+                ->leftJoin('daily_payroll_master', 'daily_payroll_master.id_guide', '=', 'guides.id')
+                ->leftJoin('daily_payrolls', 'daily_payrolls.id_dp_master', '=', 'daily_payroll_master.id')
+                ->leftJoin($relation, "$relation.id_daily_payroll", '=', 'daily_payrolls.id')
+                ->groupBy('guides.id', 'guides.code', 'guides.no_animals')
+                ->havingRaw('serach_total < guides.no_animals')
+                ->get();
+                
+            return response()->json($guides);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+    
 
     public function sltSpecies () {
         try {

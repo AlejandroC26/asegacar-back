@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\DailyPayrollExport;
 use App\Http\Requests\StoreDailyPayrollRequest;
 use App\Http\Resources\DailyPayrollResource;
+use App\Http\Resources\ShowDailyPayrollResource;
 use App\Models\DailyPayroll;
 use App\Models\DailyPayrollMaster;
 use App\Models\GeneralParam;
@@ -25,7 +26,7 @@ class DailyPayrollController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
             $aMasterTable = DailyPayrollMaster::all();
@@ -91,8 +92,7 @@ class DailyPayrollController extends Controller
     {
         try {
             $aMasterTable = DailyPayrollMaster::find($id);
-            $aMasterTable['entries'] = $aMasterTable->dailyPayrolls;
-            return $this->successResponse($aMasterTable, 'Listado exitosamente', 200);
+            return $this->successResponse(ShowDailyPayrollResource::make($aMasterTable), 'Listado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -182,10 +182,10 @@ class DailyPayrollController extends Controller
         }
     }
 
-    public function sltPayrrollsGuide($id)
+    public function sltPayrrollsGuide($relation, $id)
     {
         try {
-            $dailyPayrolls = DailyPayroll::whereHas('master', function(Builder $query) use ($id) {
+            $dailyPayrolls = DailyPayroll::whereDoesntHave($relation)->whereHas('master', function(Builder $query) use ($id) {
                 $query->where('id_guide', $id);
             })->get();
 
