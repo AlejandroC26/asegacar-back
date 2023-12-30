@@ -40,7 +40,7 @@
     @foreach($data as $element)
     <tr>
         <td>{{ $element->dailyPayroll->outlet->code }}</td>
-        <td>{{ $element->dailyPayroll->code }}</td>
+        <td>{{ $element->dailyPayroll->incomeForm->code }}</td>
         <td>{{ $element->outlet }}</td>
         <td>{{ $element->code }}</td>
         <td>{{ $element->skin }}</td>

@@ -43,7 +43,7 @@
     <tr>
         <td>{{ $key + 1 }}</td>
         <td>{{ $element->dailyPayroll->outlet->code }}</td>
-        <td>{{ $element->dailyPayroll->code }}</td>
+        <td>{{ $element->dailyPayroll->incomeForm->code }}</td>
         <td>{{ $element->head }}</td>
         <td>{{ $element->small_ints }}</td>
         <td>{{ $element->large_ints }}</td>

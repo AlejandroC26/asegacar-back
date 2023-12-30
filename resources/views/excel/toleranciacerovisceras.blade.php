@@ -68,7 +68,7 @@
         @foreach($data as $element)
         <tr>
             <td>{{ $element->dailyPayroll->outlet->code }}</td>
-            <td>{{ $element->dailyPayroll->code }}</td>
+            <td>{{ $element->dailyPayroll->incomeForm->code }}</td>
             <td>{{ $element->organ }}</td>
             <td>{{ $element->fecal_matter }}</td>
             <td>{{ $element->resume }}</td>

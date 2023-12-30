@@ -27,17 +27,20 @@ class StoreDailyPayrollRequest extends FormRequest
     {
         return [
             'date' => 'required',
-            'id_guide' => 'required',        
-            
+            'id_dp_master' => 'required',        
             'entries' => 'required|array',
             'entries.*.code' => 'required',
-            'entries.*.id_gender' => 'required',
-            'entries.*.id_color' => 'required',
-            'entries.*.id_age' => 'required',
-            'entries.*.id_purpose' => 'required',
-            'entries.*.id_outlet' => 'max:500',
-            'entries.*.sacrifice_date' => 'max:500',
+            'entries.*.id_product_type' => 'required',
+            'entries.*.id_outlet' => 'required',
+            'entries.*.sacrifice_date' => 'required',
             'entries.*.special_order' => 'max:1000',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'entries.required' => 'Registra al menos un registro.',
         ];
     }
 

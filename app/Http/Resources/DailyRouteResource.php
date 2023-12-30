@@ -25,7 +25,6 @@ class DailyRouteResource extends JsonResource
             "quantity" => $this->quantity,
             "orders" => $this->orders ?? '',
             "date" => date_format(date_create($this->date), 'Y-m-d'),
-            "created_at" => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }
 }

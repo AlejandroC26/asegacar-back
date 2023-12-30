@@ -29,8 +29,12 @@ class Guide extends Model
         return $this->hasMany(DailyPayrollMaster::class, 'id_guide');
     }
 
+    public function incomeForms() {
+        return $this->hasMany(IncomeForm::class, 'id_guide');
+    }
+
     public function dailyPayrolls() {
-        return $this->hasManyThrough(DailyPayroll::class, DailyPayrollMaster::class, 'id_guide', 'id_dp_master');
+        return $this->hasManyThrough(DailyPayroll::class, IncomeForm::class, 'id_guide', 'id_income_form', 'id', 'id');
     }
         
     public function owner() { 

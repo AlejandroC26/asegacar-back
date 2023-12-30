@@ -23,7 +23,7 @@ class PostmortemInspectionsResource extends JsonResource
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,
             "outlet" => $this->dailyPayroll->outlet->code,
-            "code" => $this->dailyPayroll->code,
+            "code" => $this->dailyPayroll->incomeForm->code,
 
             'id_intestines_cause' => $this->id_intestines_cause,
             'intestines_cause' => $this->intestines_cause?->name,

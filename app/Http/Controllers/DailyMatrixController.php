@@ -16,12 +16,11 @@ class DailyMatrixController extends Controller
 {
     use ApiResponse;
     
-    public function index(Request $request)
+    public function index()
     {
         try {
             $dailyMatrix = DB::table('daily_matrix_view')->get();
             return $dailyMatrix;
-            
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

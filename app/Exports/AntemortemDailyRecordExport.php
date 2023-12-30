@@ -81,10 +81,10 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
         $sheet->getColumnDimension('D')->setWidth(14);
         $sheet->getColumnDimension('E')->setWidth(7);
         $sheet->getColumnDimension('F')->setWidth(7);
-        $sheet->getColumnDimension('G')->setWidth(7); 
-        $sheet->getColumnDimension('H')->setWidth(14); 
-        $sheet->getColumnDimension('I')->setWidth(7); 
-        $sheet->getColumnDimension('J')->setWidth(8); 
+        $sheet->getColumnDimension('G')->setWidth(14); 
+        $sheet->getColumnDimension('H')->setWidth(14);
+        $sheet->getColumnDimension('I')->setWidth(7);
+        $sheet->getColumnDimension('J')->setWidth(8);
 
 
         // Aquí podrías agregar más estilos si los necesitas

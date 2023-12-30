@@ -87,14 +87,14 @@ class AntemoretemInspectionController extends Controller
 
             $guides = collect($resultArray)->pluck('id_guide');
             
-            $suspiciousAnimals = InspectionSuspiciousAnimal::whereHas('dailyPayroll.master', function (Builder $query) use ($guides) {
+            $suspiciousAnimals = InspectionSuspiciousAnimal::whereHas('dailyPayroll.incomeForm', function (Builder $query) use ($guides) {
                 $query->whereIn('id_guide', $guides);
             })->get();
 
             $suspiciousAnimals = $suspiciousAnimals->map(function ($animal) {
-                $response['male'] = ($animal->dailyPayroll->id_gender === 1) ? 1 : 0;
-                $response['female'] = ($animal->dailyPayroll->id_gender === 2) ? 1 : 0;
-                $response['guide'] = $animal->dailyPayroll->master->guide->code;
+                $response['male'] = ($animal->dailyPayroll->incomeForm->id_gender === 1) ? 1 : 0;
+                $response['female'] = ($animal->dailyPayroll->incomeForm->id_gender === 2) ? 1 : 0;
+                $response['guide'] = $animal->dailyPayroll->incomeForm->guide->code;
                 $response['findings_and_observations'] = $animal->findings_and_observations;
                 $response['decision'] = $animal->decision;
                 $response['cause_forfeiture'] = $animal->cause_forfeiture;

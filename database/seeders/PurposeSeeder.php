@@ -18,6 +18,5 @@ class PurposeSeeder extends Seeder
         Purpose::create(['name' => 'PROPOSITO CARNE']);
         Purpose::create(['name' => 'PROPOSITO LECHE']);
         Purpose::create(['name' => 'DOBLE PROPOSITO']);
-        Purpose::create(['name' => 'PROPOSITO MAMONA']);
     }
 }

@@ -71,7 +71,8 @@ class DailyPayrollExport implements FromView, WithColumnFormatting, WithStyles, 
 
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
-        $sheet->getRowDimension(4)->setRowHeight(30);
+        $sheet->getRowDimension(2)->setRowHeight(32);
+        $sheet->getRowDimension(4)->setRowHeight(32);
         $sheet->getRowDimension(5)->setRowHeight(32);
         //COL
         $sheet->getColumnDimension('A')->setWidth(20);

@@ -60,7 +60,7 @@
     <tr>
         <td>{{ $key+1 }}</td>
         <td>{{ $element->dailyPayroll->outlet->code }}</td>
-        <td>{{ $element->dailyPayroll->code }}</td>
+        <td>{{ $element->dailyPayroll->incomeForm->code }}</td>
 
         <td>{{ $element->intestines_cause?->name }}</td>
         <td>{{ $element->intestines_quantity }}</td>

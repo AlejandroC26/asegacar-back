@@ -28,7 +28,7 @@ class UpdatePersonsRequest extends FormRequest
         return [
             'fullname' => 'required|string|max:255',
             'document' => 'required',
-            'expedition_city' => 'required',
+            'expedition_city' => 'nullable',
             'adress' => 'max:255',
             'phone' => 'max:255',
             'signature' => 'mimes:jpg,jpeg,png',

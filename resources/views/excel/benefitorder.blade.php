@@ -33,7 +33,7 @@
         <td>{{ $income->dailyPayroll->outlet->code }}</td>
         <td 
             colspan="3"
-        >{{ $income->dailyPayroll->code }}</td>
+        >{{ $income->dailyPayroll->incomeForm->code }}</td>
         <td></td>
     </tr>
     @endforeach

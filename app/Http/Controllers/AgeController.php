@@ -7,10 +7,12 @@ use App\Helpers\FormatDateHelper;
 use App\Http\Resources\AgeResource;
 use App\Models\Age;
 use App\Models\DailyPayroll;
+use App\Models\IncomeForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AgeController extends Controller
@@ -113,7 +115,9 @@ class AgeController extends Controller
             $oDate["month"] = strtoupper(FormatDateHelper::onNumberToMonth(intval($date->format('m'))));
             $oDate["year"]  = $date->format('Y');
 
-            $aRecords = DailyPayroll::whereBetween('sacrifice_date', [$first_date, $last_date])->get();
+            $aRecords = IncomeForm::whereHas('dailyPayroll', function(Builder $query) use ($first_date, $last_date) {
+                $query->whereBetween('sacrifice_date', [$first_date, $last_date]);
+            })->get();
 
             
             if(!count($aRecords)) {

@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreVehicleRequest extends FormRequest
+class StoreIncomeFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,30 +18,24 @@ class StoreVehicleRequest extends FormRequest
         return true;
     }
 
+    public function rules()
+    {
+        return [
+            'date' => 'required',     
+            
+            'entries' => 'required|array',
+            'entries.*.code' => 'required',
+            'entries.*.id_gender' => 'required',
+            'entries.*.id_color' => 'required',
+            'entries.*.id_age' => 'required',
+            'entries.*.id_purpose' => 'required',
+        ];
+    }
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, mixed>
      */
-    public function rules()
-    {
-        return [
-            'plate' => 'required',
-            'driver_name' => 'required',
-            'driver_document' => 'nullable|min:8',
-            'refrigerated' => 'required',
-            'isothermal' => 'required',
-            'temperature' => 'nullable'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'driver_document.min' => 'El documento debe tener mínimo :min caracteres',
-        ];
-    }
-
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json(

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
 use App\Models\DailyPayroll;
+use App\Models\DailyPayrollMaster;
 use App\Models\Guide;
 use App\Models\Specie;
 use App\Traits\ApiResponse;
@@ -13,6 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Guid\Guid;
 
 class GuideController extends Controller
 {
@@ -129,23 +131,53 @@ class GuideController extends Controller
         }
     }
 
-    public function sltGuideForDailyPayroll() {
+    public function sltGuideForIncomeForm($sDate) {
         try {
-            $guides = Guide::select('id', 'code as name')->has('dailyPayrolls', '<', DB::raw('no_animals'))->get();
+            $guides = Guide::select('id', 'code as name')->has('incomeForms', '<', DB::raw('no_animals'))->where('date_entry', $sDate)->get();
             return response()->json($guides);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 
-    public function sltGuideThroughMaster($relation) {
+    public function sltGuideForDailyPayroll($sDate) {
         try {
-            $guides = DB::table('guides')
+            $guides = DailyPayrollMaster::select('daily_payroll_master.id', 'guides.code as name')
+                ->leftJoin('income_forms', 'income_forms.id_dp_master', 'daily_payroll_master.id')
+                ->leftJoin('daily_payrolls', 'daily_payrolls.id_income_form', 'income_forms.id')
+                ->leftJoin('guides', 'guides.id', 'income_forms.id_guide')
+                ->where('guides.date_entry', $sDate)
+                ->groupBy('daily_payroll_master.id', 'guides.id')
+                ->having(DB::raw('count(daily_payrolls.id)'), '<=', '0')
+                ->get();
+            
+            return response()->json($guides);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+    
+    public function dailyPayrollGuides($id) {
+        try {
+            $oMaster = DailyPayrollMaster::find($id);
+            return $this->successResponse(GuideResource::make($oMaster->incomeForms[0]->guide));
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltGuideThroughMaster($relation, $date) {
+        try {
+            $qurey = DB::table('guides')
                 ->select('guides.id', 'guides.code as name', 'guides.no_animals as total', DB::raw("COUNT($relation.id) as serach_total"))
-                ->leftJoin('daily_payroll_master', 'daily_payroll_master.id_guide', '=', 'guides.id')
-                ->leftJoin('daily_payrolls', 'daily_payrolls.id_dp_master', '=', 'daily_payroll_master.id')
-                ->leftJoin($relation, "$relation.id_daily_payroll", '=', 'daily_payrolls.id')
-                ->groupBy('guides.id', 'guides.code', 'guides.no_animals')
+                ->leftJoin('income_forms', 'income_forms.id_guide', 'guides.id')
+                ->leftJoin('daily_payrolls', 'income_forms.id', 'daily_payrolls.id_income_form')
+                ->leftJoin($relation, "$relation.id_daily_payroll", 'daily_payrolls.id');
+
+            if($date != "false") 
+                $qurey = $qurey->where('guides.date_entry', $date);
+
+            $guides = $qurey->groupBy('guides.id', 'guides.code', 'guides.no_animals')
                 ->havingRaw('serach_total < guides.no_animals')
                 ->get();
                 

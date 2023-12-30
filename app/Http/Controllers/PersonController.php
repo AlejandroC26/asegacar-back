@@ -14,7 +14,7 @@ class PersonController extends Controller
 {
     use ApiResponse;
 
-    public function index(Request $request)
+    public function index()
     {
         try {
             $persons = Person::all();

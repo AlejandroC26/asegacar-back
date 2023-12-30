@@ -14,19 +14,18 @@ class DailyPayrollMaster extends Model
     protected $fillable = [
         'date',
         'id_responsable',
-        'id_guide',
         'state'
     ];
-
-    public function guide() { 
-        return $this->belongsTo(Guide::class, 'id_guide'); 
-    }
 
     public function responsable() { 
         return $this->belongsTo(Person::class, 'id_responsable'); 
     }
 
+    public function incomeForms() {
+        return $this->hasMany(IncomeForm::class, 'id_dp_master');
+    }
+
     public function dailyPayrolls() {
-        return $this->hasMany(DailyPayroll::class, 'id_dp_master', 'id');
+        return $this->hasManyThrough(DailyPayroll::class, IncomeForm::class, 'id_dp_master', 'id_income_form', 'id', 'id');
     }
 }

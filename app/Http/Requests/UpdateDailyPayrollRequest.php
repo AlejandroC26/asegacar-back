@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreVehicleRequest extends FormRequest
+class UpdateDailyPayrollRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,19 +26,20 @@ class StoreVehicleRequest extends FormRequest
     public function rules()
     {
         return [
-            'plate' => 'required',
-            'driver_name' => 'required',
-            'driver_document' => 'nullable|min:8',
-            'refrigerated' => 'required',
-            'isothermal' => 'required',
-            'temperature' => 'nullable'
+            'date' => 'required',   
+            'entries' => 'required|array',
+            'entries.*.code' => 'required',
+            'entries.*.id_product_type' => 'required',
+            'entries.*.id_outlet' => 'required',
+            'entries.*.sacrifice_date' => 'required',
+            'entries.*.special_order' => 'max:1000',
         ];
     }
 
     public function messages()
     {
         return [
-            'driver_document.min' => 'El documento debe tener mínimo :min caracteres',
+            'entries.required' => 'Registra al menos un registro.',
         ];
     }
 

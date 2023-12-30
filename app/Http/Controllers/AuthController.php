@@ -115,6 +115,10 @@ class AuthController extends Controller
                     "separator" => 1,
                     "routes" => [
                         [
+                            "label" => 'Planilla Ingreso',
+                            "route" => 'planillaingreso',
+                        ],
+                        [
                             "label" => 'Planilla Diaria',
                             "route" => 'planilladiaria',
                         ],

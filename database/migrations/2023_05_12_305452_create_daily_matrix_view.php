@@ -1,8 +1,7 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,8 +12,8 @@ return new class extends Migration
      */
     public function up()
     {
-        \DB::statement($this->dropView());
-        \DB::statement($this->createView());
+        DB::statement($this->dropView());
+        DB::statement($this->createView());
     }
 
     /**
@@ -28,7 +27,7 @@ return new class extends Migration
             CREATE VIEW `daily_matrix_view` AS 
                 SELECT 
                     `guides`.`date_entry` AS `date_entry`,
-                    `dp`.`code` AS `asigned_code`,
+                    `if`.`code` AS `asigned_code`,
                     `guides`.`code` AS `no_guide`,
                     `guides`.`time_entry` AS `time_entry`,
                     `ages`.`description` AS `age`,
@@ -48,12 +47,13 @@ return new class extends Migration
                     `source_department`.`name` AS `source_department`
                 FROM
                     (((((((((((`daily_payrolls` `dp`
-                    LEFT JOIN `daily_payroll_master` `dpm` ON ((`dpm`.`id` = `dp`.`id_dp_master`)))
-                    LEFT JOIN `guides` ON ((`guides`.`id` = `dpm`.`id_guide`)))
-                    LEFT JOIN `purposes` ON ((`purposes`.`id` = `dp`.`id_purpose`)))
-                    LEFT JOIN `ages` ON ((`ages`.`id` = `dp`.`id_age`)))
-                    LEFT JOIN `colors` ON ((`colors`.`id` = `dp`.`id_color`)))
-                    LEFT JOIN `genders` ON ((`genders`.`id` = `dp`.`id_gender`)))
+                    LEFT JOIN `income_forms` `if` ON (`if`.`id` = `dp`.`id_income_form`)
+                    LEFT JOIN `daily_payroll_master` `dpm` ON ((`dpm`.`id` = `if`.`id_dp_master`)))
+                    LEFT JOIN `guides` ON ((`guides`.`id` = `if`.`id_guide`)))
+                    LEFT JOIN `purposes` ON ((`purposes`.`id` = `if`.`id_purpose`)))
+                    LEFT JOIN `ages` ON ((`ages`.`id` = `if`.`id_age`)))
+                    LEFT JOIN `colors` ON ((`colors`.`id` = `if`.`id_color`)))
+                    LEFT JOIN `genders` ON ((`genders`.`id` = `if`.`id_gender`)))
                     LEFT JOIN `outlets` ON ((`outlets`.`id` = `dp`.`id_outlet`)))
                     LEFT JOIN `cities` `source_city` ON ((`source_city`.`id` = `guides`.`id_source`)))
                     LEFT JOIN `departments` `source_department` ON ((`source_department`.`id` = `source_city`.`id_department`)))

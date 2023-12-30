@@ -106,6 +106,8 @@ class DailyRoutesController extends Controller
                 $query->where('date', $request->date);
             }])->get();
 
+            return $routes;
+
             if(!count($routes)) {
                 return $this->errorResponse('The report could not be showed', ['There are not records saved']);
             }

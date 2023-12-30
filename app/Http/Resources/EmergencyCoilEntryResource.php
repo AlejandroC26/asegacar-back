@@ -35,7 +35,7 @@ class EmergencyCoilEntryResource extends JsonResource
             'guide' => $this->dailyPayroll->master->guide->code,
             'id_daily_payroll' => $this->id_daily_payroll,
             'id_gender' => $this->dailyPayroll->id_gender,
-            'animal_code' => $this->dailyPayroll->code,
+            'animal_code' => $this->dailyPayroll->incomeForm->code,
             'weight' => $this->weight,
             'temperature' => $this->temperature,
             'heart_frequency' => $this->heart_frequency,

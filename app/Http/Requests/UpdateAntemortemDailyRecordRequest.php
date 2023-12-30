@@ -26,8 +26,19 @@ class UpdateAntemortemDailyRecordRequest extends FormRequest
     public function rules()
     {
         return [
-            'sacrifice_date' => 'required|date',
+            'id_product_type' => 'required',
             'id_outlet' => 'required',
+            'sacrifice_date' => 'required|date',
+            'special_order' => 'nullable'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'sacrifice_date.required' => 'Registra la fecha de sacrificio',
+            'id_product_type.required' => 'Registra el tipo de producto',
+            'id_outlet.required' => 'Registra el número de expendio',
         ];
     }
 

@@ -25,7 +25,7 @@ class ZeroToleranceInspectionResource extends JsonResource
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,
             "outlet" => $this->dailyPayroll->outlet->code,
-            "code" => $this->dailyPayroll->code,
+            "code" => $this->dailyPayroll->incomeForm->code,
             
             "milk" => $this->milk,            
             "fecal_matter" => $this->fecal_matter,

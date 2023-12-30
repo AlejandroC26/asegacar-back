@@ -16,6 +16,7 @@ use App\Http\Controllers\GendersController;
 use App\Http\Controllers\GeneralParamsController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\IncomeFormController;
 use App\Http\Controllers\InspectionSuspiciousAnimalController;
 use App\Http\Controllers\MasterTableController;
 use App\Http\Controllers\OutletController;
@@ -59,6 +60,7 @@ Route::resource('outlets', OutletController::class);
 Route::resource('ages', AgeController::class);
 Route::resource('incomes', IncomeController::class);
 Route::resource('formatCodes', FormatCodeController::class);
+Route::resource('incomeForm', IncomeFormController::class);
 Route::resource('dailyPayroll', DailyPayrollController::class);
 Route::resource('colors', ColorsController::class);
 Route::resource('genders', GendersController::class);
@@ -118,7 +120,8 @@ Route::get('sltPurposes', 'App\Http\Controllers\PurposeController@sltPurposes');
 Route::get('sltCities/{idDepartment}', 'App\Http\Controllers\CityController@sltCities');
 Route::get('sltDepartments', 'App\Http\Controllers\CityController@sltDepartments');
 Route::get('sltGuides', 'App\Http\Controllers\GuideController@sltGuides');
-Route::get('sltGuideForDailyPayroll', 'App\Http\Controllers\GuideController@sltGuideForDailyPayroll');
+Route::get('sltGuideForIncomeForm/{sDate}', 'App\Http\Controllers\GuideController@sltGuideForIncomeForm');
+Route::get('sltGuideForDailyPayroll/{sDate}', 'App\Http\Controllers\GuideController@sltGuideForDailyPayroll');
 
 Route::get('sltFormatCodes', 'App\Http\Controllers\FormatCodeController@sltFormatCodes');
 Route::get('sltRoutes', 'App\Http\Controllers\RouteController@sltRoutes');
@@ -132,9 +135,11 @@ Route::get('sltSpecies', 'App\Http\Controllers\GuideController@sltSpecies');
 Route::get('sltDailyPayrolls', 'App\Http\Controllers\DailyPayrollController@sltDailyPayrolls');
 Route::get('sltAntemortemVeterinary', 'App\Http\Controllers\AntemoretemInspectionController@sltAntemortemVeterinary');
 
-Route::get('sltGuideThroughMaster/{table}', 'App\Http\Controllers\GuideController@sltGuideThroughMaster');
+Route::get('sltGuideThroughMaster/{table}/{sDate}', 'App\Http\Controllers\GuideController@sltGuideThroughMaster');
 Route::get('sltPayrrollsGuide/{relation}/{id_guide}', 'App\Http\Controllers\DailyPayrollController@sltPayrrollsGuide');
 
 Route::get('sltAntemoremOutlets/{relation}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremOutlet');
 Route::get('sltAntemoremAnimals/{relation}/{id_outlet}', 'App\Http\Controllers\AntemortemDailyRecordController@sltAntemoremAnimals');
 
+Route::get('sltProductTypes', 'App\Http\Controllers\DailyPayrollController@sltProductTypes');
+Route::get('dailyPayrollGuides/{nIdGuide}', 'App\Http\Controllers\GuideController@dailyPayrollGuides');

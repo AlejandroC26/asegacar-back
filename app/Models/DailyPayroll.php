@@ -10,20 +10,21 @@ class DailyPayroll extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code',
-        'id_dp_master',
+        'id_income_form',
+        'id_product_type',
         'id_outlet',
-        'id_gender',
-        'id_color',
-        'id_age',
-        'id_purpose',
         'sacrifice_date',
         'special_order'
     ];
 
-    public function master() 
+    public function incomeForm() 
     { 
-        return $this->belongsTo(DailyPayrollMaster::class, 'id_dp_master'); 
+        return $this->belongsTo(IncomeForm::class, 'id_income_form'); 
+    }
+
+    public function outlet() 
+    { 
+        return $this->belongsTo(Outlet::class, 'id_outlet'); 
     }
 
     public function antemortemInspections() {
@@ -69,18 +70,4 @@ class DailyPayroll extends Model
     public function visceraDispatch() {
         return $this->hasMany(VisceraDispatch::class, 'id_daily_payroll');
     }
-    
-    public function outlet() 
-    { 
-        return $this->belongsTo(Outlet::class, 'id_outlet'); 
-    }
-    public function gender() 
-    { 
-        return $this->belongsTo(Gender::class, 'id_gender'); 
-    }
-    public function color() 
-    { 
-        return $this->belongsTo(Color::class, 'id_color'); 
-    }
-
 }

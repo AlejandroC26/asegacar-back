@@ -16,9 +16,9 @@ class InspectionSuspiciousAnimalResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'id_guide' => $this->dailyPayroll?->master?->id_guide,
-            'guide' => $this->dailyPayroll?->master?->guide->code,
-            "code" => $this->dailyPayroll->code,
+            'id_guide' => $this->dailyPayroll?->incomeForm?->id_guide,
+            'guide' => $this->dailyPayroll?->incomeForm?->guide->code,
+            "code" => $this->dailyPayroll->incomeForm->code,
             'id_daily_payroll' => $this->id_daily_payroll,
             'findings_and_observations' => $this->findings_and_observations ?? '',
             'decision' => $this->decision ?? '',

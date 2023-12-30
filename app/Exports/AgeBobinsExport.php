@@ -69,16 +69,16 @@ class AgeBobinsExport implements FromView, WithColumnFormatting, WithStyles, Wit
         $sheet->getRowDimension(1)->setRowHeight(30);
         $sheet->getRowDimension(2)->setRowHeight(30);
         //COL
-        $sheet->getColumnDimension('A')->setWidth(11);
-        $sheet->getColumnDimension('B')->setWidth(11);
-        $sheet->getColumnDimension('C')->setWidth(11);
-        $sheet->getColumnDimension('D')->setWidth(11);
-        $sheet->getColumnDimension('E')->setWidth(11);
-        $sheet->getColumnDimension('F')->setWidth(11);
-        $sheet->getColumnDimension('G')->setWidth(11); 
-        $sheet->getColumnDimension('H')->setWidth(11); 
-        $sheet->getColumnDimension('I')->setWidth(11); 
-        $sheet->getColumnDimension('J')->setWidth(11); 
+        $sheet->getColumnDimension('A')->setWidth(13);
+        $sheet->getColumnDimension('B')->setWidth(13);
+        $sheet->getColumnDimension('C')->setWidth(13);
+        $sheet->getColumnDimension('D')->setWidth(13);
+        $sheet->getColumnDimension('E')->setWidth(13);
+        $sheet->getColumnDimension('F')->setWidth(13);
+        $sheet->getColumnDimension('G')->setWidth(13); 
+        $sheet->getColumnDimension('H')->setWidth(13); 
+        $sheet->getColumnDimension('I')->setWidth(13); 
+        $sheet->getColumnDimension('J')->setWidth(13); 
 
 
         // Aquí podrías agregar más estilos si los necesitas

@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('daily_payroll_master', function (Blueprint $table) {
+        Schema::create('product_types', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-
-            $table->unsignedBigInteger('id_responsable')->nullable();
-            $table->foreign('id_responsable')->references('id')->on('persons');
-
-            $table->boolean('state')->default(1);
+            $table->string('name');
+            $table->float('amount', 8, 2);
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('daily_payroll_master');
+        Schema::dropIfExists('product_types');
     }
 };

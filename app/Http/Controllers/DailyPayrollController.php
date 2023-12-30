@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Exports\DailyPayrollExport;
 use App\Http\Requests\StoreDailyPayrollRequest;
+use App\Http\Requests\UpdateDailyPayrollRequest;
 use App\Http\Resources\DailyPayrollResource;
 use App\Http\Resources\ShowDailyPayrollResource;
 use App\Models\DailyPayroll;
 use App\Models\DailyPayrollMaster;
 use App\Models\GeneralParam;
 use App\Models\Guide;
-use App\Models\MasterType;
+use App\Models\IncomeForm;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Carbon;
@@ -29,7 +31,7 @@ class DailyPayrollController extends Controller
     public function index()
     {
         try {
-            $aMasterTable = DailyPayrollMaster::all();
+            $aMasterTable = DailyPayrollMaster::has('dailyPayrolls')->get();
             return $this->successResponse(DailyPayrollResource::collection($aMasterTable));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -47,30 +49,12 @@ class DailyPayrollController extends Controller
         try {       
             DB::beginTransaction();
 
-            $responsable_id = GeneralParam::onGetResponsable();
-            if(!$responsable_id) {
-                return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
-            }
-
-            $oMasterTable = DailyPayrollMaster::create(array_merge($request->except(['entries']), [
-                'id_responsable' => $responsable_id
-            ]));
-
-            $oGuide = Guide::find($request->id_guide);
-
-            if($oGuide->no_animals !== count($request->validated()['entries'])) {
-                return $this->errorResponse('The record could not be saved', ['Registra el número de animales asignados en la guía'], 409);
-            }
-
             foreach ($request->validated()['entries'] as $entrie) {
-                $oUniqueCode = DailyPayroll::whereHas('master', function(Builder $query) use ($request){
-                    $query->whereYear('date', $request->date);
-                    $query->whereMonth('date', Carbon::createFromFormat('Y-m-d', $request->date)->month);
-                })->where(['code' => $entrie['code']])->first();
-                if($oUniqueCode) {
-                    return $this->errorResponse('The record could not be saved', ['El código debe ser único por día'], 409);
-                }
-                DailyPayroll::create(array_merge($entrie, ['id_dp_master' => $oMasterTable->id,]));
+                $oIncomeForm = IncomeForm::where([
+                    'id_dp_master' => $request->id_dp_master,
+                    'code' => $entrie['code']
+                ])->first();
+                DailyPayroll::create(array_merge($entrie, ['id_income_form' => $oIncomeForm->id]));
             }
 
             DB::commit();
@@ -105,46 +89,16 @@ class DailyPayrollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreDailyPayrollRequest $request, $id)
+    public function update(UpdateDailyPayrollRequest $request, $id)
     {
         try {
-
             $oMasterTable = DailyPayrollMaster::find($id);
             
-            if($oMasterTable?->guide->no_animals !== count($request->validated()['entries'])) {
-                return $this->errorResponse('The record could not be saved', ['Registra el número de animales asignados en la guía'], 409);
-            }
+            $oMasterTable->update($request->except(['entries']));
 
-            $oMasterTable->update(
-                $request->except(['entries'])
-            );
-
-            $entries = collect($request->entries);
-            $aCodes = $entries->pluck('code');
-
-            $oldRecords = DailyPayroll::where('id_dp_master', $oMasterTable->id)->whereNotIn('code',$aCodes)->get();
-
-            $oldRecordsIndex = 0;
-            foreach ($request->validated()['entries'] as $entrie) {
-                $oUniqueCode = DailyPayroll::whereHas('master', function(Builder $query) use ($request){
-                    $query->whereYear('date', $request->date);
-                    $query->whereMonth('date', Carbon::createFromFormat('Y-m-d', $request->date)->month);
-                })->where(['code' => $entrie['code']])->where('id_dp_master', '!=', $oMasterTable->id)->first();
-                if($oUniqueCode) {
-                    return $this->errorResponse('The record could not be updated', ['El código debe ser único por día'], 409);
-                }
-
-                $existsDailyPayroll = DailyPayroll::where(['code' => $entrie['code'], 'id_dp_master' => $oMasterTable->id])->first();
-                if($existsDailyPayroll) {
-                    $existsDailyPayroll->update($entrie);
-                } else {
-                    if(array_key_exists($oldRecordsIndex, $oldRecords->toArray())) {
-                        $oldRecords[$oldRecordsIndex]->update($entrie);
-                        $oldRecordsIndex += 1;
-                    } else {
-                        DailyPayroll::create(array_merge($entrie, ['id_dp_master' => $oMasterTable->id]));
-                    }
-                }
+            foreach ($request->validated(['entries']) as $entrie) {
+                $oIncomeForm = IncomeForm::where(['code' => $entrie['code'], 'id_dp_master' => $id])->first();
+                DailyPayroll::where('id_income_form', $oIncomeForm->id)->update(collect($entrie)->except(['code'])->toArray());
             }
 
             return $this->successResponse($oMasterTable, 'Actualizado exitosamente', 200);
@@ -181,20 +135,31 @@ class DailyPayrollController extends Controller
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
+    
+    public function sltProductTypes()
+    {
+        try {
+            $productTypes = ProductType::select('id', 'name')->get();
+            return response()->json($productTypes);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
 
     public function sltPayrrollsGuide($relation, $id)
     {
         try {
-            $dailyPayrolls = DailyPayroll::whereDoesntHave($relation)->whereHas('master', function(Builder $query) use ($id) {
+            $dailyPayrolls = DailyPayroll::whereDoesntHave($relation)->whereHas('incomeForm', function(Builder $query) use ($id) {
                 $query->where('id_guide', $id);
             })->get();
 
             $dailyPayrolls = $dailyPayrolls->map(function($dailyPayroll) {
                 return [
-                    'id' => $dailyPayroll['id'],
-                    'name' => $dailyPayroll['code']
+                    'id' => $dailyPayroll->id,
+                    'name' => $dailyPayroll->incomeForm->code
                 ];
             });
+            
             return response()->json($dailyPayrolls);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -207,10 +172,11 @@ class DailyPayrollController extends Controller
             $total_males = 0;
             $total_females = 0;
 
-            $dailyPayroll = DailyPayroll::with('outlet', 'master.responsable')->select(
+            $dailyPayroll = DailyPayroll::with('outlet', 'incomeForm.master.responsable')->select(
                     'daily_payrolls.id', 
                     'id_dp_master', 
                     'id_outlet',
+                    'id_income_form',
                     DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
                     DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
                     DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
@@ -218,8 +184,9 @@ class DailyPayrollController extends Controller
                     DB::raw("GROUP_CONCAT(special_order SEPARATOR ', ')	AS special_order"),
                     'daily_payrolls.created_at'
                 )
-                ->leftJoin('colors', 'colors.id', '=', 'daily_payrolls.id_color')
-                ->leftJoin('genders', 'genders.id', '=', 'daily_payrolls.id_gender')
+                ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
+                ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
+                ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
                 ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
                 ->where('daily_payroll_master.date', $request->date)
                 ->whereNotNull('id_outlet')
@@ -230,7 +197,6 @@ class DailyPayrollController extends Controller
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
             }
 
-
             $total_males = 0;
             $total_females = 0;
             foreach ($dailyPayroll as $element) {
@@ -239,7 +205,7 @@ class DailyPayrollController extends Controller
             }
             
             $general['date'] = $request->date;
-            $general['responsable'] = $dailyPayroll[0]?->master?->responsable?->fullname;
+            $general['responsable'] = $dailyPayroll[0]?->incomeForm->master?->responsable?->fullname;
 
             return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

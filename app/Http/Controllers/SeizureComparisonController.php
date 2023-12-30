@@ -140,6 +140,8 @@ class SeizureComparisonController extends Controller
             $general['supervised_by'] = $seizureComparison[0]?->master->supervised_by->fullname;
             $general['responsable'] = $seizureComparison[0]?->master->responsable->fullname;
 
+            return $seizureComparison;
+
             return Excel::download(new SeizureComparisonExport($seizureComparison, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

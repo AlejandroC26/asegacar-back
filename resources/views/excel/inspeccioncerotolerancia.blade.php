@@ -66,7 +66,7 @@
     @endphp
     <tr>
         <td>{{ $element?->dailyPayroll->outlet->code }}</td>
-        <td>{{ $element?->dailyPayroll->code }}</td>
+        <td>{{ $element?->dailyPayroll->incomeForm->code }}</td>
         <td>{{ $element?->milk }}</td>
         <td>{{ $element?->fecal_matter }}</td>
         <td>{{ $element?->rumen_content }}</td>
@@ -76,7 +76,7 @@
         <td></td>
 
         <td>{{ $channel?->dailyPayroll->outlet->code }}</td>
-        <td>{{ $channel?->dailyPayroll->code }}</td>
+        <td>{{ $channel?->dailyPayroll->incomeForm->code }}</td>
         <td>{{ $channel?->outlet }}</td>
         <td>{{ $channel?->code }}</td>
         <td>{{ $channel?->skin }}</td>
