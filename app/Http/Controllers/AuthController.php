@@ -195,6 +195,17 @@ class AuthController extends Controller
                     ]
                 ],
                 [
+                    "icon" => "local_shipping",
+                    "label" => "Despacho",
+                    "separator" => 1,
+                    "routes" => [
+                        [
+                            "label" => 'Guía de despacho',
+                            "route" => 'guiadespacho',
+                        ],
+                    ]
+                ],
+                [
                     "icon" => "fact_check",
                     "label" => "Reportes",
                     "route" => "reportes",

@@ -22,6 +22,11 @@ class DailyPayroll extends Model
         return $this->belongsTo(IncomeForm::class, 'id_income_form'); 
     }
 
+    public function productType() 
+    { 
+        return $this->belongsTo(ProductType::class, 'id_product_type'); 
+    }
+
     public function outlet() 
     { 
         return $this->belongsTo(Outlet::class, 'id_outlet'); 

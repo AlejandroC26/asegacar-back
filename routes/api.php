@@ -9,6 +9,7 @@ use App\Http\Controllers\ChannelConditioningController;
 use App\Http\Controllers\ColorsController;
 use App\Http\Controllers\DailyPayrollController;
 use App\Http\Controllers\DailyRoutesController;
+use App\Http\Controllers\DispatchGuideController;
 use App\Http\Controllers\EmergencyCoilEntryController;
 use App\Http\Controllers\FormatCodeController;
 use App\Http\Controllers\FormBenefitOrderController;
@@ -82,7 +83,7 @@ Route::resource('suspiciousAnimals', SuspiciousAnimalsController::class);
 Route::resource('emergencyCoilEntry', EmergencyCoilEntryController::class);
 Route::resource('generalParams', GeneralParamsController::class);
 Route::resource('inspectionSuspiciousAnimals', InspectionSuspiciousAnimalController::class);
-
+Route::resource('dispatchGuides', DispatchGuideController::class);
 
 
 Route::get('/getpermissions', 'App\Http\Controllers\AuthController@getpermissions');
@@ -107,6 +108,8 @@ Route::post('antemortemInspectionFormat', 'App\Http\Controllers\AntemoretemInspe
 Route::post('parturientFemalesFormat/{nId}', 'App\Http\Controllers\ParturientFemalesController@download');
 Route::post('suspiciousAnimalsFormat/{nId}', 'App\Http\Controllers\SuspiciousAnimalsController@download');
 Route::post('emergencyCoilEntryFormat/{nId}', 'App\Http\Controllers\EmergencyCoilEntryController@download');
+Route::post('dispatchGuidesFormat/{nId}', 'App\Http\Controllers\DispatchGuideController@downloadGuides');
+Route::post('retainedProducts/{nId}', 'App\Http\Controllers\DispatchGuideController@downloadRetained');
 
 Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
 Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');

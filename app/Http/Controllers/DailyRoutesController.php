@@ -52,11 +52,10 @@ class DailyRoutesController extends Controller
      * @param  \App\Models\DailyRoutes  $dailyRoutes
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(DailyRoutes $dailyRoute)
     {
         try {
-            $route = DailyRoutes::find($id);
-            return $this->successResponse(DailyRouteResource::make($route), 'Listado exitosamente');
+            return $this->successResponse(DailyRouteResource::make($dailyRoute), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }

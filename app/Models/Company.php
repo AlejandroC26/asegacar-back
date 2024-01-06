@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+class Company extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
+    public $table = 'company';
+
     protected $fillable = [
         'name',
-        'id_department'
+        'id_city',
+        'adress',
+        'phone'
     ];
 
-    public function department() { 
-        return $this->belongsTo(Department::class, 'id_department'); 
+    public function city() { 
+        return $this->belongsTo(City::class, 'id_city'); 
     }
 }
