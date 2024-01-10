@@ -8,13 +8,10 @@ use App\Http\Requests\StoreAntemortemDailyRecordRequest;
 use App\Http\Requests\UpdateAntemortemDailyRecordRequest;
 use App\Http\Resources\AntemortemDailyRecordResource;
 use App\Models\DailyPayroll;
-use App\Models\DailyPayrollMaster;
 use App\Models\IncomeForm;
 use App\Traits\ApiResponse;
 use Maatwebsite\Excel\Facades\Excel;
 
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 
 class AntemortemDailyRecordController extends Controller
 {
