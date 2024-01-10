@@ -188,7 +188,7 @@ class DailyPayrollController extends Controller
                 ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
                 ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
-                ->where('daily_payroll_master.date', $request->date)
+                ->where('daily_payrolls.sacrifice_date', $request->date)
                 ->whereNotNull('id_outlet')
                 ->groupBy('id_outlet')
                 ->get();
