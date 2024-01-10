@@ -26,7 +26,7 @@ class StoreGuideRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required',
+            'code' => 'required|unique:guides',
             'no_animals' => 'required|integer',
             'date_entry' => 'required',
             'time_entry' => 'required',
@@ -37,6 +37,13 @@ class StoreGuideRequest extends FormRequest
             'establishment_name' => 'required',
             'id_specie' => 'required',
             'file_attached' => 'mimes:pdf',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'code.unique' => 'El código de guía debe ser único en el sistema',
         ];
     }
 
