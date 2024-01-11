@@ -88,7 +88,7 @@
       <td colspan="3"><b>{{ $data['products'][1] ?? '' }}</b></td>
       <td></td>
       <td rowspan="8">{{ $config['dispatch_guide']->average_temperature }}</td>
-      <td colspan="5" rowspan="8"><center>{{ implode(',', $data['codes']) }}</center></td>
+      <td colspan="5" rowspan="8">{{ implode(',', $data['codes']) }}</td>
     </tr>
     <tr>
       <td>2</td>
@@ -181,11 +181,11 @@
     </tr>
     <tr>
       <td colspan="3"><b>Recibe:</b></td>
-      <td colspan="5">___________________</td>
+      <td colspan="5"></td>
       <td></td>
       <td>C.C</td>
-      <td colspan="3">__________________</td>
+      <td colspan="3"></td>
       <td>Firma:</td>
-      <td colspan="3">_____</td>
+      <td colspan="3"></td>
     </tr>
   </table>

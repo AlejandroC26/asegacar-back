@@ -109,12 +109,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
                 'startColor' => ['argb' => 'FFFFFF'], 
             ],
         ]);
-        $sheet->getStyle('A4:Q27')->applyFromArray([
-            'alignment' => [
-                'horizontal' => Alignment::HORIZONTAL_LEFT,
-                'vertical' => Alignment::VERTICAL_TOP,
-            ],
-        ]);
+        $sheet->getStyle('A4:Q27')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT,'vertical' => Alignment::VERTICAL_TOP,]]);
         $sheet->getStyle('H1:Q2')->applyFromArray($this->none);
         $sheet->getStyle('H1:Q2')->applyFromArray($this->outline);
         $sheet->getStyle('A6:Q8')->applyFromArray($this->none);
@@ -139,5 +134,6 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $sheet->getStyle('G14:G21')->getFont()->setSize(8);
         $sheet->getStyle('H14:J21')->getFont()->setSize(12);
         $sheet->getStyle('H14:J21')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
+        $sheet->getStyle('L14:Q21')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_TOP]]);
     }
 }
