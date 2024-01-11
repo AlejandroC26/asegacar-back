@@ -68,8 +68,8 @@
       <td colspan="4"><b>3. TIPO DE PRODUCTO</b></td>
       <td colspan="3"></td>
       <td colspan="2"><b>ESPECIE</b></td>
+      <td colspan="2">BOVINA</td>
       <td colspan="2"></td>
-      <td colspan="2"><b>DICTAMEN DEL PRODUCTO</b></td>
       <td colspan="4"></td>
     </tr>
     <tr>
@@ -85,7 +85,7 @@
       <td>1</td>
       <td colspan="5">Carne en canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3">{{ $data['products'][1] ?? '' }}</td>
+      <td colspan="3"><b>{{ $data['products'][1] ?? '' }}</b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
       <td colspan="5" rowspan="8">{{ implode(',', $data['codes']) }}</td>
@@ -94,7 +94,7 @@
       <td>2</td>
       <td colspan="5">Carne en media canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3">{{ $data['products'][2] ?? '' }}</td>
+      <td colspan="3"><b>{{ $data['products'][2] ?? '' }}</b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -102,7 +102,7 @@
       <td>3</td>
       <td colspan="5">Carne en cuartos de canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3">{{ $data['products'][3] ?? '' }}</td>
+      <td colspan="3"><b>{{ $data['products'][3] ?? '' }}</b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -110,7 +110,7 @@
       <td>4</td>
       <td colspan="5">Viscera blanca</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"></td>
+      <td colspan="3"><b></b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -118,7 +118,7 @@
       <td>5</td>
       <td colspan="5">Viscera roja</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"></td>
+      <td colspan="3"><b></b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -126,7 +126,7 @@
       <td>6</td>
       <td colspan="5">Cabezas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"></td>
+      <td colspan="3"><b></b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -134,7 +134,7 @@
       <td>7</td>
       <td colspan="5">Patas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"></td>
+      <td colspan="3"><b></b></td>
       <td></td>
       <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
@@ -185,5 +185,14 @@
       <td colspan="2">Tel. </td>
       <td>Firma:</td>
       <td colspan="3"></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Recibe:</b></td>
+      <td colspan="5">___________________</td>
+      <td></td>
+      <td>C.C</td>
+      <td colspan="2">__________________</td>
+      <td>Firma:</td>
+      <td colspan="3">_____</td>
     </tr>
   </table>
