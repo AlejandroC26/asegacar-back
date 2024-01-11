@@ -108,35 +108,35 @@
       <td>4</td>
       <td colspan="5">Viscera blanca</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b></b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->white_viscera }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>5</td>
       <td colspan="5">Viscera roja</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b></b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->red_viscera }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>6</td>
       <td colspan="5">Cabezas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b></b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->heads }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>7</td>
       <td colspan="5">Patas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b></b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->legs }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>8</td>
       <td colspan="5">Otros</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->others }}</b></td>
       <td></td>
     </tr>
     <tr>

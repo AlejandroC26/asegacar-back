@@ -19,7 +19,12 @@ class DispatchGuide extends Model
         'dispatch_time',
         'id_outlet',
         'id_invima_code',
-        'id_vehicle'
+        'id_vehicle',
+        'white_viscera',
+        'red_viscera',
+        'heads',
+        'legs',
+        'others',
     ];
 
     public function invimaCode()

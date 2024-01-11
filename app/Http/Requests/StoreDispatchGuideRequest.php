@@ -37,6 +37,11 @@ class StoreDispatchGuideRequest extends FormRequest
             'average_temperature' => 'required',
             'id_outlet' => 'required',
             'id_vehicle' => 'required',
+            'white_viscera' => 'nullable',
+            'red_viscera' => 'nullable',
+            'heads' => 'nullable',
+            'legs' => 'nullable',
+            'others' => 'nullable',
         ];
     }
 
