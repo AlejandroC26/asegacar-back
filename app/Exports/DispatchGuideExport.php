@@ -97,7 +97,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('Q')->setWidth(6); 
 
         //BORDES
-        $sheet->getStyle('A1:Q27')->applyFromArray([
+        $sheet->getStyle('A1:Q28')->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,

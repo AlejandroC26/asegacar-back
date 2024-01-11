@@ -87,8 +87,8 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b>{{ $data['products'][1] ?? '' }}</b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
-      <td colspan="5" rowspan="8">{{ implode(',', $data['codes']) }}</td>
+      <td rowspan="8">{{ $config['dispatch_guide']->average_temperature }}</td>
+      <td colspan="5" rowspan="8"><center>{{ implode(',', $data['codes']) }}</center></td>
     </tr>
     <tr>
       <td>2</td>
@@ -96,7 +96,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b>{{ $data['products'][2] ?? '' }}</b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>3</td>
@@ -104,7 +103,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b>{{ $data['products'][3] ?? '' }}</b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>4</td>
@@ -112,7 +110,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b></b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>5</td>
@@ -120,7 +117,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b></b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>6</td>
@@ -128,7 +124,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b></b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>7</td>
@@ -136,7 +131,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b></b></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td>8</td>
@@ -144,7 +138,6 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"></td>
       <td></td>
-      <td>{{ $config['dispatch_guide']->average_temperature }}</td>
     </tr>
     <tr>
       <td colspan="17"><b>4. VEHÍCULO TRANSPORTADOR</b></td>
@@ -191,7 +184,7 @@
       <td colspan="5">___________________</td>
       <td></td>
       <td>C.C</td>
-      <td colspan="2">__________________</td>
+      <td colspan="3">__________________</td>
       <td>Firma:</td>
       <td colspan="3">_____</td>
     </tr>
