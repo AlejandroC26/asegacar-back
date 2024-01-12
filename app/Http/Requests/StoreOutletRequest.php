@@ -32,6 +32,7 @@ class StoreOutletRequest extends FormRequest
             'secondary_phone' => 'max:255',
             'establishment_name' => 'required',
             'establishment_address' => 'max:255',
+            'id_city' => 'required'
         ];
     }
 

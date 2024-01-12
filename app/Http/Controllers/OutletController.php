@@ -34,7 +34,7 @@ class OutletController extends Controller
 
     public function show (Outlet $outlet) {
         try {
-            return $this->successResponse($outlet, 'Listado exitosamente');
+            return $this->successResponse(OutletResource::make($outlet), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }

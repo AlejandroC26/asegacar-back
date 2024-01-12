@@ -181,9 +181,10 @@ class DailyPayrollController extends Controller
                     DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
                     DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
                     DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
-                    DB::raw("GROUP_CONCAT(special_order SEPARATOR ', ')	AS special_order"),
+                    DB::raw("GROUP_CONCAT(distinct(daily_payrolls.special_order) SEPARATOR ', ') AS special_order"),
                     'daily_payrolls.created_at'
                 )
+                ->leftJoin('outlets', 'outlets.id', 'id_outlet')
                 ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
                 ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
@@ -191,6 +192,7 @@ class DailyPayrollController extends Controller
                 ->where('daily_payrolls.sacrifice_date', $request->date)
                 ->whereNotNull('id_outlet')
                 ->groupBy('id_outlet')
+                ->orderBy(DB::raw('CAST(outlets.code as SIGNED)'), 'ASC')
                 ->get();
 
             if(!count($dailyPayroll)) {

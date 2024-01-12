@@ -58,9 +58,9 @@
     </tr>
     <tr>
       <td colspan="3">Municipio</td>
-      <td colspan="3">_____________</td>
+      <td colspan="3"><b>{{ $config['outlet']->city->name }}</b></td>
       <td colspan="2">Departamento</td>
-      <td colspan="2">_____________</td>
+      <td colspan="2"><b>{{ $config['outlet']->city->department->name }}</b></td>
       <td colspan="2">Código expendio:</td>
       <td colspan="5">{{ $config['outlet']->code }}</td>
     </tr>
@@ -85,7 +85,7 @@
       <td>1</td>
       <td colspan="5">Carne en canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $data['products'][1] ?? '' }}</b></td>
+      <td colspan="3"><b>{{ $data['products'][1] ?? 0 }}</b></td>
       <td></td>
       <td rowspan="8"><b>{{ $config['dispatch_guide']->average_temperature }}</b></td>
       <td colspan="5" rowspan="8">{{ implode(',', $data['codes']) }}</td>
@@ -94,14 +94,14 @@
       <td>2</td>
       <td colspan="5">Carne en media canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $data['products'][2] ?? '' }}</b></td>
+      <td colspan="3"><b>{{ $data['products'][2] ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>3</td>
       <td colspan="5">Carne en cuartos de canal</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $data['products'][3] ?? '' }}</b></td>
+      <td colspan="3"><b>{{ $data['products'][3] ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>

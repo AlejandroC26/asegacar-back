@@ -16,6 +16,11 @@ class Outlet extends Model
         'secondary_phone',
         'establishment_name',
         'establishment_address',
+        'id_city'
     ];
+
+    public function city() { 
+        return $this->belongsTo(City::class, 'id_city'); 
+    }
         
 }

@@ -21,6 +21,10 @@ class OutletResource extends JsonResource
             'primary_phone' => $this->primary_phone,
             'secondary_phone' => $this->secondary_phone,
             'establishment_name' => $this->establishment_name,
+            'id_city' => $this->id_city,
+            'city' => $this->city->name,
+            'id_department' => $this->city->id_department,
+            'department' => $this->city->department->name,
             'establishment_address' => $this->establishment_address,
             'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
