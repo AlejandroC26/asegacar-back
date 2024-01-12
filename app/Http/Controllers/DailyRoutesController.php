@@ -108,7 +108,6 @@ class DailyRoutesController extends Controller
             if(!count($routes)) {
                 return $this->errorResponse('The report could not be showed', ['There are not records saved']);
             }
-            
             return Excel::download(new DailyRoutesExport($routes, $request->date), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);

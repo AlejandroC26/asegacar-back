@@ -35,7 +35,7 @@
     @php
         $total_sacrificios = 0;
     @endphp
-    @foreach($data as $route)
+    @foreach($data as $rowKey => $route)
         @php
             $rows = count($route->dailyRoutes);
             $total_canales = 0;
@@ -45,7 +45,7 @@
         @php
             $total_canales += $dr->quantity;
             $total_sacrificios += $dr->quantity;
-            $vehicles[] = $dr->vehicle->name;
+            $vehicles[] = $dr->vehicle->plate;
         @endphp
         @endforeach
         <tr>
@@ -56,11 +56,7 @@
             <td>{{ $route->dailyRoutes[0]->quantity }}</td>
             <td colspan="2">{{ $route->dailyRoutes[0]->orders }}</td>
             <td rowspan="{{$rows}}">{{ $total_canales }}</td>
-            <td rowspan="{{$rows}}">
-                @foreach (array_unique($vehicles) as $vehicle)
-                    {{ $vehicle }} <br>
-                @endforeach
-            </td>
+            <td rowspan="{{$rows}}">{{implode(' ', array_unique($vehicles))}}</td>
         </tr>
         @for ($i = 1; $i < $rows; $i++)
         @php

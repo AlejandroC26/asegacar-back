@@ -76,8 +76,9 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
         $sheet->getColumnDimension('F')->setWidth(14);
         $sheet->getColumnDimension('G')->setWidth(18);
 
+        $lastRow = $sheet->getHighestRow();
 
-        $sheet->getStyle('A1:G4')->applyFromArray([
+        $sheet->getStyle('A1:G'.$lastRow)->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
