@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Exports\PostmortemInspectionExport;
 use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StorePostmoremInspectionsRequest;
+use App\Http\Requests\UpdatePostmoremInspectionsRequest;
 use App\Http\Resources\PostmortemInspectionsResource;
 use App\Models\Causes;
 use App\Models\GeneralParam;
-use App\Models\MasterTable;
 use App\Models\PostmortemInspections;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,7 +23,7 @@ class PostmortemInspectionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
             $inspections = PostmortemInspections::all();
@@ -46,10 +46,7 @@ class PostmortemInspectionsController extends Controller
             if(!$responsable_id) {
                 return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
             }
-            $master = MasterTable::create(['date' => $request->date, 'id_responsable' => $responsable_id, 'id_master_type' => 3]);
-            $inspections = PostmortemInspections::create(array_merge($request->except(['date']), [
-                'id_master' => $master->id
-            ]));
+            $inspections = PostmortemInspections::create(array_merge($request->validated(), ['id_responsable' => $responsable_id]));
             return $this->successResponse($inspections, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -79,13 +76,11 @@ class PostmortemInspectionsController extends Controller
      * @param  \App\Models\PostmortemInspections  $inspections
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePostmoremInspectionsRequest $request, $id)
+    public function update(UpdatePostmoremInspectionsRequest $request, PostmortemInspections $postmortemInspection)
     {
         try {
-            $inspections = PostmortemInspections::findOrFail($id);        
-            $inspections->master->update(['date' => $request->date]);
-            $inspections->update($request->validated());
-            return $this->successResponse($inspections, 'Actualizado exitosamente');
+            $postmortemInspection->update($request->validated());
+            return $this->successResponse($postmortemInspection, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }

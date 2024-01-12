@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         $token = Auth::attempt($credentials);
         if (!$token) {
-            return $this->errorResponse('Unauthorized', [], 401);
+            return $this->errorResponse('Unauthorized', [], 403);
         }
 
         $user = Auth::user();

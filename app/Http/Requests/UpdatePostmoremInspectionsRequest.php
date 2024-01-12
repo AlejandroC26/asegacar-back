@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StorePostmoremInspectionsRequest extends FormRequest
+class UpdatePostmoremInspectionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,6 @@ class StorePostmoremInspectionsRequest extends FormRequest
     {
         return [
             'date' => 'required|date',
-            'id_daily_payroll' => 'required',
             'id_head_cause' => 'nullable',
             'head_quantity' => 'nullable',
             'id_small_ints_cause' => 'nullable',

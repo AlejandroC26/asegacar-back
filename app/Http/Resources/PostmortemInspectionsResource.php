@@ -17,37 +17,77 @@ class PostmortemInspectionsResource extends JsonResource
         return [
             'id' => $this->id,
             'id_master' => $this->id_master,
-            "responsable" => $this->master->responsable?->fullname,
-            "date" => date_format(date_create($this->master->date), 'Y-m-d'),
+            "responsable" => $this->responsable?->fullname,
+            "date" => date_format(date_create($this->date), 'Y-m-d'),
 
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,
             "outlet" => $this->dailyPayroll->outlet->code,
             "code" => $this->dailyPayroll->incomeForm->code,
 
-            'id_intestines_cause' => $this->id_intestines_cause,
-            'intestines_cause' => $this->intestines_cause?->name,
-            'intestines_quantity' => $this->intestines_quantity,
+            'id_head_cause' => $this->id_head_cause,
+            'head' => $this->head?->name,
+            'head_quantity' => $this->head_quantity,
 
-            'id_livers_cause' => $this->id_livers_cause,
-            'livers_cause' => $this->livers_cause?->name,
+            'id_small_ints_cause' => $this->id_small_ints_cause,
+            'small_ints' => $this->small_ints?->name,
+            'small_ints_quantity' => $this->small_ints_quantity,
+
+            'id_large_ints_cause' => $this->id_large_ints_cause,
+            'large_ints' => $this->large_ints?->name,
+            'large_ints_quantity' => $this->large_ints_quantity,
+
+            'id_oment_cause' => $this->id_oment_cause,
+            'oment' => $this->oment?->name,
+            'oment_quantity' => $this->oment_quantity,
+
+            'id_callus_cause' => $this->id_callus_cause,
+            'callus' => $this->callus?->name,
+            'callus_quantity' => $this->callus_quantity,
+
+            'id_liver_cause' => $this->id_liver_cause,
+            'liver' => $this->liver?->name,
             'liver_quantity' => $this->liver_quantity,
 
             'id_lungs_cause' => $this->id_lungs_cause,
-            'lungs_cause' => $this->lungs_cause?->name,
+            'lungs' => $this->lungs?->name,
             'lungs_quantity' => $this->lungs_quantity,
 
-            'id_udders_cause' => $this->id_udders_cause,
-            'udders_cause' => $this->udders_cause?->name,
-            'udders_quantity' => $this->udders_quantity,
-
             'id_legs_cause' => $this->id_legs_cause,
-            'legs_cause' => $this->legs_cause?->name,
-            'legs_quantity' => $this->legs_quantity,
+            'legs' => $this->legs?->name,
+            'legs_quantity' => $this->lungs_quantity,
 
-            'id_purges_cause' => $this->id_purges_cause,
-            'purges_cause' => $this->purges_cause?->name,
-            'purges_quantity' => $this->purges_quantity,
+            'id_udder_cause' => $this->id_udder_cause,
+            'udder' => $this->udder?->name,
+            'udder_quantity' => $this->udder_quantity,
+
+            'id_kidney_cause' => $this->id_kidney_cause,
+            'kidney' => $this->kidney?->name,
+            'kidney_quantity' => $this->kidney_quantity,
+
+            'id_heart_cause' => $this->id_heart_cause,
+            'heart' => $this->heart?->name,
+            'heart_quantity' => $this->heart_quantity,
+
+            'id_booklet_cause' => $this->id_booklet_cause,
+            'booklet' => $this->booklet?->name,
+            'booklet_quantity' => $this->booklet_quantity,
+
+            'id_white_viscera_cause' => $this->id_white_viscera_cause,
+            'white_viscera' => $this->white_viscera?->name,
+            'white_viscera_quantity' => $this->white_viscera_quantity,
+
+            'id_red_viscera_cause' => $this->id_red_viscera_cause,
+            'red_viscera' => $this->red_viscera?->name,
+            'red_viscera_quantity' => $this->red_viscera_quantity,
+
+            'id_destocking_cause' => $this->id_destocking_cause,
+            'destocking' => $this->destocking?->name,
+            'destocking_quantity' => $this->destocking_quantity,
+
+            'id_canal_cause' => $this->id_canal_cause,
+            'destocking' => $this->destocking?->name,
+            'canal_quantity' => $this->canal_quantity,
 
             'other_organ' => $this->other_organ,
             'id_other_cause' => $this->id_other_cause,

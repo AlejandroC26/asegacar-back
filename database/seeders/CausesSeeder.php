@@ -15,26 +15,30 @@ class CausesSeeder extends Seeder
      */
     public function run()
     {
-        Causes::create(['name'=> 'DISTOMATOSIS']);
-        Causes::create(['name'=> 'TELANGECTASIA']);
-        Causes::create(['name'=> 'De. GRASA ']);
-        Causes::create(['name'=> 'TUMORES']);
-        Causes::create(['name'=> 'ABSCESOS']);
-        Causes::create(['name'=> 'CIRROSIS']);
-        Causes::create(['name'=> 'CONGESTIÓN']);
-        Causes::create(['name'=> 'HIDRONEFROSIS']);
-        Causes::create(['name'=> 'PARÁSITOS']);
-        Causes::create(['name'=> 'QUISTES PARASITARIOS']);
-        Causes::create(['name'=> 'PERITONITIS']);
-        Causes::create(['name'=> 'TRAUMATISMOS']);
-        Causes::create(['name'=> 'HEMATOMAS']);
-        Causes::create(['name'=> 'CROMATOSIS']);
-        Causes::create(['name'=> 'MIASIS']);
-        Causes::create(['name'=> 'NECROSIS']);
-        Causes::create(['name'=> 'ADHERENCIAS']);
-        Causes::create(['name'=> 'ENFISEMA']);
-        Causes::create(['name'=> 'BRONCO ASPIRACIÓN']);
-        Causes::create(['name'=> 'HEMORRÁGICO']);
-        Causes::create(['name'=> 'DESHIDRATACION']);
+        Causes::updateOrCreate(['name'=> 'DISTOMATOSIS']);
+        Causes::updateOrCreate(['name'=> 'TELANGECTASIA']);
+        Causes::updateOrCreate(['name'=> 'De. GRASA ']);
+        Causes::updateOrCreate(['name'=> 'TUMORES']);
+        Causes::updateOrCreate(['name'=> 'ABSCESOS']);
+        Causes::updateOrCreate(['name'=> 'CIRROSIS']);
+        Causes::updateOrCreate(['name'=> 'CONGESTIÓN']);
+        Causes::updateOrCreate(['name'=> 'HIDRONEFROSIS']);
+        Causes::updateOrCreate(['name'=> 'PARÁSITOS']);
+        Causes::updateOrCreate(['name'=> 'QUISTES PARASITARIOS']);
+        Causes::updateOrCreate(['name'=> 'PERITONITIS']);
+        Causes::updateOrCreate(['name'=> 'TRAUMATISMOS']);
+        Causes::updateOrCreate(['name'=> 'HEMATOMAS']);
+        Causes::updateOrCreate(['name'=> 'CROMATOSIS']);
+        Causes::updateOrCreate(['name'=> 'MIASIS']);
+        Causes::updateOrCreate(['name'=> 'NECROSIS']);
+        Causes::updateOrCreate(['name'=> 'ADHERENCIAS']);
+        Causes::updateOrCreate(['name'=> 'ENFISEMA']);
+        Causes::updateOrCreate(['name'=> 'BRONCO ASPIRACIÓN']);
+        Causes::updateOrCreate(['name'=> 'HEMORRÁGICO']);
+        Causes::updateOrCreate(['name'=> 'DESHIDRATACION']);
+        Causes::updateOrCreate(['name'=> 'PRODUCCIÓN LÁCTICA']);
+        Causes::updateOrCreate(['name'=> 'MATERIA ORGÁNICA']);
+        Causes::updateOrCreate(['name'=> 'CONTENIDO RUMINAL']);
+        Causes::updateOrCreate(['name'=> 'MATERIA FECAL']);
     }
 }
