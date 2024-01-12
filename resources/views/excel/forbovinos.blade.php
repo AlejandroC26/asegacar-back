@@ -35,30 +35,28 @@
         </td>
     </tr>
     <tr>
-        <td></td>
+        <td><b>ITEM</b></td>
         <td><b>EXP</b></td>
         <td><b>CANTIDAD</b></td>
         <td><b>COLOR</b></td>
         <td><b>SEXO</b></td>
-        <td><b>ORDEN ESPECIAL</b></td>
-        <td></td>
+        <td colspan="2"><b>ORDEN ESPECIAL</b></td>
     </tr>
     @php
         $total_males = 0;
         $total_females = 0;
     @endphp
-    @foreach($data as $element)
+    @foreach($data as $key => $element)
         @php
             $total = $element['total_males'] + $element['total_females'];
         @endphp
     <tr>
-        <td></td>
+        <td>{{ $key + 1 }} </td>
         <td>{{ $element['outlet']['code'] ?? '' }}</td>
         <td>{{ $total }}</td>
         <td>{{ $element['colors'] }}</td>
         <td>{{ $element['genders'] }}</td>
-        <td>{{ $element['special_order'] }}</td>
-        <td></td>
+        <td colspan="2">{{ $element['special_order'] }}</td>
     </tr>
     @endforeach
     <tr>
