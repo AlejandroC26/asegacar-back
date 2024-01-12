@@ -97,9 +97,6 @@ class PostmortemInspectionsController extends Controller
         try {
             $inspections = PostmortemInspections::find($id);
             $inspections->delete();
-            if(count($inspections->master->postMortemInspections) <= 1) {
-                $inspections->master->delete();
-            }
             return $this->successResponse($inspections, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
