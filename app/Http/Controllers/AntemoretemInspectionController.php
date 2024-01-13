@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AntemortemInspectionExport;
 use App\Http\Requests\StoreAntemortemInspectionRequest;
+use App\Http\Requests\UpdateAntemortemInspectionRequest;
 use App\Http\Resources\AntemortemInspectionResource;
 use App\Models\AntemortemInspection;
 use App\Models\InspectionSuspiciousAnimal;
@@ -46,7 +47,7 @@ class AntemoretemInspectionController extends Controller
         }
     }
     
-    public function update (StoreAntemortemInspectionRequest $request, AntemortemInspection $antemortemInspection)
+    public function update (UpdateAntemortemInspectionRequest $request, AntemortemInspection $antemortemInspection)
     {
         try {   
             $antemortemInspection->update($request->validated());

@@ -116,9 +116,7 @@ class PostmortemInspectionsController extends Controller
     public function download(Request $request)
     {
         try {
-            $inspections = PostmortemInspections::whereHas('master', function (Builder $query) use ($request) {
-                $query->where('date', $request->date);
-            })->get();
+            $inspections = PostmortemInspections::where('date', $request->date)->get();
             $inspections = PostmortemInspectionsResource::collection($inspections);
 
             if(!count($inspections)) {
@@ -126,7 +124,7 @@ class PostmortemInspectionsController extends Controller
             }
 
             $general['date'] = FormatDateHelper::onGetTextDate($request->date);
-            $general['responsable'] = $inspections[0]?->master?->responsable?->fullname;
+            $general['responsable'] = $inspections[0]?->responsable?->fullname;
 
             return Excel::download(new PostmortemInspectionExport($inspections, '', '', $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

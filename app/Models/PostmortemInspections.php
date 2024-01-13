@@ -79,6 +79,7 @@ class PostmortemInspections extends Model
     public function small_ints() { return $this->belongsTo(Causes::class, 'id_small_ints_cause'); }
     public function large_ints() { return $this->belongsTo(Causes::class, 'id_large_ints_cause'); }
     public function oment() { return $this->belongsTo(Causes::class, 'id_oment_cause'); }
+    public function renet() { return $this->belongsTo(Causes::class, 'id_renet_cause'); }
     public function callus() { return $this->belongsTo(Causes::class, 'id_callus_cause'); }
     public function liver() { return $this->belongsTo(Causes::class, 'id_liver_cause'); }
     public function lungs() { return $this->belongsTo(Causes::class, 'id_lungs_cause'); }

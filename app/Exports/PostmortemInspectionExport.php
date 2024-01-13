@@ -63,12 +63,18 @@ class PostmortemInspectionExport implements FromView, WithColumnFormatting, With
 
     public function styles(Worksheet $sheet)
     {
+        $lastCol = $sheet->getHighestColumn();
+        $lastRow = $sheet->getHighestDataRow();
+
         $sheet->getStyle('A1:S4')->getFont()->setName('Arial');
         $sheet->getStyle('E1:P1')->getFont()->setSize(15);
         $sheet->getStyle('A4:S5')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A4:S5')->getFont()->setSize(10);
         $sheet->getStyle('L4:Q5')->getFont()->setSize(10);
         $sheet->getStyle('L4:L5')->getFont()->setSize(9);
+        $sheet->getStyle('L4:L5')->getFont()->setSize(9);
+
+        $sheet->getStyle('D6:'.$lastCol.$lastRow)->getFont()->setSize(9);
 
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
@@ -76,34 +82,19 @@ class PostmortemInspectionExport implements FromView, WithColumnFormatting, With
         $sheet->getColumnDimension('A')->setWidth(4);
         $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(15);
-        $sheet->getColumnDimension('D')->setWidth(17);
-        $sheet->getColumnDimension('E')->setWidth(13);
-        $sheet->getColumnDimension('F')->setWidth(17);
-        $sheet->getColumnDimension('G')->setWidth(13); 
-        $sheet->getColumnDimension('H')->setWidth(17); 
-        $sheet->getColumnDimension('I')->setWidth(13); 
-        $sheet->getColumnDimension('J')->setWidth(17); 
-        $sheet->getColumnDimension('K')->setWidth(13); 
-        $sheet->getColumnDimension('L')->setWidth(17); 
-        $sheet->getColumnDimension('M')->setWidth(13); 
-        $sheet->getColumnDimension('N')->setWidth(17); 
-        $sheet->getColumnDimension('O')->setWidth(13); 
-        $sheet->getColumnDimension('P')->setWidth(15); 
-        $sheet->getColumnDimension('Q')->setWidth(15); 
-        $sheet->getColumnDimension('R')->setWidth(15); 
-        $sheet->getColumnDimension('S')->setWidth(15); 
+        foreach (range('D', $lastCol) as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:S5')->applyFromArray([
+        $sheet->getStyle("A1:".$lastCol."5")->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
 
-        // BORDERS
-        $lastRow = 5 + count($this->data);
-        $range = 'A1:S'.$lastRow;
+        $range = 'A1:'.$lastCol.$lastRow;
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -117,14 +108,7 @@ class PostmortemInspectionExport implements FromView, WithColumnFormatting, With
             ],
         ];
 
-
-        
-
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
         $sheet->getStyle($range)->applyFromArray($styleArray);
-
-        $secondTableInit = $lastRow+2;
-        $secondTableFinish = $lastRow+7;
-        $sheet->getStyle("B$secondTableInit:K$secondTableFinish")->applyFromArray($styleArray);
     }
 }

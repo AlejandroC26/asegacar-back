@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreAntemortemInspectionRequest extends FormRequest
+class UpdateAntemortemInspectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,11 +28,10 @@ class StoreAntemortemInspectionRequest extends FormRequest
         return [
             'date' => 'required',
             'corral_number' => 'required',
-            'id_daily_payroll' => 'required',
             'id_veterinary' => 'required|exists:users,id',
             'corral_entry' => 'required',
             'time_entry' => 'required',
-            'rest_time' => 'nullable',
+            'rest_time' => 'nullable'
         ];
     }
 

@@ -41,6 +41,10 @@ class PostmortemInspectionsResource extends JsonResource
             'oment' => $this->oment?->name,
             'oment_quantity' => $this->oment_quantity,
 
+            'id_renet_cause' => $this->id_oment_cause,
+            'renet' => $this->renet?->name,
+            'renet_quantity' => $this->renet_quantity,
+
             'id_callus_cause' => $this->id_callus_cause,
             'callus' => $this->callus?->name,
             'callus_quantity' => $this->callus_quantity,

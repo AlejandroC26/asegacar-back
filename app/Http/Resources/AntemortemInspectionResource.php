@@ -27,7 +27,7 @@ class AntemortemInspectionResource extends JsonResource
             'time_entry' => date_format(date_create($this->time_entry), 'H:i'),
             'corral_entry' => date_format(date_create($this->corral_entry), 'H:i'),
             'id_veterinary' => $this->id_veterinary,
-            'time_off' => self::timeOff($this->corral_entry, $this->time_entry)
+            'rest_time' => $this->rest_time
         ];
     }
 
