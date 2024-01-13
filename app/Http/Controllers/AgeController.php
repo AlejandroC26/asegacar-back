@@ -124,7 +124,10 @@ class AgeController extends Controller
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
             }
 
-            $sResponsable = $aRecords[0]?->master?->responsable?->fullname;
+
+            
+            $config['responsable'] = $aRecords[0]?->master?->responsable?->fullname;
+            $config['date'] = date('d-m', strtotime($aRecords[0]?->master?->date));
 
             $aResults = [];
             $oTotals = [
@@ -213,7 +216,7 @@ class AgeController extends Controller
                     }
                 }
             }
-            return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $sResponsable), 'invoices.xlsx');
+            return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be downloaded', $exception->getMessage(), 422);
         }

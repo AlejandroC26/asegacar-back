@@ -46,7 +46,7 @@
     </tr>
     @foreach($data as $record)
     <tr>
-        <td><b>{{ date('d-m', strtotime($record['date'])) }}</b></td>
+        <td><b>{{ $config['date'] }}</b></td>
         <td>{{ $record['females']['1-2'] }}</td>
         <td>{{ $record['females']['2-3'] }}</td>
         <td>{{ $record['females']['> 3'] }}</td>
@@ -95,7 +95,7 @@
         $total_guides += count($record['guides']);
     @endphp
     <tr>
-        <td><b>{{ date('d-m', strtotime($record['date'])) }}</b></td>
+        <td><b>{{ $config['date'] }}</b></td>
         <td>{{ $record['purposes']['meat'] }}</td>
         <td>{{ $record['purposes']['milk'] }}</td>
         <td>{{ $record['purposes']['double'] }}</td>
@@ -103,7 +103,7 @@
         <!--  -->
         <td></td>
         <!--  -->
-        <td><b>{{ date('d-m', strtotime($record['date'])) }}</b></td>
+        <td><b>{{ $config['date'] }}</b></td>
         <td>{{ count($record['guides']) }}</td>
     </tr>
     @endforeach
@@ -122,6 +122,6 @@
     <tr></tr>
     <tr>
         <td colspan="2"><b>RESPONSABLE</b></td>
-        <td colspan="2">{{ $responsable }}</td>
+        <td colspan="2">{{ $config['responsable'] }}</td>
     </tr>
 </table>
