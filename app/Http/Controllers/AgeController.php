@@ -6,7 +6,6 @@ use App\Exports\AgeBobinsExport;
 use App\Helpers\FormatDateHelper;
 use App\Http\Resources\AgeResource;
 use App\Models\Age;
-use App\Models\DailyPayroll;
 use App\Models\IncomeForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -115,19 +114,15 @@ class AgeController extends Controller
             $oDate["month"] = strtoupper(FormatDateHelper::onNumberToMonth(intval($date->format('m'))));
             $oDate["year"]  = $date->format('Y');
 
-            $aRecords = IncomeForm::whereHas('dailyPayroll', function(Builder $query) use ($first_date, $last_date) {
+            $aRecords = IncomeForm::with('dailyPayroll')->whereHas('dailyPayroll', function(Builder $query) use ($first_date, $last_date) {
                 $query->whereBetween('sacrifice_date', [$first_date, $last_date]);
             })->get();
-
             
             if(!count($aRecords)) {
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
             }
-
-
             
             $config['responsable'] = $aRecords[0]?->master?->responsable?->fullname;
-            $config['date'] = date('d-m', strtotime($aRecords[0]?->master?->date));
 
             $aResults = [];
             $oTotals = [
@@ -169,9 +164,10 @@ class AgeController extends Controller
                 $oTotals["purposes"]["double"] += ($oRecord->id_purpose == 3) ? 1 : 0;
                 $oTotals["purposes"]["total"] += ($oRecord->id_purpose >= 1 && $oRecord->id_purpose <= 3) ? 1 : 0;
 
-                if(!array_key_exists($oRecord->sacrifice_date, $aResults)) {
-                    $aResults[$oRecord->sacrifice_date] = [
-                        "date" => $oRecord->sacrifice_date,
+                $sacrificeDate = $oRecord->dailyPayroll->sacrifice_date;
+                if(!array_key_exists($sacrificeDate, $aResults)) {
+                    $aResults[$sacrificeDate] = [
+                        "date" => date('d-m', strtotime($sacrificeDate)),
                         "males" => [
                             "1-2" => ($oRecord->id_gender == 1 && $oRecord->id_age === 1) ? 1 : 0,
                             "2-3" => ($oRecord->id_gender == 1 && $oRecord->id_age === 2) ? 1 : 0,
@@ -193,29 +189,30 @@ class AgeController extends Controller
                         ],
                         "guides" => [ $oRecord->id_guide ]
                     ];
-                } else {
-                    $aResults[$oRecord->sacrifice_date]["males"]["1-2"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 1) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["males"]["2-3"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 2) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["males"]["> 3"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 3) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["males"]["total"] += ($oRecord->id_gender == 1) ? 1 : 0;
+                } else {      
+                    $aResults[$sacrificeDate]["males"]["1-2"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 1) ? 1 : 0;
+                    $aResults[$sacrificeDate]["males"]["2-3"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 2) ? 1 : 0;
+                    $aResults[$sacrificeDate]["males"]["> 3"] += ($oRecord->id_gender == 1 && $oRecord->id_age === 3) ? 1 : 0;
+                    $aResults[$sacrificeDate]["males"]["total"] += ($oRecord->id_gender == 1) ? 1 : 0;
 
-                    $aResults[$oRecord->sacrifice_date]["females"]["1-2"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 1) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["females"]["2-3"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 2) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["females"]["> 3"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 3) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["females"]["total"] += ($oRecord->id_gender == 2) ? 1 : 0;
+                    $aResults[$sacrificeDate]["females"]["1-2"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 1) ? 1 : 0;
+                    $aResults[$sacrificeDate]["females"]["2-3"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 2) ? 1 : 0;
+                    $aResults[$sacrificeDate]["females"]["> 3"] += ($oRecord->id_gender == 2 && $oRecord->id_age === 3) ? 1 : 0;
+                    $aResults[$sacrificeDate]["females"]["total"] += ($oRecord->id_gender == 2) ? 1 : 0;
 
-                    $aResults[$oRecord->sacrifice_date]["total"] += 1;
+                    $aResults[$sacrificeDate]["total"] += 1;
 
-                    $aResults[$oRecord->sacrifice_date]["purposes"]["meat"] += ($oRecord->id_purpose == 1) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["purposes"]["milk"] += ($oRecord->id_purpose == 2) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["purposes"]["double"] += ($oRecord->id_purpose == 3) ? 1 : 0;
-                    $aResults[$oRecord->sacrifice_date]["purposes"]["total"] += ($oRecord->id_purpose >= 1 && $oRecord->id_purpose <= 3) ? 1 : 0;
+                    $aResults[$sacrificeDate]["purposes"]["meat"] += ($oRecord->id_purpose == 1) ? 1 : 0;
+                    $aResults[$sacrificeDate]["purposes"]["milk"] += ($oRecord->id_purpose == 2) ? 1 : 0;
+                    $aResults[$sacrificeDate]["purposes"]["double"] += ($oRecord->id_purpose == 3) ? 1 : 0;
+                    $aResults[$sacrificeDate]["purposes"]["total"] += ($oRecord->id_purpose >= 1 && $oRecord->id_purpose <= 3) ? 1 : 0;
 
-                    if(!in_array($oRecord->id_guide, $aResults[$oRecord->sacrifice_date]["guides"], true)) {
-                        $aResults[$oRecord->sacrifice_date]["guides"][] = $oRecord->id_guide;
+                    if(!in_array($oRecord->id_guide, $aResults[$sacrificeDate]["guides"], true)) {
+                        $aResults[$sacrificeDate]["guides"][] = $oRecord->id_guide;
                     }
                 }
             }
+            return $aResults;
             return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be downloaded', $exception->getMessage(), 422);

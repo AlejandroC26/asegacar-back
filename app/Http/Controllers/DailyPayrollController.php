@@ -179,6 +179,8 @@ class DailyPayrollController extends Controller
                     'id_income_form',
                     DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
                     DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
+                    DB::raw("GROUP_CONCAT(distinct(income_forms.code) SEPARATOR ', ') as codes"),
+                    DB::raw("GROUP_CONCAT(distinct(guides.code) SEPARATOR ', ') as guides"),
                     DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
                     DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
                     DB::raw("GROUP_CONCAT(distinct(daily_payrolls.special_order) SEPARATOR ', ') AS special_order"),
@@ -186,6 +188,7 @@ class DailyPayrollController extends Controller
                 )
                 ->leftJoin('outlets', 'outlets.id', 'id_outlet')
                 ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
+                ->leftJoin('guides', 'guides.id', 'id_guide')
                 ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
                 ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
                 ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
@@ -209,6 +212,7 @@ class DailyPayrollController extends Controller
             $general['date'] = $request->date;
             $general['responsable'] = $dailyPayroll[0]?->incomeForm->master?->responsable?->fullname;
 
+            // return $dailyPayroll;
             return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);

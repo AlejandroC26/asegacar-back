@@ -10,9 +10,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class AgeBobinsExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class AgeBobinsExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $totals;
@@ -36,13 +35,6 @@ class AgeBobinsExport implements FromView, WithColumnFormatting, WithStyles, Wit
             "dates" => $this->dates,
             "config" => $this->config
         ]);
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
     }
     
     public function drawings()

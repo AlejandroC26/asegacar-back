@@ -36,17 +36,17 @@
     <tr>
         <td><b>1 - 2 AÑOS</b></td>
         <td><b>2 - 3 AÑOS</b></td>
-        <td><b>3 - 4 AÑOS</b></td>
+        <td><b>> 3 AÑOS</b></td>
         <td><b>TOTAL</b></td>
         
         <td><b>1 - 2 AÑOS</b></td>
         <td><b>2 - 3 AÑOS</b></td>
-        <td><b>3 - 4 AÑOS</b></td>
+        <td><b>> 3 AÑOS</b></td>
         <td><b>TOTAL</b></td>
     </tr>
     @foreach($data as $record)
     <tr>
-        <td><b>{{ $config['date'] }}</b></td>
+        <td><b>{{ $record['date'] }}</b></td>
         <td>{{ $record['females']['1-2'] }}</td>
         <td>{{ $record['females']['2-3'] }}</td>
         <td>{{ $record['females']['> 3'] }}</td>
@@ -95,7 +95,7 @@
         $total_guides += count($record['guides']);
     @endphp
     <tr>
-        <td><b>{{ $config['date'] }}</b></td>
+        <td><b>{{ $record['date'] }}</b></td>
         <td>{{ $record['purposes']['meat'] }}</td>
         <td>{{ $record['purposes']['milk'] }}</td>
         <td>{{ $record['purposes']['double'] }}</td>
@@ -103,7 +103,7 @@
         <!--  -->
         <td></td>
         <!--  -->
-        <td><b>{{ $config['date'] }}</b></td>
+        <td><b>{{ $record['date'] }}</b></td>
         <td>{{ count($record['guides']) }}</td>
     </tr>
     @endforeach

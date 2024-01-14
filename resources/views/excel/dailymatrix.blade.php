@@ -71,7 +71,7 @@
         <td>{{ $income->purpose }}</td>
         <td>{{ $income->color }}</td>
         <td>{{ $income->outlet }}</td>
-        <td></td>
+        <td>{{ $income->corral_entry }}</td>
         <td>{{ $income->sacrifice_date }}</td>
         <td>{{ $income->owner }}</td>
         <td>{{ $income->owner_document }}</td>

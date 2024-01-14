@@ -27,10 +27,7 @@ class StoreDispatchGuideRequest extends FormRequest
     public function rules()
     {
         return [
-            'sacrifice_date' => [
-                'required', 'date',
-                Rule::unique('dispatch_guides', 'sacrifice_date')->ignore($this->route('dispatchGuide'))
-            ],
+            'sacrifice_date' => 'required|date',
             'closing_date' => 'required|date',
             'closing_time' => 'required',
             'dispatch_time' => 'required',

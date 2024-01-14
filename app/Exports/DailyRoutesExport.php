@@ -98,7 +98,7 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
             $totalRows += count($route->dailyRoutes);
         }
         $lastRow = 5 + $totalRows;
-        $range = 'B4:G'.$lastRow;
+        $range = 'A4:G'.$lastRow;
 
         $styleArray = [
             'alignment' => [
@@ -115,6 +115,6 @@ class DailyRoutesExport implements FromView, WithColumnFormatting, WithStyles, W
         $sheet->getStyle($range)->getAlignment()->setWrapText(true);
         $sheet->getStyle('A1:G2')->applyFromArray($styleArray);
         $sheet->getStyle($range)->applyFromArray($styleArray);
-        $sheet->getStyle('B'.($lastRow+2).':G'.($lastRow+2))->applyFromArray($styleArray);
+        $sheet->getStyle('A'.($lastRow+2).':G'.($lastRow+2))->applyFromArray($styleArray);
     }
 }

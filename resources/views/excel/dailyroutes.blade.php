@@ -19,13 +19,12 @@
     </tr>
     <tr></tr>
     <tr>
-        <td></td>
-        <td colspan="6">
+        <td colspan="7">
             {{ $date }}
         </td>
     </tr>
     <tr>
-        <td></td>
+        <td>RUTA</td>
         <td>FAMA</td>
         <td># ANIMALES</td>
         <td colspan="2">ORDENES</td>
@@ -71,8 +70,7 @@
     @endforeach
     <tr></tr>
     <tr>
-        <td></td>
-        <td colspan="5">TOTAL SACRIFICIO DIA</td>
+        <td colspan="6">TOTAL SACRIFICIO DIA</td>
         <td>{{ $total_sacrificios }}</td>
     </tr>
 </table>

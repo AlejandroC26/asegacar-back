@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithDrawings;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Carbon\Carbon;
 
-class DailyMatrixExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class DailyMatrixExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $benefit_date;
@@ -41,13 +41,6 @@ class DailyMatrixExport implements FromView, WithColumnFormatting, WithStyles, W
             "issue_date" => $issue_date,
             "benefit_date" => $benefit_date
         ]);
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
     }
     
     public function drawings()
