@@ -25,6 +25,8 @@ class DispatchGuide extends Model
         'heads',
         'legs',
         'others',
+        'approved',
+        'observations'
     ];
 
     public function invimaCode()
@@ -40,5 +42,10 @@ class DispatchGuide extends Model
     public function vehicle()
     {
         return $this->belongsTo(Vehicle::class, 'id_vehicle');
+    }
+
+    public function dispatchGuideAnimals()
+    {
+        return $this->hasMany(DispatchGuideAnimal::class, 'id_dispatch_guide');
     }
 }

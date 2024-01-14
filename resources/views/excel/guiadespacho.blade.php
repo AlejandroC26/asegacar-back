@@ -108,36 +108,42 @@
       <td>4</td>
       <td colspan="5">Viscera blanca</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $config['dispatch_guide']->white_viscera }}</b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->white_viscera ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>5</td>
       <td colspan="5">Viscera roja</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $config['dispatch_guide']->red_viscera }}</b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->red_viscera ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>6</td>
       <td colspan="5">Cabezas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $config['dispatch_guide']->heads }}</b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->heads ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>7</td>
       <td colspan="5">Patas</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $config['dispatch_guide']->legs }}</b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->legs ?? 0 }}</b></td>
       <td></td>
     </tr>
     <tr>
       <td>8</td>
       <td colspan="5">Otros</td>
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
-      <td colspan="3"><b>{{ $config['dispatch_guide']->others }}</b></td>
+      <td colspan="3"><b>{{ $config['dispatch_guide']->others ?? 0 }}</b></td>
       <td></td>
+    </tr>
+    <tr>
+      <td colspan="17"> Dictamen del producto: APROBADO ( {{ $config['dispatch_guide']->approved ? 'X' : ' ' }} ) APROBADO CONDICIONAL ( {{ !$config['dispatch_guide']->approved ? 'X' : ' ' }} )</td>
+    </tr>
+    <tr>
+      <td colspan="17">OBSERVACIONES:  {{ $config['dispatch_guide']->observations }} </td>
     </tr>
     <tr>
       <td colspan="17"><b>4. VEHÍCULO TRANSPORTADOR</b></td>

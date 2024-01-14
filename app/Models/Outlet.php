@@ -22,5 +22,12 @@ class Outlet extends Model
     public function city() { 
         return $this->belongsTo(City::class, 'id_city'); 
     }
-        
+
+    public function dailyPayrolls() {
+        return $this->hasMany(DailyPayroll::class, 'id_outlet');
+    }
+
+    public function dispatchGuideAnimals() {
+        return $this->hasManyThrough(DispatchGuideAnimal::class, DailyPayroll::class, 'id_outlet', 'id_daily_payroll', 'id', 'id');
+    }
 }

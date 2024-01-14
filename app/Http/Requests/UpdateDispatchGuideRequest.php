@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 
-class StoreDispatchGuideRequest extends FormRequest
+class UpdateDispatchGuideRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,26 +32,21 @@ class StoreDispatchGuideRequest extends FormRequest
             'closing_time' => 'required',
             'dispatch_time' => 'required',
             'average_temperature' => 'required',
-            'id_outlet' => 'required',
             'id_vehicle' => 'required',
             'white_viscera' => 'nullable',
             'red_viscera' => 'nullable',
             'heads' => 'nullable',
             'legs' => 'nullable',
             'others' => 'nullable',
-            'animals' => 'required',
             'approved' => 'nullable',
-            'observations' => 'nullable',
-            'animals.*.id' => 'required',
-            'animals.*.amount' => 'required|numeric|min:1',
+            'observations' => 'nullable'
         ];
     }
 
     public function messages()
     {
         return [
-            'sacrifice_date.unique' => 'No se puede repetir fecha de sacrificio',
-            'animals.*.amount.min' => 'Se debe digitar una cantidad mínima de :min.',
+            'sacrifice_date.unique' => 'No se puede repetir fecha de sacrificio'
         ];
     }
 

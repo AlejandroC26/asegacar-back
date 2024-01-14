@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOutletRequest;
 use App\Http\Resources\OutletResource;
+use App\Models\DailyPayroll;
 use App\Models\Outlet;
-use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Builder;
 
 class OutletController extends Controller
 {
@@ -62,6 +62,55 @@ class OutletController extends Controller
         try {
             $outlet->delete();
             return $this->successResponse($outlet, 'Eliminado exitosamente');
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function dailyPayrollOutlets($id, $date) {
+        try {
+            $maxTipoProducto = 4;
+            $dailyPayrolls = DailyPayroll::where('id_outlet', $id)
+            ->with(['dispatchGuideAnimal' => function ($query) {
+                $query->selectRaw('id_daily_payroll, SUM(amount) as total_amount')
+                      ->groupBy('id_daily_payroll');
+            }])
+            ->where(function ($query) use ($maxTipoProducto) {
+                $query->whereHas('dispatchGuideAnimal', function ($subquery) use ($maxTipoProducto) {
+                    $subquery->selectRaw('id_daily_payroll, SUM(amount) as total_amount')
+                             ->groupBy('id_daily_payroll')
+                             ->having('total_amount', '<', $maxTipoProducto);
+                })->orWhereDoesntHave('dispatchGuideAnimal');
+            })
+            ->where('sacrifice_date', $date)
+            ->get();
+
+            $dailyPayrolls = $dailyPayrolls->map(function($dailyPayroll) {
+                $oResponse['id'] = $dailyPayroll->id;
+                $oResponse['code'] = $dailyPayroll->incomeForm->code;
+                $oResponse['product_type'] = $dailyPayroll->productType->name;
+                $oResponse['special_order'] = $dailyPayroll->special_order;
+                $oResponse['amount'] = $dailyPayroll->productType->amount - $dailyPayroll->dispatchGuideAnimal->sum('total_amount');
+                return $oResponse;
+            });
+            return $this->successResponse($dailyPayrolls);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
+        }
+    }
+
+    
+    public function dispatchGuideOutlets($sDate) {
+        try {
+            $outlets = DailyPayroll::select('id_outlet as id', 'outlets.code as name')
+                ->leftJoin('product_types', 'product_types.id', '=', 'daily_payrolls.id_product_type')
+                ->leftJoin('outlets', 'outlets.id', '=', 'daily_payrolls.id_outlet')
+                ->groupBy('id_outlet')
+                ->where('daily_payrolls.sacrifice_date', $sDate)
+                ->havingRaw('SUM(product_types.amount) > COALESCE(SUM((SELECT SUM(amount) FROM dispatch_guide_animals WHERE id_daily_payroll = daily_payrolls.id)), 0)')
+                ->orderBy('id_outlet')
+                ->get();
+            return response()->json($outlets);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
         }

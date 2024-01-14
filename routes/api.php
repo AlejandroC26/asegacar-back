@@ -146,3 +146,5 @@ Route::get('sltAntemoremAnimals/{relation}/{id_outlet}', 'App\Http\Controllers\A
 
 Route::get('sltProductTypes', 'App\Http\Controllers\DailyPayrollController@sltProductTypes');
 Route::get('dailyPayrollGuides/{nIdGuide}', 'App\Http\Controllers\GuideController@dailyPayrollGuides');
+Route::get('dailyPayrollOutlets/{nIdOutlet}/{sDate}', 'App\Http\Controllers\OutletController@dailyPayrollOutlets');
+Route::get('sltDispatchGuideOutlets/{sDate}', 'App\Http\Controllers\OutletController@dispatchGuideOutlets');

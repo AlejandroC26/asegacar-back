@@ -77,6 +77,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(22);
         $sheet->getRowDimension(4)->setRowHeight(22);
+        $sheet->getRowDimension(23)->setRowHeight(42);
         //COL
         $sheet->getColumnDimension('A')->setWidth(3);
         $sheet->getColumnDimension('B')->setWidth(3);
@@ -96,8 +97,9 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('P')->setWidth(6); 
         $sheet->getColumnDimension('Q')->setWidth(6); 
 
+        $lastRow = $sheet->getHighestRow();
         //BORDES
-        $sheet->getStyle('A1:Q28')->applyFromArray([
+        $sheet->getStyle("A1:Q$lastRow")->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => Border::BORDER_THIN,
@@ -109,7 +111,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
                 'startColor' => ['argb' => 'FFFFFF'], 
             ],
         ]);
-        $sheet->getStyle('A4:Q27')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT,'vertical' => Alignment::VERTICAL_TOP,]]);
+        $sheet->getStyle("A4:Q$lastRow")->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT,'vertical' => Alignment::VERTICAL_TOP,]]);
         $sheet->getStyle('H1:Q2')->applyFromArray($this->none);
         $sheet->getStyle('H1:Q2')->applyFromArray($this->outline);
         $sheet->getStyle('A6:Q8')->applyFromArray($this->none);

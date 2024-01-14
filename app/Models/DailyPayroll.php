@@ -75,4 +75,8 @@ class DailyPayroll extends Model
     public function visceraDispatch() {
         return $this->hasMany(VisceraDispatch::class, 'id_daily_payroll');
     }
+
+    public function dispatchGuideAnimal() {
+        return $this->hasMany(DispatchGuideAnimal::class, 'id_daily_payroll');
+    }
 }

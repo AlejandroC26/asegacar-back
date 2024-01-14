@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('average_temperature');
             $table->date('closing_date');
             $table->time('closing_time');
-            $table->enum('dispatch_time', ['AM', 'PM']);
+            $table->time('dispatch_time');
 
             $table->unsignedBigInteger('id_outlet')->nullable()->comment('Id de expendio');
             $table->foreign('id_outlet')->references('id')->on('outlets');
