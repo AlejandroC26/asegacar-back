@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\DispatchGuideAnimal;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DispatchGuideResource extends JsonResource
@@ -56,12 +57,12 @@ class DispatchGuideResource extends JsonResource
             "others" => $that->others ?? '',
             "approved" => $that->approved ?? '',
             "observations" => $that->observations ?? '',
-            "animals" => $that->dispatchGuideAnimals->map(function($oAnimal) {
+            "animals" => $that->dispatchGuideAnimals->map(function($oAnimal) use ($that) {
                 $oResponse['id'] = $oAnimal->id_daily_payroll;
                 $oResponse['code'] = $oAnimal->dailyPayroll->incomeForm->code;
                 $oResponse['product_type'] = $oAnimal->dailyPayroll->productType->name;
                 $oResponse['special_order'] = $oAnimal->dailyPayroll->special_order;
-                $oResponse['amount'] = $oAnimal->dailyPayroll->dispatchGuideAnimal->sum('amount');
+                $oResponse['amount'] = DispatchGuideAnimal::where(['id_dispatch_guide' => $that->id, 'id_daily_payroll' => $oAnimal->id_daily_payroll])->sum('amount');
                 return $oResponse;
             }),
             "closing_date" => date_format(date_create($that->closing_date), 'Y-m-d'),
