@@ -14,16 +14,6 @@ return new class extends Migration
     public function up()
     {
         DB::statement($this->dropView());
-        DB::statement($this->createView());
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    private function createView()
-    {
         DB::statement(DailyMatrix::onGetMakeViewSQL());
     }
     
