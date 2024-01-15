@@ -48,7 +48,7 @@ class DispatchGuideController extends Controller
             $curDate = Carbon::now();
             $curYear = $curDate->year;
             $invimaCode = InvimaCode::where('year', $curYear)->first();
-            $nextCode = DispatchGuide::where('id_invima_code', $invimaCode->id)->count() + 1;
+            $nextCode = DispatchGuide::where('id_invima_code', $invimaCode->id)->max('code') + 1;
             if($nextCode > $invimaCode->codes) 
                 return $this->errorResponse('Invalid code', ['El número de guías generada supera las asignadas por el invima'], 400);
  
