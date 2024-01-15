@@ -48,11 +48,12 @@ class GuideController extends Controller
             $consecutive = '';
             $sCurrentDate = Carbon::now();
             
-            $monthGuides = Guide::select(DB::raw('SUM(no_animals) as total_animals'))->whereYear('date_entry', $sCurrentDate->year)
+            $monthGuides = Guide::select(DB::raw('MAX(CAST(SUBSTRING_INDEX(consecutive, " - ", -1) AS UNSIGNED)) AS max_number'))
+                ->whereYear('date_entry', $sCurrentDate->year)
                 ->whereMonth('date_entry', $sCurrentDate->month)
                 ->first();
 
-            $monthAnimals = $monthGuides->total_animals ?? 0;
+            $monthAnimals = $monthGuides?->max_number ?? 0;
             $consecutive = $monthAnimals+1 .' - '. $monthAnimals + $request->no_animals;
             
             if($request->file('file_attached')) {
