@@ -45,7 +45,7 @@
         <td>{{ $element['guide'] }}</td>
         <td colspan="2">{{ $element['animal_code'] }}</td>
         <td colspan="2">{{ $element['corral_entry'] }}</td>
-        <td>{{ $element['time_off'] }}</td>
+        <td>{{ $element['rest_time'] }}</td>
     </tr>
     @php 
         $key += 1;
