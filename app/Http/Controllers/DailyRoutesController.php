@@ -103,7 +103,7 @@ class DailyRoutesController extends Controller
                 $query->where('date', $request->date);
             })->with(['dailyRoutes' => function($query) use ($request) {
                 $query->where('date', $request->date);
-            }])->get();
+            }])->orderBy('id')->get();
 
             if(!count($routes)) {
                 return $this->errorResponse('The report could not be showed', ['There are not records saved']);

@@ -48,9 +48,7 @@
         @endphp
         @endforeach
         <tr>
-            <td rowspan="{{$rows}}">
-                {{ $route->name }}
-            </td>
+            <td rowspan="{{$rows}}"> {{ $route->name }} </td>
             <td>{{ $route->dailyRoutes[0]->outlet->code }}</td>
             <td>{{ $route->dailyRoutes[0]->quantity }}</td>
             <td colspan="2">{{ $route->dailyRoutes[0]->orders }}</td>

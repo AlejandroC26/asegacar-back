@@ -24,17 +24,15 @@
     <tr>
         <td></td>
         <td><strong>N° EXPENDIO</strong></td>
-        <td colspan="3"><strong>CÓDIGO</strong></td>
-        <td></td>
+        <td colspan="4"><strong>CÓDIGO</strong></td>
     </tr>
     @foreach($data as $key => $income)
     <tr>
         <td>{{ $key+1 }}</td>
         <td>{{ $income->dailyPayroll->outlet->code }}</td>
         <td 
-            colspan="3"
+            colspan="4"
         >{{ $income->dailyPayroll->incomeForm->code }}</td>
-        <td></td>
     </tr>
     @endforeach
     <tr>
