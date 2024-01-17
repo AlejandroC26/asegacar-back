@@ -6,8 +6,9 @@ use App\Http\Requests\StoreOutletRequest;
 use App\Http\Resources\OutletResource;
 use App\Models\DailyPayroll;
 use App\Models\Outlet;
+use App\Models\PostmortemInspections;
+use App\Models\SeizureComparison;
 use App\Traits\ApiResponse;
-use Illuminate\Database\Eloquent\Builder;
 
 class OutletController extends Controller
 {
@@ -86,14 +87,28 @@ class OutletController extends Controller
             ->get();
 
             $dailyPayrolls = $dailyPayrolls->map(function($dailyPayroll) {
+                $comparison = null;
+                $hasInspections = count($dailyPayroll->postmortemInspections) > 0;
+                if($hasInspections) {
+                    $meetComparison = SeizureComparison::onGetComparison($dailyPayroll->id);
+                    $matchedFields  = SeizureComparison::onGetMatches(PostmortemInspections::onGetFieldsToMatch($dailyPayroll->id)); 
+                    $comparison['fields'] = $matchedFields;
+                    $comparison['success'] = !empty($meetComparison);
+                }
                 $oResponse['id'] = $dailyPayroll->id;
                 $oResponse['code'] = $dailyPayroll->incomeForm->code;
                 $oResponse['product_type'] = $dailyPayroll->productType->name;
                 $oResponse['special_order'] = $dailyPayroll->special_order;
+                $oResponse['comparison'] = $comparison;
                 $oResponse['amount'] = $dailyPayroll->productType->amount - $dailyPayroll->dispatchGuideAnimal->sum('total_amount');
-                return $oResponse;
+                return (object)$oResponse;
             });
-            return $this->successResponse($dailyPayrolls);
+            
+            $filteredDailyPayrolls = $dailyPayrolls->filter(function ($item) {
+                return $item->amount > 0;
+            })->values();
+
+            return $this->successResponse($filteredDailyPayrolls);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

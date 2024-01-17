@@ -16,7 +16,6 @@ class PostmortemInspectionsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'id_master' => $this->id_master,
             "responsable" => $this->responsable?->fullname,
             "date" => date_format(date_create($this->date), 'Y-m-d'),
 
@@ -98,7 +97,6 @@ class PostmortemInspectionsResource extends JsonResource
             'other_cause' => $this->other_cause?->name,
             'other_quantity' => $this->other_quantity,
             'insp_ganglions' => $this->insp_ganglions,
-            'created_at' => date_format(date_create($this->created_at), 'Y-m-d H:i:s a')
         ];
     }
 }

@@ -30,24 +30,4 @@ class AntemortemInspectionResource extends JsonResource
             'rest_time' => $this->rest_time
         ];
     }
-
-    static function timeOff($horaSacrificio, $horaIngreso) {
-        $horaSacrificio = DateTime::createFromFormat('H:i:s', $horaSacrificio);
-        $horaIngreso = DateTime::createFromFormat('H:i:s', $horaIngreso);
-        
-        $diferencia = $horaIngreso->diff($horaSacrificio);
-        
-        $horas = $diferencia->h;
-        $minutos = $diferencia->i;
-
-        if($horaIngreso > $horaSacrificio) 
-            $horas += 12;
-        
-        if ($horas > 0) {
-            $horas = 24 - $horas;
-            return $horas . 'h';
-        } else {
-            return $minutos . 'm';
-        }
-    }
 }

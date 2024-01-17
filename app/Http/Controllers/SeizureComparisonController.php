@@ -7,7 +7,6 @@ use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StoreSeizureComparisonRequest;
 use App\Http\Resources\SeizureComparisonResource;
 use App\Models\GeneralParam;
-use App\Models\MasterTable;
 use App\Models\SeizureComparison;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,13 +54,7 @@ class SeizureComparisonController extends Controller
             if(count($errors)) 
                 return $this->errorResponse('The record could not be saved', $errors, 409);
 
-            $master = MasterTable::create(['date' => $request->date, 
-                'id_responsable' => $id_responsable,
-                'id_supervised_by' => $id_supervised_by,
-                'id_master_type' => 8,
-            ]);
-
-            $seizureComparison = SeizureComparison::create(array_merge($request->validated(), ['id_master' => $master->id]));
+            $seizureComparison = SeizureComparison::create(array_merge($request->validated(), ['id_responsable' => $id_responsable, 'id_supervised_by' => $id_supervised_by]));
             return $this->successResponse($seizureComparison, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -113,10 +106,6 @@ class SeizureComparisonController extends Controller
     {
         try {
             $seizureComparison = SeizureComparison::find($id);
-            $seizureComparison->delete();
-            if(count($seizureComparison->master->seizureComparisons) <= 1) {
-                $seizureComparison->master->delete();
-            }
             return $this->successResponse($seizureComparison, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);

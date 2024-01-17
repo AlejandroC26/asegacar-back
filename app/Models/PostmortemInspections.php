@@ -73,6 +73,36 @@ class PostmortemInspections extends Model
         'other_quantity',
         'insp_ganglions',
     ];
+
+    public static function onGetFieldsToMatch($id)
+    {
+        return PostmortemInspections::select([
+            'id_daily_payroll',
+            'head_quantity',
+            'small_ints_quantity',
+            'large_ints_quantity',
+            'oment_quantity',
+            'renet_quantity',
+            'callus_quantity',
+            'liver_quantity',
+            'lungs_quantity',
+            'legs_quantity',
+            'hands_quantity',
+            'udder_quantity',
+            'kidney_quantity',
+            'heart_quantity',
+            'booklet_quantity',
+            'white_viscera_quantity',
+            'red_viscera_quantity',
+            'destocking_quantity',
+            'canal_quantity',
+            'other_organ',
+            'other_quantity',
+        ])->where('id_daily_payroll', $id)
+        ->first()
+        ->toArray();
+    }
+
     public function responsable() { return $this->belongsTo(Person::class, 'id_responsable'); }
     public function dailyPayroll() { return $this->belongsTo(DailyPayroll::class, 'id_daily_payroll'); }
     public function head() { return $this->belongsTo(Causes::class, 'id_head_cause'); }

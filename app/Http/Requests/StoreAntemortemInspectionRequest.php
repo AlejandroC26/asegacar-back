@@ -30,8 +30,8 @@ class StoreAntemortemInspectionRequest extends FormRequest
             'corral_number' => 'required',
             'id_daily_payroll' => 'required',
             'id_veterinary' => 'required|exists:users,id',
-            'corral_entry' => 'required',
-            'time_entry' => 'required',
+            'corral_entry' => 'required|date_format:H:i',
+            'time_entry' => 'required|date_format:H:i',
             'rest_time' => 'nullable',
         ];
     }

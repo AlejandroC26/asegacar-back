@@ -39,9 +39,9 @@ class StoreDispatchGuideRequest extends FormRequest
             'heads' => 'nullable',
             'legs' => 'nullable',
             'others' => 'nullable',
-            'animals' => 'required',
             'approved' => 'nullable',
             'observations' => 'nullable',
+            'animals' => 'nullable',
             'animals.*.id' => 'required',
             'animals.*.amount' => 'required|numeric|min:1',
         ];

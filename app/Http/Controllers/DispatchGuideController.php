@@ -12,6 +12,7 @@ use App\Models\DailyPayroll;
 use App\Models\DispatchGuide;
 use App\Models\DispatchGuideAnimal;
 use App\Models\InvimaCode;
+use App\Models\SeizureComparison;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,15 @@ class DispatchGuideController extends Controller
 
             foreach ($request->animals as $animal) {
                 $dailyPayroll = DailyPayroll::find($animal['id']);
+                $hasInspections = count($dailyPayroll->postmortemInspections) > 0;
+                if($hasInspections) {
+                    $meetComparison = SeizureComparison::onGetComparison($dailyPayroll->id);
+                    if(empty($meetComparison)) {
+                        DB::rollBack();
+                        return $this->errorResponse('Ivalid comparison', ['Verifica que la coincidencia de todos los animales sea validada antes de su registro en la guía.']);
+                    }
+                }
+
                 $curDispatchAmount = $dailyPayroll->dispatchGuideAnimal->sum('amount');
                 $total = $animal['amount'] + $curDispatchAmount;
                 if($total > $dailyPayroll->productType->amount) {
