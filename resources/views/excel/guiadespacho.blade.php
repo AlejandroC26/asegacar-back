@@ -146,7 +146,7 @@
       <td colspan="17">OBSERVACIONES:  {{ $config['dispatch_guide']->observations }} </td>
     </tr>
     <tr>
-      <td colspan="17"><b>OBSERVACIONES</b></td>
+      <td colspan="17"><b>3.1 PRODUCTOS RETENIDOS</b></td>
     </tr>
     <tr>
       <td><b>ID</b></td>
