@@ -108,8 +108,7 @@ Route::post('antemortemInspectionFormat', 'App\Http\Controllers\AntemoretemInspe
 Route::post('parturientFemalesFormat/{nId}', 'App\Http\Controllers\ParturientFemalesController@download');
 Route::post('suspiciousAnimalsFormat/{nId}', 'App\Http\Controllers\SuspiciousAnimalsController@download');
 Route::post('emergencyCoilEntryFormat/{nId}', 'App\Http\Controllers\EmergencyCoilEntryController@download');
-Route::post('dispatchGuidesFormat/{nId}', 'App\Http\Controllers\DispatchGuideController@downloadGuides');
-Route::post('retainedProducts/{nId}', 'App\Http\Controllers\DispatchGuideController@downloadRetained');
+Route::post('dispatchGuidesFormat/{nId}', 'App\Http\Controllers\DispatchGuideController@download');
 
 Route::get('antemortemDailyRecordPending', 'App\Http\Controllers\AntemortemDailyRecordController@pending');
 Route::post('contractPDF/{nIdGuide}', 'App\Http\Controllers\GuideController@generatePDF');

@@ -101,6 +101,21 @@ class SeizureComparison extends Model
         return $matches;
     }
 
+    public static function onGetMatchesWithData($comparison)
+    {
+        $matches = [];
+        foreach ($comparison as $field => $value) {
+            // Excluir el campo 'id_daily_payroll' ya que se utiliza como base de la comparación
+            if ($field !== 'id_daily_payroll' && !empty($value)) {
+                $match['field'] = str_replace('_quantity', '', $field);
+                $match['value'] = $value;
+                $matches[] =  $match;
+            }
+        }
+        return $matches;
+    }
+
+
     public function dailyPayroll() 
     { 
         return $this->belongsTo(DailyPayroll::class, 'id_daily_payroll'); 

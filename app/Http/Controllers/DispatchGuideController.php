@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DispatchGuideExport;
-use App\Exports\RetainedProductsExport;
 use App\Http\Requests\StoreDispatchGuideRequest;
 use App\Http\Requests\UpdateDispatchGuideRequest;
 use App\Http\Resources\DispatchGuideResource;
@@ -12,6 +11,7 @@ use App\Models\DailyPayroll;
 use App\Models\DispatchGuide;
 use App\Models\DispatchGuideAnimal;
 use App\Models\InvimaCode;
+use App\Models\PostmortemInspections;
 use App\Models\SeizureComparison;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
@@ -131,7 +131,7 @@ class DispatchGuideController extends Controller
         }
     }
 
-    public function downloadGuides($id)
+    public function download($id)
     {
         try {
             $dispatchGuide = DispatchGuide::find($id);
@@ -139,6 +139,7 @@ class DispatchGuideController extends Controller
             $expeditionDate = Carbon::now();
             $closingDate = Carbon::parse($dispatchGuide->closing_date);
             $company = Company::first();
+
             $config['code'] = $dispatchGuide->invimaCode->invima_code;
             $config['year'] = '-'.substr((string) $dispatchGuide->invimaCode->year, -2);
 
@@ -164,8 +165,18 @@ class DispatchGuideController extends Controller
 
             $data['products'] = [];
             $data['codes'] = [];
+            $data['inspections'] = [];
+
 
             foreach ($dispatchGuide->dispatchGuideAnimals as $dispatchGuideAnimal) {
+                $dailyPayroll = $dispatchGuideAnimal->dailyPayroll;
+                $hasInspections = count($dailyPayroll->postmortemInspections) > 0;
+                if($hasInspections) {
+                    $matchedFields  = SeizureComparison::onGetMatchesWithData(PostmortemInspections::onGetFieldsToMatch($dailyPayroll->id)); 
+                    $matchedCauses  = PostmortemInspections::onGetFieldsCause($dailyPayroll->id, $matchedFields);
+                    $data['inspections'] = array_merge($data['inspections'], $matchedCauses);
+                }
+
                 $productTypeId = $dispatchGuideAnimal->dailyPayroll->id_product_type;
                 if (!isset($data['products'][$productTypeId])) {
                     $data['products'][$productTypeId] = 0;
@@ -174,44 +185,6 @@ class DispatchGuideController extends Controller
                 $data['codes'][] = $dispatchGuideAnimal->dailyPayroll->incomeForm->code;
             }
             return Excel::download(new DispatchGuideExport(collect($data), $config), 'invoices.xlsx');
-        } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
-        }
-    }
-
-    public function downloadRetained($id)
-    {
-        try {
-            $dispatchGuide = DispatchGuide::find($id);
-            $sacrificeDate = Carbon::parse($dispatchGuide->sacrifice_date);
-            $expeditionDate = Carbon::now();
-            $company = Company::first();
-            $config['code'] = $dispatchGuide->invimaCode->invima_code;
-            $config['year'] = '-'.substr((string) $dispatchGuide->invimaCode->year, -2);
-
-            $config['sacrifice_date']['day'] = $sacrificeDate->format('d');
-            $config['sacrifice_date']['month'] = $sacrificeDate->format('m');
-            $config['sacrifice_date']['year'] = $sacrificeDate->format('y');
-            $config['sacrifice_date']['complete'] = $sacrificeDate->format('Y-m-d');
-
-            $config['expedition_date']['day'] = $expeditionDate->format('d');
-            $config['expedition_date']['month'] = $expeditionDate->format('m');
-            $config['expedition_date']['year'] = $expeditionDate->format('y');
-
-            $config['dispatch_time'] = $dispatchGuide->dispatch_time;
-            $config['outlet'] = $dispatchGuide->outlet;
-
-            $config['company'] = $company;
-            $config['dispatch_guide'] = $dispatchGuide;
-            $config['vehicle'] = $dispatchGuide->vehicle;
-
-            $data['codes'] = [];
-            $dailyPayrolls = DailyPayroll::where(['sacrifice_date' => $dispatchGuide->sacrifice_date, 'id_outlet' => $dispatchGuide->id_outlet])->get();
-            foreach ($dailyPayrolls as $dailyPayroll) {
-                $data['codes'][] = $dailyPayroll->incomeForm->code;
-            }
-
-            return Excel::download(new RetainedProductsExport(collect($data), $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

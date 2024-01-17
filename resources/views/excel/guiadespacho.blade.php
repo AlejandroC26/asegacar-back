@@ -146,6 +146,27 @@
       <td colspan="17">OBSERVACIONES:  {{ $config['dispatch_guide']->observations }} </td>
     </tr>
     <tr>
+      <td colspan="17"><b>OBSERVACIONES</b></td>
+    </tr>
+    <tr>
+      <td><b>ID</b></td>
+      <td colspan="5"><b>CODIGOS DEL ANIMAL (ES)</b></td>
+      <td><b>LOTE</b></td>
+      <td colspan="3"><b>CAUSA</b></td>
+      <td colspan="2"><b>CANTIDAD</b></td>
+      <td colspan="5"><b>PRODUCTO</b></td>
+    </tr>
+    @foreach ($data['inspections'] as $key => $inspection)
+    <tr>
+      <td>{{ $key + 1 }}</td>
+      <td colspan="5">{{ $inspection['code'] }}</td>
+      <td>{{ $inspection['sacrifice_date'] }}</td>
+      <td colspan="3">{{ $inspection['cause'] }}</td>
+      <td colspan="2">{{ $inspection['value'] }}</td>
+      <td colspan="5">{{ $inspection['field'] }}</td>
+    </tr>
+    @endforeach
+    <tr>
       <td colspan="17"><b>4. VEHÍCULO TRANSPORTADOR</b></td>
     </tr>
     <tr>

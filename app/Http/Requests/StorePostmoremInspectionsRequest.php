@@ -27,7 +27,7 @@ class StorePostmoremInspectionsRequest extends FormRequest
     {
         return [
             'date' => 'required|date',
-            'id_daily_payroll' => 'required',
+            'id_daily_payroll' => 'required|unique:postmortem_inspections',
             'id_head_cause' => 'nullable',
             'head_quantity' => 'nullable',
             'id_small_ints_cause' => 'nullable',
