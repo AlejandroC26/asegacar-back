@@ -130,7 +130,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
 
         $dateTimeRow = $lastRow-2;
         $dateTimeRowInfo = $dateTimeRow+1;
-        $lastInspectionRow = 26 + count($this->data['inspections']);
+        $lastInspectionRow = 26 + count($this->data['inspections']) ?? 1;
         $sheet->getStyle("A$dateTimeRow:H$dateTimeRow")->getFont()->setSize(10);
         $sheet->getStyle("A$dateTimeRow:H$dateTimeRowInfo")->applyFromArray($this->center);
         $sheet->getStyle("G26:G$lastInspectionRow")->getFont()->setSize(9);

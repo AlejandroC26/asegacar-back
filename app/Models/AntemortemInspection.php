@@ -17,8 +17,10 @@ class AntemortemInspection extends Model
         'id_daily_payroll',
         'corral_entry',
         'id_veterinary',
-        'time_entry',
-        'rest_time'
+        'rest_time',
+        'findings_and_observations',
+        'final_dictament',
+        'cause_for_seizure'
     ];
     
     public function dailyPayroll() 

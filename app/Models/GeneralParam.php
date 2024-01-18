@@ -33,4 +33,9 @@ class GeneralParam extends Model
         $id_supervised_by = GeneralParam::where('name', 'id_supervised_by')->first();
         return $id_supervised_by->value ?? null;
     }
+
+    public static function onGetVeterinary() {
+        $id_veterinary = GeneralParam::where('name', 'id_veterinary')->first();
+        return $id_veterinary->value ?? null;
+    }
 }

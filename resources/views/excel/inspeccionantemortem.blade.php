@@ -1,39 +1,42 @@
 <table border="1">
     <tr>
         <td colspan="3" class="logo"></td>
-        <td colspan="3" class="center">
+        <td colspan="5" class="center">
             <strong>Formato de inspección Ante Mortem</strong><br>
             <strong>Sistema integral de gestion de la Calidad e<br> Inocuidad de los alimentos.</strong><br>
         </td>
-        <td colspan="2">
+        <td colspan="3">
             <b>PBA</b> <br>
             Planta de Beneficio Animal
         </td>
     </tr>
     <tr>
-        <td colspan="2">CODIGO: PBA-PM-PB-BOV-FOR-01</td>
-        <td colspan="2">versión: 1</td>
-        <td colspan="2">Fecha de Emisión: 05/12/2021</td>
+        <td colspan="3">CODIGO: PBA-PM-PB-BOV-FOR-01</td>
+        <td colspan="4">Versión: 4</td>
+        <td colspan="2">Fecha de Emisión: 17/01/2024</td>
         <td colspan="2">Página 1</td>
     </tr>
     <tr>
-        <td colspan="8"></td>
+        <td colspan="11"></td>
     </tr>
     <tr>
         <td colspan="3"><strong>FECHA: {{ $request->date }}</strong></td>
-        <td colspan="2"><strong>HORA I: {{ $request->time_entry }}</strong></td>
-        <td colspan="3"><strong>MEDICO VETERINARIO: {{ $request->veterinary }}</strong></td>
+        <td colspan="8"><strong>MEDICO VETERINARIO: {{ $request->veterinary }}</strong></td>
     </tr>
     <tr>
-        <td colspan="8"></td>
+        <td colspan="11"></td>
     </tr>
     <tr>
         <td><strong>ITEM</strong></td>
+        <td><strong>HORA ANTEMORTEM</strong></td>
         <td><strong># CORRAL</strong></td>
-        <td><strong>No. DE GUIA SANITARIA</strong></td>
-        <td colspan="2"><strong>No. CONSECUTIVO código</strong></td>
-        <td colspan="2"><strong>HORA DE INGRESO CORRALES DE SACRIFICIO</strong></td>
+        <td colspan="2"><strong>No. DE GUIA SANITARIA</strong></td>
+        <td><strong>No. CONSECUTIVO</strong></td>
+        <td><strong>SEXO</strong></td>
         <td><strong>TIEMPO DE DESCANSO</strong></td>
+        <td><strong>HALLAZGOS Y OBSERVACIONES</strong></td>
+        <td><strong>DICTAMEN FINAL</strong></td>
+        <td><strong>CAUSA DE DECOMISO</strong></td>
     </tr>
     @php 
         $key = 1;
@@ -41,61 +44,29 @@
     @foreach($data as $element)
     <tr>
         <td>{{ $key }}</td>
+        <td>{{ $element['corral_entry'] }}</td>
         <td>{{ $element['corral_number'] }}</td>
-        <td>{{ $element['guide'] }}</td>
-        <td colspan="2">{{ $element['animal_code'] }}</td>
-        <td colspan="2">{{ $element['corral_entry'] }}</td>
+        <td colspan="2">{{ $element->dailyPayroll->incomeForm->guide->code }}</td>
+        <td>{{ $element->dailyPayroll->incomeForm->code }}</td>
+        <td>{{ $element->dailyPayroll->incomeForm->gender->name }}</td>
         <td>{{ $element['rest_time'] }}</td>
+        <td>{{ $element['findings_and_observations'] }}</td>
+        <td>{{ $element['final_dictament'] }}</td>
+        <td>{{ $element['cause_for_seizure'] }}</td>
     </tr>
     @php 
         $key += 1;
     @endphp
     @endforeach
-
     <tr>
-        <td colspan="8"></td>
+        <td colspan="11"></td>
     </tr>
     <tr>
-        <td colspan="8">
-            <b>HALLASGOS /ANTEMORTEM</b>
-        </td>
+        <td colspan="2"><strong>MACHOS</strong></td>
+        <td colspan="2">{{ $request['count']['males'] }}</td>
+        <td colspan="2"><strong>HEMBRAS</strong></td>
+        <td colspan="2">{{ $request['count']['females'] }}</td>
+        <td><strong>TOTAL BOVINOS</strong></td>
+        <td colspan="2">{{ $request['total'] }}</td>
     </tr>
-    @php
-        $males = 0;
-        $females = 0;
-    @endphp
-    @foreach ($request->suspiciousAnimals as $animal)
-    @php
-    $males += $animal['male'];
-    $females += $animal['female'];    
-    @endphp
-    @endforeach
-    <tr>
-        <td colspan="2"><b>HEMBRAS: {{ $females }}</b> </td>
-        <td colspan="2"><b>MACHOS: {{ $males }}</b> </td>
-        <td colspan="4"><b>TOTAL BOBINOS: {{ count($request->suspiciousAnimals) }}</b></td>
-    </tr>
-    <tr>
-        <td colspan="2"><b>SEXO</b></td>
-        <td rowspan="2"><b># DE GUIA <br>SANITARIA</b></td>
-        <td colspan="2" rowspan="2"><b>HALLAZGOS Y<br>OBSERVACIONES</b></td>
-        <td rowspan="2"><b>DECISION</b></td>
-        <td rowspan="2"><b>CAUSA DE<br>DECOMISO</b></td>
-        <td rowspan="2"><b>CORRAL</b></td>
-    </tr>
-    <tr>
-        <td><b>MACHO</b></td>
-        <td><b>HEMBRA</b></td>
-    </tr>
-    @foreach ($request->suspiciousAnimals as $animal)
-    <tr>
-        <td>{{ $animal['male'] ? 'X' : '' }}</td>
-        <td>{{ $animal['female'] ? 'X' : '' }}</td>
-        <td>{{ $animal['guide'] }}</td>
-        <td colspan="2">{{ $animal['findings_and_observations'] }}</td>
-        <td>{{ $animal['decision'] }}</td>
-        <td>{{ $animal['cause_forfeiture'] }}</td>
-        <td>{{ $animal['corral'] }}</td>
-    </tr>
-    @endforeach
 </table>

@@ -7,13 +7,12 @@ use App\Http\Requests\StoreAntemortemInspectionRequest;
 use App\Http\Requests\UpdateAntemortemInspectionRequest;
 use App\Http\Resources\AntemortemInspectionResource;
 use App\Models\AntemortemInspection;
-use App\Models\InspectionSuspiciousAnimal;
+use App\Models\GeneralParam;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AntemoretemInspectionController extends Controller
 {
@@ -21,8 +20,13 @@ class AntemoretemInspectionController extends Controller
     public function index () 
     {
         try {
-            $antemortemInspections = AntemortemInspection::all();
-            return $this->successResponse(AntemortemInspectionResource::collection($antemortemInspections));
+            $antemortemInspections = AntemortemInspection::select('antemortem_inspection.id', 'antemortem_inspection.date', 'guides.code', DB::raw('count(*) as entries'))
+                ->leftJoin('daily_payrolls', 'daily_payrolls.id', '=', 'antemortem_inspection.id_daily_payroll')
+                ->leftJoin('income_forms', 'income_forms.id', '=', 'daily_payrolls.id_income_form')
+                ->leftJoin('guides', 'guides.id', '=', 'income_forms.id_guide')
+                ->groupBy('antemortem_inspection.date', 'guides.code')
+                ->get();
+            return $this->successResponse($antemortemInspections);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -31,9 +35,19 @@ class AntemoretemInspectionController extends Controller
     public function store (StoreAntemortemInspectionRequest $request) 
     {
         try {
-            $antemortemInspection = AntemortemInspection::create($request->validated());
-            return $this->successResponse($antemortemInspection, 'Registro realizado exitosamente');
+            DB::beginTransaction();
+            $id_veterinary = GeneralParam::onGetVeterinary();
+            foreach ($request->validated()['entries'] as $entrie) {
+                AntemortemInspection::create(array_merge($entrie, [
+                    'id_daily_payroll' => $entrie['id'],
+                    'date' => $request->date,
+                    'id_veterinary' => $id_veterinary
+                ]));
+            }
+            DB::commit();
+            return $this->successResponse([], 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
+            DB::rollBack();
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
         }
     }
@@ -41,18 +55,30 @@ class AntemoretemInspectionController extends Controller
     public function show (AntemortemInspection $antemortemInspection)
     {
         try {
-            return $this->successResponse(AntemortemInspectionResource::make($antemortemInspection), 'Listado exitosamente');
+            return $this->successResponse(AntemortemInspectionResource::toShow($antemortemInspection), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
     
-    public function update (UpdateAntemortemInspectionRequest $request, AntemortemInspection $antemortemInspection)
+    public function update (UpdateAntemortemInspectionRequest $request)
     {
         try {   
-            $antemortemInspection->update($request->validated());
-            return $this->successResponse($antemortemInspection, 'Actualizado exitosamente');
+            DB::beginTransaction();
+            foreach ($request->validated()['entries'] as $entrie) {
+                $update['date'] = $request->date;
+                $update['corral_number'] = $entrie['corral_number'];
+                $update['corral_entry'] = $entrie['corral_entry'];
+                $update['rest_time'] = $entrie['rest_time'];
+                $update['findings_and_observations'] = $entrie['findings_and_observations'];
+                $update['final_dictament'] = $entrie['final_dictament'];
+                $update['cause_for_seizure'] = $entrie['cause_for_seizure'];
+                AntemortemInspection::where('id', $entrie['id'])->update($update);
+            }
+            DB::commit();
+            return $this->successResponse([], 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
+            DB::rollBack();
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
     }
@@ -70,46 +96,30 @@ class AntemoretemInspectionController extends Controller
     public function download(Request $request)
     {
         try {
-            $time_entry = Carbon::createFromFormat('H:i', $request->time_entry);
-            $time_entry = $time_entry->format('H:i:s', $time_entry);
-            $antemortemInspection = AntemortemInspection::where([
-                'date' => $request->date,
-                'id_veterinary' => $request->id_veterinary,
-                'time_entry' => $time_entry
-            ])->get();
-
-            $antemortemInspectionResource = AntemortemInspectionResource::collection($antemortemInspection);
+            $antemortemInspection = AntemortemInspection::where(['date' => $request->date])->whereHas('dailyPayroll', function($query) {
+                $query->whereNotNull('sacrifice_date');
+            })->get();
 
             if(!count($antemortemInspection)) {
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
             } 
 
-            $resultArray = json_decode(json_encode($antemortemInspectionResource), true);
+            $count['males'] = 0;
+            $count['females'] = 0;
+            foreach ($antemortemInspection as $inspection) {
+                $gender = $inspection->dailyPayroll->incomeForm->gender->id;
+                $count['males'] += $gender == 1;
+                $count['females'] += $gender == 2;
+            }
 
-            $guides = collect($resultArray)->pluck('id_guide');
-            
-            $suspiciousAnimals = InspectionSuspiciousAnimal::whereHas('dailyPayroll.incomeForm', function (Builder $query) use ($guides) {
-                $query->whereIn('id_guide', $guides);
-            })->get();
-
-            $suspiciousAnimals = $suspiciousAnimals->map(function ($animal) {
-                $response['male'] = ($animal->dailyPayroll->incomeForm->id_gender === 1) ? 1 : 0;
-                $response['female'] = ($animal->dailyPayroll->incomeForm->id_gender === 2) ? 1 : 0;
-                $response['guide'] = $animal->dailyPayroll->incomeForm->guide->code;
-                $response['findings_and_observations'] = $animal->findings_and_observations;
-                $response['decision'] = $animal->decision;
-                $response['cause_forfeiture'] = $animal->cause_forfeiture;
-                $response['corral'] = $animal->corral;
-                return $response;
-            });
-
-            $veterinary = User::find($request->id_veterinary);
+            $veterinary = User::find($antemortemInspection[0]->id_veterinary);
             $request->request->add([
                 'veterinary' => $veterinary->person->fullname, 
-                'suspiciousAnimals' => $suspiciousAnimals
+                'count' => $count,
+                'total' => $antemortemInspection->count()
             ]);
 
-            return Excel::download(new AntemortemInspectionExport($request, collect($resultArray)), 'invoices.xlsx');
+            return Excel::download(new AntemortemInspectionExport($request, $antemortemInspection), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

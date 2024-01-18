@@ -8,8 +8,8 @@ use App\Http\Resources\DailyRouteResource;
 use App\Models\DailyRoutes;
 use App\Models\Route;
 use App\Traits\ApiResponse;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -98,12 +98,14 @@ class DailyRoutesController extends Controller
     public function download(Request $request)
     {
         try {
+            $dailyRoutes = DailyRoutes::where('date', $request->date)->pluck('id_route')->unique()->values()->toArray();
 
-            $routes = Route::whereHas('dailyRoutes', function(Builder $query) use ($request) {
+            $routes = Route::whereIn('id', $dailyRoutes)
+            ->with(['dailyRoutes' => function ($query) use ($request) {
                 $query->where('date', $request->date);
-            })->with(['dailyRoutes' => function($query) use ($request) {
-                $query->where('date', $request->date);
-            }])->orderBy('id')->get();
+            }])
+            ->orderByRaw(DB::raw("FIELD(id, " . implode(',', $dailyRoutes) . ")"))
+            ->get();
 
             if(!count($routes)) {
                 return $this->errorResponse('The report could not be showed', ['There are not records saved']);

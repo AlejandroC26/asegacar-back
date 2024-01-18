@@ -89,7 +89,7 @@
         @endforeach
     @endforeach
     <tr>
-        <td colspan="4" rowspan="2"><b>TOTAL BOBINOS EN PLANTA</b></td>
+        <td colspan="4" rowspan="2"><b>TOTAL BOVINOS EN PLANTA</b></td>
         <td>{{ $total_males }}</td>
         <td>{{ $total_females }}</td>
         <td rowspan="2" colspan="2"><b>ANIMALES PARA <br>BENEFICIO</b></td>

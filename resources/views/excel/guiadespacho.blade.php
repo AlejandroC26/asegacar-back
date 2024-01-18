@@ -156,6 +156,16 @@
       <td colspan="2"><b>CANTIDAD</b></td>
       <td colspan="5"><b>PRODUCTO</b></td>
     </tr>
+    @if (!count($data['inspections']))
+    <tr>
+      <td></td>
+      <td colspan="5"></td>
+      <td></td>
+      <td colspan="3"></td>
+      <td colspan="2"></td>
+      <td colspan="5"></td>
+    </tr>
+    @endif
     @foreach ($data['inspections'] as $key => $inspection)
     <tr>
       <td>{{ $key + 1 }}</td>

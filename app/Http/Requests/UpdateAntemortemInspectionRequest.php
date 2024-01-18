@@ -27,11 +27,14 @@ class UpdateAntemortemInspectionRequest extends FormRequest
     {
         return [
             'date' => 'required',
-            'corral_number' => 'required',
-            'id_veterinary' => 'required|exists:users,id',
-            'corral_entry' => 'required',
-            'time_entry' => 'required',
-            'rest_time' => 'nullable'
+            'entries' => 'required',
+            'entries.*.id' => 'required',
+            'entries.*.corral_number' => 'required',
+            'entries.*.corral_entry' => 'required|date_format:H:i',
+            'entries.*.rest_time' => 'nullable',
+            'entries.*.findings_and_observations' => 'nullable',
+            'entries.*.final_dictament' => 'nullable',
+            'entries.*.cause_for_seizure' => 'nullable',
         ];
     }
 

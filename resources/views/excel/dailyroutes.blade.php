@@ -12,9 +12,9 @@
         </td>
     </tr>
     <tr>
-        <td colspan="3">código: PBA-PE-GC-GCL-MT01</td>
-        <td>versión: 2</td>
-        <td><center>fecha de emisión: JULIO 2022</center></td>
+        <td colspan="2">Código: PBA-PE-GC-GCL-MT01</td>
+        <td>Versión: 2</td>
+        <td colspan="2"><center>Fecha de emisión: JULIO 2022</center></td>
         <td colspan="2">Página 1</td>
     </tr>
     <tr></tr>

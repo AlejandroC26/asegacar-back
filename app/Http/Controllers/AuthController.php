@@ -150,8 +150,8 @@ class AuthController extends Controller
                             "route" => 'animalessospechosos',
                         ],
                         [
-                            "label" => 'Ingreso Bobinos Emergencia',
-                            "route" => 'ingresobobinosemergencia',
+                            "label" => 'Ingreso Bovinos Emergencia',
+                            "route" => 'ingresobovinosemergencia',
                         ],
                     ]
                 ],
