@@ -60,6 +60,10 @@ class DailyPayroll extends Model
         return $this->hasMany(PostmortemInspections::class, 'id_daily_payroll');
     }
 
+    public function seizureComparisons() {
+        return $this->hasMany(SeizureComparison::class, 'id_daily_payroll');
+    }
+
     public function zeroGutsTolerance() {
         return $this->hasMany(ZeroGutsTolerance::class, 'id_daily_payroll');
     }

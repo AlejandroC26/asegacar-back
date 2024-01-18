@@ -212,7 +212,6 @@ class AgeController extends Controller
                     }
                 }
             }
-            return $aResults;
             return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be downloaded', $exception->getMessage(), 422);
