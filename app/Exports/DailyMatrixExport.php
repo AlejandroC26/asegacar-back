@@ -58,11 +58,13 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
 
     public function styles(Worksheet $sheet)
     {
+        $lastCol = $sheet->getHighestColumn();
+
         $sheet->getStyle('A1:S4')->getFont()->setName('Arial');
         $sheet->getStyle('E1:P1')->getFont()->setSize(15);
         $sheet->getStyle('A4:S5')->getAlignment()->setWrapText(true);
-        $sheet->getStyle('L4:Q5')->getFont()->setSize(10);
-        $sheet->getStyle('L4:L5')->getFont()->setSize(9);
+        $sheet->getStyle('M4:R5')->getFont()->setSize(10);
+        $sheet->getStyle('M4:M5')->getFont()->setSize(9);
 
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(90);
@@ -78,7 +80,6 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('J')->setWidth(19); // COLOR
         $sheet->getColumnDimension('K')->setWidth(22); // NO EXPENDIOS
         $sheet->getColumnDimension('L')->setWidth(22);
-        $sheet->getColumnDimension('L')->setWidth(22);
         $sheet->getColumnDimension('M')->setWidth(22);
         $sheet->getColumnDimension('N')->setWidth(26); // PROPIETARIO
         $sheet->getColumnDimension('O')->setWidth(21); // PROPIETARIO ID
@@ -86,6 +87,7 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('Q')->setWidth(24); // PREDIO
         $sheet->getColumnDimension('R')->setWidth(20); // MUNICIPIO
         $sheet->getColumnDimension('S')->setWidth(20); // DEPARTAMENTO
+        $sheet->getColumnDimension('T')->setWidth(20);
 
 
         $sheet->getStyle('A1:S6')->applyFromArray([
@@ -96,7 +98,7 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
         ]);
         // BORDERS
         $lastRow = 5 + count($this->data);
-        $range = 'A1:S'.$lastRow;
+        $range = 'A1:'.$lastCol.$lastRow;
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,

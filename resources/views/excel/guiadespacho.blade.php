@@ -87,8 +87,8 @@
       <td>{{ $config['sacrifice_date']['complete'] }}</td>
       <td colspan="3"><b>{{ $data['products'][1] ?? 0 }}</b></td>
       <td></td>
-      <td rowspan="8"><b>{{ $config['dispatch_guide']->average_temperature }}</b></td>
-      <td colspan="5" rowspan="8">{{ implode(',', $data['codes']) }}</td>
+      <td rowspan="8"><b>{{ $config['dispatch_guide']->average_temperature }}°C</b></td>
+      <td colspan="5" rowspan="8">{{ implode(', ', $data['codes']) }}</td>
     </tr>
     <tr>
       <td>2</td>

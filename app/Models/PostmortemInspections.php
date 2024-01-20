@@ -96,7 +96,7 @@ class PostmortemInspections extends Model
 
     public static function onGetFieldsToMatch($id)
     {
-        return PostmortemInspections::select([
+        $inspection = PostmortemInspections::select([
             'id_daily_payroll',
             'head_quantity',
             'small_ints_quantity',
@@ -119,8 +119,8 @@ class PostmortemInspections extends Model
             'other_organ',
             'other_quantity',
         ])->where('id_daily_payroll', $id)
-        ->first()
-        ->toArray();
+        ->first();
+        return $inspection ? $inspection->toArray() : [];
     }
 
     public function responsable() { return $this->belongsTo(Person::class, 'id_responsable'); }

@@ -12,6 +12,7 @@ class DailyMatrix extends Model
     public static function onGetMakeViewSQL() {
         return "CREATE VIEW `daily_matrix_view` AS 
             SELECT 
+                `dp`.`id` AS `id`,
                 `guides`.`date_entry` AS `date_entry`,
                 `if`.`code` AS `asigned_code`,
                 `guides`.`code` AS `no_guide`,

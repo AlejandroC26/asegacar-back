@@ -140,6 +140,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $sheet->getStyle('M3:M4')->getFont()->setSize(16);
         $sheet->getStyle('G14:G21')->getFont()->setSize(8);
         $sheet->getStyle('H14:J21')->getFont()->setSize(12);
+        $sheet->getStyle('L14:L21')->getFont()->setSize(14);
         $sheet->getStyle('H14:J21')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]]);
         $sheet->getStyle('L14:Q21')->applyFromArray(['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER]]);
     }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\DailyMatrixExport;
 use App\Helpers\FormatDateHelper;
+use App\Models\PostmortemInspections;
+use App\Models\SeizureComparison;
 use Carbon\Carbon;
 
 use App\Traits\ApiResponse;
@@ -39,6 +41,13 @@ class DailyMatrixController extends Controller
             $dailyMatrix = DB::table('daily_matrix_view')
                 ->where('sacrifice_date', $request->benefit_date)
                 ->get();
+
+            $dailyMatrix = $dailyMatrix->map(function($record) {
+                $matchedFields  = SeizureComparison::onGetMatchesWithData(PostmortemInspections::onGetFieldsToMatch($record->id)); 
+                $matchedCauses  = PostmortemInspections::onGetFieldsCause($record->id, $matchedFields);
+                $record->seizures = collect($matchedCauses)->pluck('field')->toArray();
+                return $record;
+            });
 
             if(!count($dailyMatrix)) {
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);

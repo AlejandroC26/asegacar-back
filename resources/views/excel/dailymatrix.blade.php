@@ -1,7 +1,7 @@
 <table border="1">
     <tr>
         <td colspan="4"></td>
-        <td colspan="13">
+        <td colspan="14">
             MATRIZ INFORMACION DIARIA DE BOVINOS <br>
             Sistema Integral de Gestión de la Calidad e inocuidad de los alimentos.
         </td>
@@ -10,12 +10,12 @@
     <tr>
         <td colspan="3">código: PBA-PE-GC-GCL-MT-01</td>
         <td colspan="2">versión: 3</td>
-        <td colspan="6">fecha de emisión: JULIO 2022</td>
+        <td colspan="7">fecha de emisión: JULIO 2022</td>
         <td colspan="6"></td>
         <td colspan="2" rowspan="2"></td>
     </tr>
     <tr>
-        <td colspan="4"><b>FECHA DE BENEFICIO: {{ $benefit_date }}</b></td>
+        <td colspan="12"><b>FECHA DE BENEFICIO: {{ $benefit_date }}</b></td>
         <td colspan="6"></td>
     </tr>
     <tr>
@@ -29,6 +29,7 @@
         <td rowspan="2"><b>PROPÓSITO</b></td>
         <td rowspan="2"><b>COLOR</b></td>
         <td rowspan="2"><b>No. EXPENDIOS</b></td>
+        <td rowspan="2"><b>DECOMISOS</b></td>
         <td rowspan="2"><b>HORA DE INGRESO CORRALES DE SACRIFICIO</b></td>
         <td rowspan="2"><b>FECHA DE BENEFICIO</b></td>
         <td rowspan="2"><b>NOMBRE DEL PROPIETARIO</b></td>
@@ -71,6 +72,7 @@
         <td>{{ $income->purpose }}</td>
         <td>{{ $income->color }}</td>
         <td>{{ $income->outlet }}</td>
+        <td>{{ implode(', ', $income->seizures) }}</td>
         <td>{{ $income->corral_entry }}</td>
         <td>{{ $income->sacrifice_date }}</td>
         <td>{{ $income->owner }}</td>
