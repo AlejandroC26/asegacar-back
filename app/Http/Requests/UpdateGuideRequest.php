@@ -28,7 +28,7 @@ class UpdateGuideRequest extends FormRequest
         return [
             'code' => 'required',
             'date_entry' => 'required',
-            'time_entry' => 'required',
+            'time_entry' => 'required|date_format:H:i',
             'id_owner' => 'required',
             'id_buyer' => 'required',
             'id_source' => 'required',
@@ -36,6 +36,14 @@ class UpdateGuideRequest extends FormRequest
             'establishment_name' => 'required',
             'id_specie' => 'required',
             'file_attached' => 'mimes:pdf',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'code.unique' => 'El código de guía debe ser único en el sistema',
+            'time_entry.date_format' => 'Digita una fecha de ingreso en formato 24h válida'
         ];
     }
 

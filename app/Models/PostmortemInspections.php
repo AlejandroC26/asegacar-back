@@ -134,6 +134,7 @@ class PostmortemInspections extends Model
     public function liver() { return $this->belongsTo(Causes::class, 'id_liver_cause'); }
     public function lungs() { return $this->belongsTo(Causes::class, 'id_lungs_cause'); }
     public function legs() { return $this->belongsTo(Causes::class, 'id_legs_cause'); }
+    public function hands() { return $this->belongsTo(Causes::class, 'id_hands_cause'); }
     public function udder() { return $this->belongsTo(Causes::class, 'id_udder_cause'); }
     public function kidney() { return $this->belongsTo(Causes::class, 'id_kidney_cause'); }
     public function heart() { return $this->belongsTo(Causes::class, 'id_heart_cause'); }

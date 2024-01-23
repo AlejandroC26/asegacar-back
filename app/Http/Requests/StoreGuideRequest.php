@@ -29,7 +29,7 @@ class StoreGuideRequest extends FormRequest
             'code' => 'required|unique:guides',
             'no_animals' => 'required|integer',
             'date_entry' => 'required',
-            'time_entry' => 'required',
+            'time_entry' => 'required|date_format:H:i',
             'id_owner' => 'required',
             'id_buyer' => 'required',
             'id_source' => 'required',
@@ -44,6 +44,7 @@ class StoreGuideRequest extends FormRequest
     {
         return [
             'code.unique' => 'El código de guía debe ser único en el sistema',
+            'time_entry.date_format' => 'Digita una fecha de ingreso en formato 24h válida'
         ];
     }
 

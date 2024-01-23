@@ -15,8 +15,21 @@ class ChargeSeeder extends Seeder
      */
     public function run()
     {
-        Charge::updateOrCreate(['name' => 'Administrativo']);
+        $record = Charge::where('name', 'Administrativo')->orWhere('name', 'Administrativo')->firstOrNew();
+        $record->name = 'Administrador';
+        $record->save();
+
+        Charge::updateOrCreate(['name' => 'Auxiliar administrativo ']);
+        
         Charge::updateOrCreate(['name' => 'Propietario']);
-        Charge::updateOrCreate(['name' => 'Veterinario']);
+
+        $record = Charge::where('name', 'Veterinario')->orWhere('name', 'Médico veterinario oficial')->firstOrNew();
+        $record->name = 'Médico veterinario oficial';
+        $record->save();
+
+        Charge::updateOrCreate(['name' => 'Médico veterinario auxiliar']);
+        Charge::updateOrCreate(['name' => 'Jefe operativo']);
+        Charge::updateOrCreate(['name' => 'Auxiliar de calidad']);
+        Charge::updateOrCreate(['name' => 'Auxiliar facturación']);
     }
 }

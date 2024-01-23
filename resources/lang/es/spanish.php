@@ -13,6 +13,7 @@ return [
   'kidney' => 'Riñón',
   'heart' => 'Corazón',
   'booklet' => 'Librillo',
+  'hands' => 'Manos',
   'white_viscera' => 'Vísceras Blancas',
   'red_viscera' => 'Vísceras Rojas',
   'destocking' => 'Desabastecimiento',

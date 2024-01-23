@@ -99,7 +99,7 @@ class UserController extends Controller
     public function sltCharges()
     {
         try {
-            $charges = Charge::select('id', 'name')->get();
+            $charges = Charge::select('id', 'name')->orderBy('name', 'ASC')->get();
             return response()->json($charges);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
