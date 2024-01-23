@@ -18,8 +18,6 @@ class ChargeSeeder extends Seeder
         $record = Charge::where('name', 'Administrativo')->orWhere('name', 'Administrativo')->firstOrNew();
         $record->name = 'Administrador';
         $record->save();
-
-        Charge::updateOrCreate(['name' => 'Auxiliar administrativo ']);
         
         Charge::updateOrCreate(['name' => 'Propietario']);
 
@@ -31,5 +29,6 @@ class ChargeSeeder extends Seeder
         Charge::updateOrCreate(['name' => 'Jefe operativo']);
         Charge::updateOrCreate(['name' => 'Auxiliar de calidad']);
         Charge::updateOrCreate(['name' => 'Auxiliar facturación']);
+        Charge::updateOrCreate(['name' => 'Auxiliar administrativo ']);
     }
 }
