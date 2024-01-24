@@ -19,11 +19,11 @@ class ChargeRouteSeeder extends Seeder
         $allRoutes = AppRoutes::all();
         $aChargeRoutes = [
             // AUX ADMINISTRATIVO
-            9 => [
+            8 => [
                 8, 9, 10, 24
             ],
             // MEIDCO VETERINARIO AUX
-            6 => [
+            5 => [
                 9, 11, 13, 14, 15, 18
             ],
             // MEDICO VETERINARIO OFICIAL
@@ -35,11 +35,11 @@ class ChargeRouteSeeder extends Seeder
                 5, 9, 16, 17
             ],
             // AUXILIAR CALIDAD
-            7 => [
+            6 => [
                 19, 20, 22, 23
             ],
             // AUXILIAR FACTURACIÓN
-            8 => [
+            7 => [
                 16
             ]
         ];
