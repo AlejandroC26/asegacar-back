@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\ApiResponse;
@@ -67,153 +68,49 @@ class AuthController extends Controller
     public function getpermissions() {
         try {
             $user = auth()->user();
-            $routes = array_merge([
-                [
-                    "icon" => 'home',
-                    "label" => 'Inicio',
-                    "route" => 'admin',
-                    "separator" => 1,
-                ],
-                [
-                    "icon" => "settings",
-                    "label" => "Configuración",
-                    "separator" => 1,
-                    "routes" => [
-                        [
-                            "label" => 'Personas',
-                            "route" => 'personas',
-                        ],
-                        [
-                            "label" => 'Usuarios',
-                            "route" => 'usuarios',
-                        ],
-                        [
-                            "label" => 'Expendios',
-                            "route" => 'expendios',
-                        ],
-                        [
-                            "label" => 'Guías',
-                            "route" => 'guias',
-                        ],
-                        [
-                            "label" => 'Rutas',
-                            "route" => 'rutas',
-                        ],
-                        [
-                            "label" => 'Vehiculos',
-                            "route" => 'vehiculos',
-                        ],
-                        [
-                            "label" => 'Firmas',
-                            "route" => 'firmas',
-                        ],
-                    ]
-                ],
-                [
-                    "icon" => "fact_check",
-                    "label" => "Recepción",
-                    "separator" => 1,
-                    "routes" => [
-                        [
-                            "label" => 'Planilla Ingreso',
-                            "route" => 'planillaingreso',
-                        ],
-                        [
-                            "label" => 'Planilla Diaria',
-                            "route" => 'planilladiaria',
-                        ],
-                        [
-                            "label" => 'Sacrificios Pendientes',
-                            "route" => 'sacrificiospendientes',
-                        ],
-                    ]
-                ],
-                [
-                    "icon" => "history",
-                    "label" => "Ante-Mortem",
-                    "separator" => 1,
-                    "routes" => [
-                        [
-                            "label" => 'Inspección Antemortem',
-                            "route" => 'inspeccionantemortem',
-                        ],
-                        [
-                            "label" => 'Hallazgos / Antemortem',
-                            "route" => 'inspeccionantemortemsospechosos',
-                        ],
-                        [
-                            "label" => 'Registro Hembras Paridas',
-                            "route" => 'registrohembrasparidas',
-                        ],
-                        [
-                            "label" => 'Animales Sospechosos',
-                            "route" => 'animalessospechosos',
-                        ],
-                        [
-                            "label" => 'Ingreso Bovinos Emergencia',
-                            "route" => 'ingresobovinosemergencia',
-                        ],
-                    ]
-                ],
-                [
-                    "icon" => "feed",
-                    "label" => "Verificación Post-Mortem",
-                    "separator" => 1,
-                    "routes" => [
-                        [
-                            "label" => 'Ruta Diaria',
-                            "route" => 'rutadiaria',
-                        ],
-                        [
-                            "label" => 'Planilla Orden Beneficio',
-                            "route" => 'planillaordenbeneficio',
-                        ],
-                        [
-                            "label" => 'Inspección Post Mortem',
-                            "route" => 'inspeccionpostmortem',
-                        ],
-                        [
-                            "label" => 'Tolerancia Cero Visceras',
-                            "route" => 'toleranciacerovisceras',
-                        ],
-                        [
-                            "label" => 'Inspección Cero Tolerancia',
-                            "route" => 'inspeccioncerotolerancia',
-                        ],
-                        [
-                            "label" => 'Acondicionamiento De La Canal',
-                            "route" => 'acondicionamientodelacanal',
-                        ],
-                        [
-                            "label" => 'Despacho Visceras',
-                            "route" => 'despachovisceras',
-                        ],
-                        [
-                            "label" => 'Comparación Decomisos',
-                            "route" => 'comparaciondecomisos',
-                        ],
-                    ]
-                ],
-                [
-                    "icon" => "local_shipping",
-                    "label" => "Despacho",
-                    "separator" => 1,
-                    "routes" => [
-                        [
-                            "label" => 'Guía de despacho',
-                            "route" => 'guiadespacho',
-                        ],
-                    ]
-                ],
-                [
-                    "icon" => "fact_check",
-                    "label" => "Reportes",
-                    "route" => "reportes",
-                    "separator" => 1
-                ]
-            ], []);
-            
 
+            $categories = [];
+            
+            foreach ($user->charge->appRouteCategories as $category) {
+                $categoryData = $category->toArray();
+                $categoryData['routes'] = $category->routes->toArray();
+                $categories[$category->id] = $categoryData;
+            }
+            
+            foreach ($user->charge->appRoutes as $route) {
+                // Asegúrate de que $route->route_categorie sea un objeto, no un array
+                $category = (object) $route->route_categorie;
+            
+                $categoryId = $category->id;
+            
+                if (array_key_exists($categoryId, $categories)) {
+                    $categories[$categoryId]['routes'][] = $route->toArray();
+                } else {
+                    $categories[$categoryId] = [
+                        'id' => $category->id,
+                        'icon' => $category->icon,
+                        'label' => $category->label,
+                        'route' => $category->route,
+                        'separator' => $category->separator,
+                        'routes' => [$route->toArray()],
+                    ];
+                }
+            }
+
+            $routes = collect($categories)->sortBy('id')->values()->map(function($categorie) {
+                $category['id'] = $categorie['id'];
+                $category['icon'] = $categorie['icon'];
+                $category['label'] = $categorie['label'];
+                $category['route'] = $categorie['route'];
+                $category['separator'] = $categorie['separator'];
+                $category['routes'] = collect($categorie['routes'])->sortBy('id')->unique('id')->values()->map(function($route) {
+                    $newRoute['id'] = $route['id'];
+                    $newRoute['label'] = $route['label'];
+                    $newRoute['route'] = $route['route'];
+                    return $newRoute;
+                });
+                return $category;
+            });
             return $this->successResponse(['routes' =>$routes, 'permissions' => []], 'The record was showed success');
         } catch (\Throwable $th) {
             return $this->errorResponse('The record could not be showed', $th->getMessage(), 422);
