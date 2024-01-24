@@ -6,6 +6,8 @@ use App\Models\AppRoutes;
 use App\Models\ChargeRoutes;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ChargeRouteSeeder extends Seeder
 {
@@ -44,7 +46,13 @@ class ChargeRouteSeeder extends Seeder
             ]
         ];
 
+        Schema::disableForeignKeyConstraints();
 
+        // Limpiar la tabla 'example'
+        DB::table('charge_routes')->truncate();
+
+        Schema::enableForeignKeyConstraints();
+        
         foreach ($allRoutes as $route) {
             ChargeRoutes::updateOrCreate([
                 'id_charge' => 1,
