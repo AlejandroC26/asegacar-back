@@ -89,7 +89,6 @@ class SeizureComparisonController extends Controller
     {
         try {
             $seizureComparison = SeizureComparison::findOrFail($id);       
-            $seizureComparison->master->update(['date' => $request->date]);  
             $seizureComparison->update($request->validated());
             return $this->successResponse($seizureComparison, 'Actualizado exitosamente');
         } catch (\Throwable $exception) {
