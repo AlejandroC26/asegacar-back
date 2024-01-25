@@ -106,6 +106,7 @@ class SeizureComparisonController extends Controller
     {
         try {
             $seizureComparison = SeizureComparison::find($id);
+            $seizureComparison->delete();
             return $this->successResponse($seizureComparison, 'Eliminado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
