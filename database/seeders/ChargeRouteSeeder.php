@@ -22,7 +22,7 @@ class ChargeRouteSeeder extends Seeder
         $aChargeRoutes = [
             // AUX ADMINISTRATIVO
             8 => [
-                8, 9, 10, 24
+                4, 8, 9, 10, 24
             ],
             // MEIDCO VETERINARIO AUX
             5 => [

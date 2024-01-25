@@ -15,7 +15,7 @@ class ChargeSeeder extends Seeder
      */
     public function run()
     {
-        $record = Charge::where('name', 'Administrativo')->orWhere('name', 'Administrativo')->firstOrNew();
+        $record = Charge::where('name', 'Administrativo')->orWhere('name', 'Administrador')->firstOrNew();
         $record->name = 'Administrador';
         $record->save();
         

@@ -6,6 +6,8 @@ use App\Models\AppRouteCategories;
 use App\Models\Charge;
 use App\Models\ChargeCategories;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ChargeCategorieSeeder extends Seeder
 {
@@ -18,6 +20,13 @@ class ChargeCategorieSeeder extends Seeder
     {
         $allCharges = Charge::all();
         $allCategories = AppRouteCategories::all();
+
+        Schema::disableForeignKeyConstraints();
+        // Limpiar la tabla 'example'
+        DB::table('charge_categories')->truncate();
+
+        Schema::enableForeignKeyConstraints();
+        
         // ALL CATEGORIES TO ADMIN
         foreach ($allCategories as $categorie) {
             ChargeCategories::updateOrCreate([
