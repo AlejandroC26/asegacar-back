@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\SeizureComparisonExport;
 use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StoreSeizureComparisonRequest;
+use App\Http\Requests\UpdateSeizureComparisonRequest;
 use App\Http\Resources\SeizureComparisonResource;
 use App\Models\GeneralParam;
 use App\Models\SeizureComparison;
@@ -84,7 +85,7 @@ class SeizureComparisonController extends Controller
      * @param  \App\Models\SeizureComparison  $seizureComparison
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreSeizureComparisonRequest $request, $id)
+    public function update(UpdateSeizureComparisonRequest $request, $id)
     {
         try {
             $seizureComparison = SeizureComparison::findOrFail($id);       

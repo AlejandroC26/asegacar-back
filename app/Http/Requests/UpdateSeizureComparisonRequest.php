@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateSeizureComparisonRequest extends FormRequest
+class StoreSeizureComparisonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,6 @@ class UpdateSeizureComparisonRequest extends FormRequest
     {
         return [
             'date' => 'required|date',
-            'id_daily_payroll' => 'required',
             'head_quantity' => 'nullable',
             'small_ints_quantity' => 'nullable',
             'large_ints_quantity' => 'nullable',
