@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\BenefitOrderExport;
 use App\Helpers\FormatDateHelper;
 use App\Http\Requests\StoreFormBenefitOrderRequest;
+use App\Http\Requests\UpdateFormBenefitOrderRequest;
 use App\Http\Resources\FormBenefitOrderResource;
 use App\Models\FormBenefitOrder;
 use App\Models\GeneralParam;
@@ -83,7 +84,7 @@ class FormBenefitOrderController extends Controller
      * @param  \App\Models\FormBenefitOrder  $formBenefitOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreFormBenefitOrderRequest $request, $id)
+    public function update(UpdateFormBenefitOrderRequest $request, $id)
     {
         try {
             DB::beginTransaction();
