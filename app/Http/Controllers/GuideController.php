@@ -5,16 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreGuideRequest;
 use App\Http\Requests\UpdateGuideRequest;
 use App\Http\Resources\GuideResource;
-use App\Models\DailyPayroll;
 use App\Models\DailyPayrollMaster;
 use App\Models\Guide;
 use App\Models\Specie;
 use App\Traits\ApiResponse;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Guid\Guid;
 
 class GuideController extends Controller
 {
@@ -47,6 +44,7 @@ class GuideController extends Controller
             $sFileName = '';
             $consecutive = '';
             $sCurrentDate = Carbon::now();
+            $sCurrentDate = $sCurrentDate->addDay();
             
             $monthGuides = Guide::select(DB::raw('MAX(CAST(SUBSTRING_INDEX(consecutive, " - ", -1) AS UNSIGNED)) AS max_number'))
                 ->whereYear('date_entry', $sCurrentDate->year)
