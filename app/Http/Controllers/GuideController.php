@@ -43,12 +43,16 @@ class GuideController extends Controller
         try {
             $sFileName = '';
             $consecutive = '';
-            $sCurrentDate = Carbon::now();
-            $sCurrentDate = $sCurrentDate->addDay();
+
+            $tomorrowDate = Carbon::now()->addDay();
+            $tomorrowDate->setTimezone('UTC');
+            $tomorrowDateCopy = $tomorrowDate->copy();
+
+            $lastDayOfLastMonth = $tomorrowDateCopy->subMonthNoOverflow()->endOfMonth()->startOfDay();
+            $lastDayOfMonth = $tomorrowDate->endOfMonth();
             
             $monthGuides = Guide::select(DB::raw('MAX(CAST(SUBSTRING_INDEX(consecutive, " - ", -1) AS UNSIGNED)) AS max_number'))
-                ->whereYear('date_entry', $sCurrentDate->year)
-                ->whereMonth('date_entry', $sCurrentDate->month)
+                ->whereBetween('created_at', [$lastDayOfLastMonth, $lastDayOfMonth])
                 ->first();
 
             $monthAnimals = $monthGuides?->max_number ?? 0;
