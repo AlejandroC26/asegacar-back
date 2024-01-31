@@ -45,7 +45,7 @@
       <td colspan="3">Teléfono</td>
       <td colspan="3"><b>{{ $config['company']->phone }}</b></td>
       <td colspan="4">Hora de despacho</td>
-      <td colspan="7">{{ $config['dispatch_time'] == 'AM' ? 'A.M' : 'P.M'}}</td>
+      <td colspan="7">{{ strtoupper(date('a', strtotime($config['dispatch_time']))) }}</td>
     </tr>
     <tr>
       <td colspan="17"><b>2. IDENTIFICACIÓN DEL ESTABLECIMIENTO DESTINO.</b></td>
@@ -202,7 +202,7 @@
       <td colspan="3">HORA DE CIERRE</td>
       <td rowspan="2"></td>
       <td>Responsable:</td>
-      <td colspan="7"></td>
+      <td colspan="7">{{ $config['responsable'] }}</td>
     </tr>
     <tr>
       <td colspan="2"><b>{{ $config['closing_date']['day'] }}</b></td>
@@ -211,8 +211,8 @@
 
       <td colspan="3">{{ date_format(date_create($config['dispatch_guide']->closing_time), 'H:i') }}</td>
       <td>Cargo:</td>
-      <td></td>
-      <td colspan="2">Tel. </td>
+      <td><b>Jefe Operativo</b></td>
+      <td colspan="2">Tel: {{ $config['phone']}} </td>
       <td>Firma:</td>
       <td colspan="3"></td>
     </tr>

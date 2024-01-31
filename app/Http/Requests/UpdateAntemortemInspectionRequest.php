@@ -38,6 +38,13 @@ class UpdateAntemortemInspectionRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'entries.*.corral_entry.date_format' => 'La hora de ingreso debe cumplir con el formato de 24h',
+        ];
+    }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json(

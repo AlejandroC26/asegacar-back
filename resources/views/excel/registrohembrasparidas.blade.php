@@ -13,34 +13,40 @@
     <tr>
         <td colspan="2"><strong>CODIGO: PBA-PM-PB-BOV-FOR-07</strong></td>
         <td colspan="1"><strong>VERSIÓN: 1</strong></td>
-        <td colspan="3"><strong>FECHA DE EMISION: ENERO 2021</strong></td>
-        <td colspan="2"></td>
+        <td colspan="5"><strong>FECHA DE EMISION: ENERO 2021</strong></td>
     </tr>
     <tr>
         <td colspan="8"></td>
     </tr>
     <tr>
-        <td colspan="4"><strong>FECHA:</strong>&nbsp;{{ $data['date'] }}</td>
-        <td colspan="4"><strong>HORA:</strong>&nbsp;{{ $data['time'] }}</td>
+        <td><strong>FECHA:</strong></td>
+        <td colspan="3">{{ $data['date'] }}</td>
+        <td><strong>HORA:</strong></td>
+        <td colspan="3">{{ $data['time'] }}</td>
     </tr>
     <tr>
-        <td colspan="4"><strong>SUPERVISO:</strong>&nbsp;{{ $data['supervisor'] }}</td>
-        <td colspan="4"><strong>RESPONSABLE:</strong>&nbsp;{{ $data['responsable'] }}</td>
+        <td><strong>SUPERVISO:</strong></td>
+        <td colspan="3">{{ $data['supervisor'] }}</td>
+        <td><strong>RESPONSABLE:</strong></td>
+        <td colspan="3">{{ $data['responsable'] }}</td>
     </tr>
     <tr>
         <td colspan="8"></td>
     </tr>
     <tr>
-        <td colspan="8"><strong>MEDICO VETERINARIO RESPONSABLE: {{ $data['veterinary'] }}</strong></td>
+        <td colspan="3"><strong>MEDICO VETERINARIO RESPONSABLE:</strong></td>
+        <td colspan="5"> {{ $data['veterinary'] }}</td>
     </tr>
     <tr>
-        <td colspan="8"><strong>PROPIETARIO DEL ANIMAL: {{ $data['owner'] }}</strong></td>
+        <td colspan="2"><strong>PROPIETARIO DEL ANIMAL:</strong></td>
+        <td colspan="6">{{ $data['owner'] }}</td>
     </tr>
     <tr>
         <td colspan="8"><strong>FIRMA: </strong></td>
     </tr>
     <tr>
-        <td colspan="8"><strong>HORA DEL PARTO: {{ $data['delivery_time'] }}</strong></td>
+        <td colspan="2"><strong>HORA DEL PARTO:</strong></td>
+        <td colspan="6">{{ $data['delivery_time'] }}</td>
     </tr>
     <tr>
         <td colspan="8"><strong>El medico veterinario responsable, certifica haber declarado PARTO EN CORRALES durante el tiempo de<br> cuarentena del animal con la siguiente identificacion:</strong></td>

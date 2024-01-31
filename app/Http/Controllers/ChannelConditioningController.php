@@ -51,25 +51,26 @@ class ChannelConditioningController extends Controller
         try {
             $errors = [];
 
-            $id_responsable = GeneralParam::onGetResponsable();
-            $id_verified_by = GeneralParam::onGetVerifiedBy();
-            $id_supervised_by = GeneralParam::onGetSupervisedBy();
+            $id_assistant_veterinarian = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
+            $id_quality_assistant = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
+            $id_quality_manager = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
 
-            if(!$id_responsable) 
-                $errors[] = 'Configura un responsable en la tabla de firmas para continuar';
-            if(!$id_verified_by)
-                $errors[] = 'Configura a la persona verificadora en la tabla de firmas para continuar';
-            if(!$id_supervised_by)
-                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            if(!$id_assistant_veterinarian)
+                $errors[] = 'Configura un medico veterinario auxiliar en la tabla de firmas para continuar';
+            if(!$id_quality_assistant)
+                $errors[] = 'Configura un asistente de calidad en la tabla de firmas para continuar';
+            if(!$id_quality_manager)
+                $errors[] = 'Configura un jefe de calidad en la tabla de firmas para continuar';
             
             if(count($errors)) 
                 return $this->errorResponse('The record could not be saved', $errors, 409);
 
             $master = MasterTable::create(['date' => $request->date, 
-                'id_responsable' => $id_responsable,
-                'id_verified_by' => $id_verified_by,
-                'id_supervised_by' => $id_supervised_by,
-                'id_master_type' => 6,
+                'id_assistant_veterinarian' => $id_assistant_veterinarian,
+                'id_quality_assistant' => $id_quality_assistant,
+                'id_quality_manager' => $id_quality_manager,
+                'id_specie' => $request->id_specie,
+                'id_master_type' => 4,
             ]);
 
             $channelConditioning = ChannelConditioning::create(array_merge($request->validated(), ['id_master' => $master->id]));

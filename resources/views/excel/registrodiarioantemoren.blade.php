@@ -103,6 +103,16 @@
     <tr></tr>
     <tr>
         <td><b>RESPONSABLE</b></td>
-        <td colspan="2">{{ $general['responsable'] }}</td>
+        <td colspan="3" rowspan="3"></td>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td></td>
+        <td colspan="3">{{ $general['responsable'] }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="3"><b>MED. VETERINARIO AUXILIAR</b></td>
     </tr>
 </table>

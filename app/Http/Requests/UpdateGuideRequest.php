@@ -43,7 +43,7 @@ class UpdateGuideRequest extends FormRequest
     {
         return [
             'code.unique' => 'El código de guía debe ser único en el sistema',
-            'time_entry.date_format' => 'Digita una fecha de ingreso en formato 24h válida'
+            'time_entry.date_format' => 'Digita una hora de ingreso en formato 24h válida'
         ];
     }
 

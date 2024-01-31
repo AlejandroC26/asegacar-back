@@ -13,12 +13,27 @@ class DailyPayrollMaster extends Model
     
     protected $fillable = [
         'date',
-        'id_responsable',
-        'state'
+        'state',
+        'id_administrative_assistant',
+        'id_quality_assistant',
+        'id_operational_manager',
+        'id_assistant_veterinarian',
     ];
 
-    public function responsable() { 
-        return $this->belongsTo(Person::class, 'id_responsable'); 
+    public function administrative_assistant() { 
+        return $this->belongsTo(Person::class, 'id_administrative_assistant'); 
+    }
+
+    public function quality_assistant() { 
+        return $this->belongsTo(Person::class, 'id_quality_assistant'); 
+    }
+
+    public function operational_manager() { 
+        return $this->belongsTo(Person::class, 'id_operational_manager'); 
+    }
+
+    public function assistant_veterinarian() { 
+        return $this->belongsTo(Person::class, 'id_assistant_veterinarian'); 
     }
 
     public function incomeForms() {

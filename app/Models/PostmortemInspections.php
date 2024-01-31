@@ -74,19 +74,15 @@ class PostmortemInspections extends Model
         'insp_ganglions',
     ];
 
-    public static function onGetTranslation()
-    {
-        
-    }
-
     public static function onGetFieldsCause($id, $fields)
     {
         $inspection = PostmortemInspections::where('id_daily_payroll', $id)->first();
         return collect($fields)->map(function($field) use ($inspection) {
             $translations = trans('spanish');
             $cause = $inspection[$field['field']];
+
             $field['field'] = strtoupper($translations[$field['field']]);
-            $field['cause'] = $cause->name;
+            $field['cause'] = $cause->name ?? '';
             $field['sacrifice_date'] = $inspection->dailyPayroll->sacrifice_date;
             $field['id_daily_payroll'] = $inspection->id_daily_payroll;
             $field['code'] = $inspection->dailyPayroll->incomeForm->code;

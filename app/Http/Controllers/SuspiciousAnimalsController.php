@@ -68,7 +68,8 @@ class SuspiciousAnimalsController extends Controller
             $suspiciousAnimals = SuspiciousAnimals::find($id);
             $suspiciousAnimalsResource = SuspiciousAnimalsResource::make($suspiciousAnimals);
             $resultArray = json_decode(json_encode($suspiciousAnimalsResource), true);
-            return Excel::download(new SuspiciousAnimalsExport(collect($resultArray)), 'invoices.xlsx');
+            $config['signature'] = $suspiciousAnimals->owner->person->signature;
+            return Excel::download(new SuspiciousAnimalsExport(collect($resultArray), $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

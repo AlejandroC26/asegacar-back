@@ -30,5 +30,7 @@ class ChargeSeeder extends Seeder
         Charge::updateOrCreate(['name' => 'Auxiliar de calidad']);
         Charge::updateOrCreate(['name' => 'Auxiliar facturación']);
         Charge::updateOrCreate(['name' => 'Auxiliar administrativo']);
+        Charge::updateOrCreate(['name' => 'Jefe de calidad']);
+        Charge::updateOrCreate(['name' => 'Auxiliar administrativo 2']);
     }
 }

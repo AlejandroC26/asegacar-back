@@ -30,6 +30,6 @@ class AntemortemInspection extends Model
 
     public function veterinary()
     {
-        return $this->belongsTo(User::class, 'id_veterinary');
+        return $this->belongsTo(Person::class, 'id_veterinary');
     }
 }

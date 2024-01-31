@@ -36,7 +36,7 @@
     </tr>
     @endforeach
     <tr>
-        <td colspan="2">______________________________</td>
+        <td colspan="2">{{ $general['signature'] ? '' : '______________________________' }}</td>
     </tr>
     <tr>
         <td colspan="2"><strong>{{ $general['responsable'] }}</strong></td>

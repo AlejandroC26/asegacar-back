@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreGuideRequest extends FormRequest
+class UpdateParturientFemalesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,25 +26,23 @@ class StoreGuideRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'required|unique:guides',
-            'no_animals' => 'required|integer',
-            'date_entry' => 'required',
-            'time_entry' => 'required|date_format:H:i',
+            'date' => 'required',
+            'time' => 'required',
+            'id_supervisor' => 'required',
+            'id_responsable' => 'required',
+            'id_veterinary' => 'required',
             'id_owner' => 'required',
-            'id_buyer' => 'required',
-            'id_source' => 'required',
-            'id_destination' => 'required',
-            'establishment_name' => 'required',
-            'id_specie' => 'required',
-            'file_attached' => 'mimes:pdf',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'code.unique' => 'El código de guía debe ser único en el sistema',
-            'time_entry.date_format' => 'Digita una hora de ingreso en formato 24h válida'
+            'delivery_time' => 'required',
+            'iron' => 'required',
+            'corral_location' => 'required',
+            'id_location' => 'required',
+            'weight' => 'required',
+            'temperature' => 'required',
+            'heart_frequency' => 'required',
+            'respiratory_frequency' => 'required',
+            'findings' => 'nullable|string',
+            'final_definition_feto' => 'nullable|string',
+            'observations' => 'nullable|string',
         ];
     }
 

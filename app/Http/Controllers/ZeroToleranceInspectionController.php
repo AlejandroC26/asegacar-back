@@ -45,25 +45,26 @@ class ZeroToleranceInspectionController extends Controller
         try {
             $errors = [];
 
-            $id_responsable = GeneralParam::onGetResponsable();
-            $id_verified_by = GeneralParam::onGetVerifiedBy();
-            $id_supervised_by = GeneralParam::onGetSupervisedBy();
+            $id_assistant_veterinarian = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
+            $id_quality_assistant = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
+            $id_quality_manager = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
 
-            if(!$id_responsable) 
-                $errors[] = 'Configura un responsable en la tabla de firmas para continuar';
-            if(!$id_verified_by)
-                $errors[] = 'Configura a la persona verificadora en la tabla de firmas para continuar';
-            if(!$id_supervised_by)
-                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            if(!$id_assistant_veterinarian)
+                $errors[] = 'Configura un medico veterinario auxiliar en la tabla de firmas para continuar';
+            if(!$id_quality_assistant)
+                $errors[] = 'Configura un asistente de calidad en la tabla de firmas para continuar';
+            if(!$id_quality_manager)
+                $errors[] = 'Configura un jefe de calidad en la tabla de firmas para continuar';
             
             if(count($errors)) 
                 return $this->errorResponse('The record could not be saved', $errors, 409);
 
             $master = MasterTable::create(['date' => $request->date, 
-                'id_responsable' => $id_responsable,
-                'id_verified_by' => $id_verified_by,
-                'id_supervised_by' => $id_supervised_by,
-                'id_master_type' => 5,
+                'id_assistant_veterinarian' => $id_assistant_veterinarian,
+                'id_quality_assistant' => $id_quality_assistant,
+                'id_quality_manager' => $id_quality_manager,
+                'id_specie' => $request->id_specie,
+                'id_master_type' => 4,
             ]);
 
             $zeroToleranceInspection = ZeroToleranceInspection::create(array_merge($request->validated(), ['id_master' => $master->id]));
@@ -143,9 +144,9 @@ class ZeroToleranceInspectionController extends Controller
             }
 
             $general['date'] = FormatDateHelper::onGetTextDate($request->date);
-            $general['supervised_by'] = $zeroToleranceInspection[0]?->master->supervised_by->fullname;
-            $general['verified_by'] = $zeroToleranceInspection[0]?->master->verified_by->fullname;
-            $general['responsable'] = $zeroToleranceInspection[0]?->master->responsable->fullname;
+            $general['supervised_by'] = $zeroToleranceInspection[0]?->master->assistant_veterinarian;
+            $general['verified_by'] = $zeroToleranceInspection[0]?->master->quality_manager;
+            $general['responsable'] = $zeroToleranceInspection[0]?->master->quality_assistant->fullname;
 
             return Excel::download(new ZeroToleranceInspectionExport([
                 'zeroToleranceInspection' => $zeroToleranceInspection,

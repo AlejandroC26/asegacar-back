@@ -167,6 +167,10 @@ class DispatchGuideController extends Controller
             $data['codes'] = [];
             $data['inspections'] = [];
 
+            $user = $dispatchGuide->dispatchGuideAnimals[0]->dailyPayroll->incomeForm->master->operational_manager ?? null;
+            $config['responsable'] = $user?->fullname;
+            $config['signature'] = $user?->signature;
+            $config['phone'] = $user?->phone;
 
             foreach ($dispatchGuide->dispatchGuideAnimals as $dispatchGuideAnimal) {
                 $dailyPayroll = $dispatchGuideAnimal->dailyPayroll;

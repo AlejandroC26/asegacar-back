@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\ParturientFemalesExport;
 use App\Http\Requests\StoreParturientFemalesRequest;
+use App\Http\Requests\UpdateParturientFemalesRequest;
 use App\Http\Resources\ParturiantFemalesResource;
 use App\Models\ParturientFemales;
 use App\Traits\ApiResponse;
@@ -41,7 +42,7 @@ class ParturientFemalesController extends Controller
         }
     }
 
-    public function update (StoreParturientFemalesRequest $request, ParturientFemales $parturientFemale)
+    public function update (UpdateParturientFemalesRequest $request, ParturientFemales $parturientFemale)
     {
         try {   
             $parturientFemale->update($request->validated());
@@ -67,7 +68,8 @@ class ParturientFemalesController extends Controller
             $parturientFemale = ParturientFemales::find($id);
             $parturientFemaleResource = ParturiantFemalesResource::make($parturientFemale);
             $resultArray = json_decode(json_encode($parturientFemaleResource), true);
-            return Excel::download(new ParturientFemalesExport(collect($resultArray)), 'invoices.xlsx');
+            $config['signature'] = $parturientFemale->owner->person->signature;
+            return Excel::download(new ParturientFemalesExport(collect($resultArray), $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

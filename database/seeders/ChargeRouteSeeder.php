@@ -20,6 +20,18 @@ class ChargeRouteSeeder extends Seeder
     {
         $allRoutes = AppRoutes::all();
         $aChargeRoutes = [
+            // AUX ADMINISTRATIVO 2
+            10 => [
+                18, 23, 24
+            ],
+            // AUXILIAR FACTURACIÓN
+            7 => [
+                16
+            ],
+            // AUXILIAR CALIDAD
+            6 => [
+                19, 20, 22, 23
+            ],
             // AUX ADMINISTRATIVO
             8 => [
                 4, 8, 9, 10, 24
@@ -36,14 +48,6 @@ class ChargeRouteSeeder extends Seeder
             4 => [
                 5, 9, 16, 17
             ],
-            // AUXILIAR CALIDAD
-            6 => [
-                19, 20, 22, 23
-            ],
-            // AUXILIAR FACTURACIÓN
-            7 => [
-                16
-            ]
         ];
 
         Schema::disableForeignKeyConstraints();

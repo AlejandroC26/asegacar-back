@@ -12,11 +12,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
-use PhpOffice\PhpSpreadsheet\Style\Color;
-use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class AntemortemDailyRecordExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $total;
@@ -40,16 +37,11 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
             "general" => $this->general
         ]);
     }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
-    }
     
     public function drawings()
     {
+        $drawings = [];
+
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -59,7 +51,21 @@ class AntemortemDailyRecordExport implements FromView, WithColumnFormatting, Wit
         $drawing->setOffsetX(50);
         $drawing->setCoordinates('A1');
 
-        return $drawing;
+        $drawings[] = $drawing;
+
+        $sData = $this->general['signature'];
+        $lastRow = 9 + $this->total;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(58);
+            $signature->setOffsetX(5);
+            $signature->setCoordinates('B'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)

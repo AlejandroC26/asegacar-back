@@ -36,7 +36,7 @@ class AntemoretemInspectionController extends Controller
     {
         try {
             DB::beginTransaction();
-            $id_veterinary = GeneralParam::onGetVeterinary();
+            $id_veterinary = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
             foreach ($request->validated()['entries'] as $entrie) {
                 AntemortemInspection::create(array_merge($entrie, [
                     'id_daily_payroll' => $entrie['id'],
@@ -112,9 +112,10 @@ class AntemoretemInspectionController extends Controller
                 $count['females'] += $gender == 2;
             }
 
-            $veterinary = User::find($antemortemInspection[0]->id_veterinary);
+            $veterinary = $antemortemInspection[0]?->veterinary;
             $request->request->add([
-                'veterinary' => $veterinary->person->fullname, 
+                'veterinary' => $veterinary->fullname,
+                'signature' => $veterinary->signature,
                 'count' => $count,
                 'total' => $antemortemInspection->count()
             ]);

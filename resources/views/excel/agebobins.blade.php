@@ -122,6 +122,12 @@
     <tr></tr>
     <tr>
         <td colspan="2"><b>RESPONSABLE</b></td>
+        <td colspan="2" rowspan="3"></td>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td colspan="2"></td>
         <td colspan="2">{{ $config['responsable'] }}</td>
     </tr>
 </table>

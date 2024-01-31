@@ -94,9 +94,12 @@
         <td colspan="18"><strong>OBSERVACIONES:</strong></td>
     </tr>
     <tr><td></td></tr>
+    <tr></tr>
+    <tr></tr>
+    <tr></tr>
     <tr>
-        <td colspan="3">VERIFICADO POR: {{ $general['verified_by'] }}</td>
+        <td colspan="3">VERIFICADO POR: {{ $general['verified_by']?->fullname }}</td>
         <td colspan="1"></td>
-        <td colspan="3">SUPERVISADO POR: {{ $general['supervised_by'] }}</td>
+        <td colspan="3">SUPERVISADO POR: {{ $general['supervised_by']?->fullname }}</td>
     </tr>
 </table>

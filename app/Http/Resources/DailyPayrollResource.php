@@ -19,7 +19,7 @@ class DailyPayrollResource extends JsonResource
         $guide = $this->incomeForms[0]->guide;
         return [
             'id' => $this->id,
-            "responsable" => $this->responsable?->fullname,
+            "responsable" => $this->administrative_assistant?->fullname,
             "date" => date_format(date_create($this->date), 'Y-m-d'),
             "guide" => $guide->code,
             "consecutive" => $guide->consecutive,

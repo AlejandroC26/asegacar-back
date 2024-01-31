@@ -9,25 +9,23 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Carbon\Carbon;
 
 class DailyMatrixExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $benefit_date;
+    private $config;
 
-
-    public function __construct($data, $benefit_date)
+    public function __construct($data, $benefit_date, $config)
     {
         $this->data = $data;
         $this->benefit_date = $benefit_date;
+        $this->config = $config;
     }
-
 
     public function view(): View
     {
@@ -39,12 +37,17 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
         return view('excel.dailymatrix', [
             "data" => $this->data,
             "issue_date" => $issue_date,
-            "benefit_date" => $benefit_date
+            "benefit_date" => $benefit_date,
+            "config" => $this->config
         ]);
     }
     
     public function drawings()
     {
+        $sData = $this->config['signature'];
+        $lastRow = 9 + count($this->data);
+
+        $drawings = [];
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -52,8 +55,19 @@ class DailyMatrixExport implements FromView, WithStyles, WithDrawings
         $drawing->setHeight(110);
         $drawing->setOffsetY(5);
         $drawing->setCoordinates('B1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(58);
+            $signature->setOffsetX(5);
+            $signature->setCoordinates('B'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)

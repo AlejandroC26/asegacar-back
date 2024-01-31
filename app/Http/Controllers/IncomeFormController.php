@@ -45,13 +45,28 @@ class IncomeFormController extends Controller
         try {       
             DB::beginTransaction();
 
-            $responsable_id = GeneralParam::onGetResponsable();
-            if(!$responsable_id) {
-                return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
-            }
+            $id_administrative_assistant = GeneralParam::onGetGeneralParamByName('id_administrative_assistant');
+            $id_quality_assistant = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
+            $id_operational_manager = GeneralParam::onGetGeneralParamByName('id_operational_manager');
+            $id_assistant_veterinarian = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
+
+            if(!$id_administrative_assistant) 
+                return $this->errorResponse('The record could not be saved', ['Configura un auxiliar administrativo en la tabla de firmas para continuar'], 409);
+
+            if(!$id_quality_assistant) 
+                return $this->errorResponse('The record could not be saved', ['Configura un auxiliar de calidad en la tabla de firmas para continuar'], 409);
+
+            if(!$id_operational_manager) 
+                return $this->errorResponse('The record could not be saved', ['Configura un jefe operativo en la tabla de firmas para continuar'], 409);
+
+            if(!$id_assistant_veterinarian) 
+                return $this->errorResponse('The record could not be saved', ['Configura un médico veterinario auxiliar en la tabla de firmas para continuar'], 409);
 
             $oMasterTable = DailyPayrollMaster::create(array_merge($request->except(['entries']), [
-                'id_responsable' => $responsable_id
+                'id_administrative_assistant' => $id_administrative_assistant,
+                'id_quality_assistant' => $id_quality_assistant,
+                'id_operational_manager' => $id_operational_manager,
+                'id_assistant_veterinarian' => $id_assistant_veterinarian,
             ]));
 
             $oGuide = Guide::find($request->id_guide);

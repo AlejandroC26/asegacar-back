@@ -59,6 +59,11 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
     
     public function drawings()
     {
+        $drawings = [];
+
+        $sData = $this->config['signature'];
+        $lastRow = 29 + count($this->data);
+
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -67,17 +72,30 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(5);
         $drawing->setCoordinates('A1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(44);
+            $signature->setCoordinates('O'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)
     {
+        $lastRow = $sheet->getHighestRow();
+        // CONFIG
         $sheet->getStyle('A4:Q13')->getAlignment()->setWrapText(true);
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(22);
         $sheet->getRowDimension(4)->setRowHeight(22);
         $sheet->getRowDimension(23)->setRowHeight(42);
+        $sheet->getRowDimension($lastRow-1)->setRowHeight(32);
         //COL
         $sheet->getColumnDimension('A')->setWidth(3);
         $sheet->getColumnDimension('B')->setWidth(3);
@@ -97,7 +115,6 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('P')->setWidth(6); 
         $sheet->getColumnDimension('Q')->setWidth(6); 
 
-        $lastRow = $sheet->getHighestRow();
         //BORDES
         $sheet->getStyle("A1:Q$lastRow")->applyFromArray([
             'borders' => [

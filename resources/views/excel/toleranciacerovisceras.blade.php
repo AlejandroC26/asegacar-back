@@ -92,11 +92,15 @@
             <td colspan="3">M: (materia)</td>
             <td colspan="3">EXP: (expendio)</td>
         </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
         <tr>
             <td></td>
-            <td colspan="5"><b>ELABORO: {{ $general['elaborated_by'] }}</b></td>
+            <td colspan="5"><b>ELABORO: {{ $general['elaborated_by']?->fullname }}</b></td>
             <td colspan="2"></td>
-            <td colspan="5"><b>VERIFICÓ: {{ $general['verified_by'] }}</b></td>
+            <td colspan="5"><b>VERIFICÓ: {{ $general['verified_by']?->fullname }}</b></td>
         </tr>
     </table>
 </body>

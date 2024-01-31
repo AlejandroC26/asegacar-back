@@ -22,7 +22,7 @@ class FormBenefitOrderResource extends JsonResource
             "outlet" => $this->dailyPayroll->outlet->code,
             "code" => $this->dailyPayroll->incomeForm->code,
             
-            "responsable" => $this->master->responsable->fullname,
+            "responsable" => $this->master->operational_manager?->fullname,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
         ];
     }

@@ -122,7 +122,10 @@ class AgeController extends Controller
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
             }
             
-            $config['responsable'] = $aRecords[0]?->master?->responsable?->fullname;
+            $user = $aRecords[0]?->master?->administrative_assistant;
+
+            $config['responsable'] = $user?->fullname;
+            $config['signature'] = $user?->signature;
 
             $aResults = [];
             $oTotals = [

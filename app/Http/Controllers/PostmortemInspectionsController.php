@@ -11,7 +11,6 @@ use App\Models\Causes;
 use App\Models\GeneralParam;
 use App\Models\PostmortemInspections;
 use App\Traits\ApiResponse;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -42,9 +41,9 @@ class PostmortemInspectionsController extends Controller
     public function store(StorePostmoremInspectionsRequest $request)
     {
         try {
-            $responsable_id = GeneralParam::onGetResponsable();
+            $responsable_id = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
             if(!$responsable_id) {
-                return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
+                return $this->errorResponse('The record could not be saved', ['Configura un medico veterinario auxiliar en la tabla de firmas para continuar'], 409);
             }
             $inspections = PostmortemInspections::create(array_merge($request->validated(), ['id_responsable' => $responsable_id]));
             return $this->successResponse($inspections, 'Registro realizado exitosamente');

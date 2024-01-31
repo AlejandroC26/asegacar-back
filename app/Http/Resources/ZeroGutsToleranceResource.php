@@ -20,8 +20,8 @@ class ZeroGutsToleranceResource extends JsonResource
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
             "id_specie" => $this->master->id_specie,
             "species" => $this->master->specie?->name,
-            "elaborated_by" => $this->master->elaborated_by?->fullname,
-            "verified_by" => $this->master->verified_by?->fullname,
+            "elaborated_by" => $this->master->quality_assistant?->fullname,
+            "verified_by" => $this->master->assistant_veterinarian?->fullname,
 
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,

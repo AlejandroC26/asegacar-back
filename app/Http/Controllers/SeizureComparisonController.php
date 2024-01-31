@@ -44,18 +44,18 @@ class SeizureComparisonController extends Controller
 
             $errors = [];
 
-            $id_responsable = GeneralParam::onGetResponsable();
-            $id_supervised_by = GeneralParam::onGetSupervisedBy();
+            $id_quality_assistant = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
+            $id_operational_manager = GeneralParam::onGetGeneralParamByName('id_operational_manager');
 
-            if(!$id_responsable) 
-                $errors[] = 'Configura un responsable en la tabla de firmas para continuar';
-            if(!$id_supervised_by)
-                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            if(!$id_quality_assistant) 
+                $errors[] = 'Configura un auxiliar administrativo en la tabla de firmas para continuar';
+            if(!$id_operational_manager)
+                $errors[] = 'Configura un jefe operativo en la tabla de firmas para continuar';
             
             if(count($errors)) 
                 return $this->errorResponse('The record could not be saved', $errors, 409);
 
-            $seizureComparison = SeizureComparison::create(array_merge($request->validated(), ['id_responsable' => $id_responsable, 'id_supervised_by' => $id_supervised_by]));
+            $seizureComparison = SeizureComparison::create(array_merge($request->validated(), ['id_responsable' => $id_quality_assistant, 'id_supervised_by' => $id_operational_manager]));
             return $this->successResponse($seizureComparison, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be registered', $exception->getMessage(), 422);
@@ -116,9 +116,7 @@ class SeizureComparisonController extends Controller
     public function download(Request $request)
     {
         try {
-            $seizureComparison = SeizureComparison::whereHas('master', function (Builder $query) use ($request) {
-                $query->where('date', $request->date);
-            })->get();
+            $seizureComparison = SeizureComparison::where('date', $request->date)->get();
 
             $seizureComparison = SeizureComparisonResource::collection($seizureComparison);
 
@@ -127,10 +125,8 @@ class SeizureComparisonController extends Controller
             }
 
             $general['date'] = FormatDateHelper::onGetTextDate($request->date);
-            $general['supervised_by'] = $seizureComparison[0]?->master->supervised_by->fullname;
-            $general['responsable'] = $seizureComparison[0]?->master->responsable->fullname;
-
-            return $seizureComparison;
+            $general['supervised_by'] = $seizureComparison[0]?->supervised_by;
+            $general['responsable'] = $seizureComparison[0]?->responsable;
 
             return Excel::download(new SeizureComparisonExport($seizureComparison, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

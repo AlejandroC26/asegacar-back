@@ -39,6 +39,11 @@ class AgeBobinsExport implements FromView, WithStyles, WithDrawings
     
     public function drawings()
     {
+        $drawings = [];
+
+        $sData = $this->config['signature'];
+        $lastRow = 12 + (count($this->data) * 2);
+
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -47,8 +52,19 @@ class AgeBobinsExport implements FromView, WithStyles, WithDrawings
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(75);
         $drawing->setCoordinates('A1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(58);
+            $signature->setOffsetX(5);
+            $signature->setCoordinates('C'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)

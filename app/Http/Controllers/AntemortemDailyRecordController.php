@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\AntemortemDailyRecordExport;
 use App\Http\Requests\AntemortemDailyRecordRequestFormatRequest;
-use App\Http\Requests\StoreAntemortemDailyRecordRequest;
 use App\Http\Requests\UpdateAntemortemDailyRecordRequest;
+use App\Http\Resources\AntemortemDailyRecordPendingResource;
 use App\Http\Resources\AntemortemDailyRecordResource;
 use App\Models\DailyPayroll;
 use App\Models\IncomeForm;
@@ -21,7 +21,7 @@ class AntemortemDailyRecordController extends Controller
     {
         try {
             $records = IncomeForm::whereDoesntHave('dailyPayroll')->get();
-            return $this->successResponse(AntemortemDailyRecordResource::collection($records));
+            return $this->successResponse(AntemortemDailyRecordPendingResource::collection($records));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
@@ -31,7 +31,7 @@ class AntemortemDailyRecordController extends Controller
     {
         try {
             $record = IncomeForm::find($id);
-            return $this->successResponse(AntemortemDailyRecordResource::make($record), 'Listado exitosamente');
+            return $this->successResponse(AntemortemDailyRecordPendingResource::make($record), 'Listado exitosamente');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be updated', $exception->getMessage(), 422);
         }
@@ -67,11 +67,8 @@ class AntemortemDailyRecordController extends Controller
             ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
             ->join('daily_payroll_master', 'daily_payroll_master.id', 'income_forms.id_dp_master')
             ->where('sacrifice_date', $request->sacrifice_date)->groupBy('id_guide')->get();
-
-            foreach ($guides as $guide) {
-				$arrayGuides[] = $guide->id;
-			}
-    
+            
+            $arrayGuides = $guides->pluck('id_guide')->unique();
             $dailyrecords = DailyPayroll::select('daily_payrolls.*', 'id_guide')
                 ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
                 ->join('daily_payroll_master', 'daily_payroll_master.id', 'income_forms.id_dp_master')
@@ -118,8 +115,10 @@ class AntemortemDailyRecordController extends Controller
                 }
             }
 
+            $user = $dailyrecords[0]->incomeForm?->master?->assistant_veterinarian;
             $general['date'] = $request->sacrifice_date;
-            $general['responsable'] = $dailyrecords[0]?->master?->responsable?->fullname;
+            $general['responsable'] = $user?->fullname;
+            $general['signature'] = $user?->signature;
 
             return Excel::download(new AntemortemDailyRecordExport(array_values($aData), $nTotal, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

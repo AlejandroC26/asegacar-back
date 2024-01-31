@@ -12,9 +12,9 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class DailyPayrollExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class DailyPayrollExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $males;
@@ -40,25 +40,33 @@ class DailyPayrollExport implements FromView, WithColumnFormatting, WithStyles, 
         ]);
     }
 
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
-    }
-    
     public function drawings()
     {
-        $drawing = new Drawing();
-        $drawing->setName('Logo');
-        $drawing->setDescription('This is my logo');
-        $drawing->setPath(public_path('/assets/logo.png'));
-        $drawing->setHeight(110);
-        $drawing->setOffsetY(5);
-        $drawing->setOffsetX(5);
-        $drawing->setCoordinates('A1');
+        $drawings = [];
 
-        return $drawing;
+        $sData = $this->general['signature'];
+        $lastRow = 7 + count($this->data);
+
+        $logo = new Drawing();
+        $logo->setName('Logo');
+        $logo->setPath(public_path('/assets/logo.png'));
+        $logo->setHeight(110);
+        $logo->setOffsetY(5);
+        $logo->setOffsetX(5);
+        $logo->setCoordinates('A1');
+        $drawings[] = $logo;
+        
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(58);
+            $signature->setOffsetX(5);
+            $signature->setCoordinates('B'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)

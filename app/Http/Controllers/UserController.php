@@ -96,6 +96,33 @@ class UserController extends Controller
         }
     }
 
+    public function sltUsersByCharge($id)
+    {
+        try {
+            $users = User::select('persons.id', 'persons.fullname as name')
+                ->where('id_charge', $id)
+                ->join('persons', 'persons.id', 'users.id_person')
+                ->groupBy('persons.id')
+                ->get();
+            return response()->json($users);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
+    public function sltUsersIdByCharge($id)
+    {
+        try {
+            $users = User::select('users.id', 'persons.fullname as name')
+                ->where('id_charge', $id)
+                ->join('persons', 'persons.id', 'users.id_person')
+                ->get();
+            return response()->json($users);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse('The record could not be deleted', $exception->getMessage(), 422);
+        }
+    }
+
     public function sltCharges()
     {
         try {

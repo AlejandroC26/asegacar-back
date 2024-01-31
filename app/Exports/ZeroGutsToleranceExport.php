@@ -12,9 +12,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class ZeroGutsToleranceExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
     private $general;
@@ -33,16 +32,10 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
             "general" => $this->general
         ]);
     }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
-    }
     
     public function drawings()
     {
+        $drawings = [];
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -51,8 +44,31 @@ class ZeroGutsToleranceExport implements FromView, WithColumnFormatting, WithSty
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(5);
         $drawing->setCoordinates('A1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        $elaborated = $this->general['elaborated_by'];
+        $verified = $this->general['verified_by'];
+        $lastRow = 8 + count($this->data);
+
+        if($elaborated?->signature) {
+            $signature_elaborated = new Drawing();
+            $signature_elaborated->setName('Signature');
+            $signature_elaborated->setPath(storage_path('app/public/signatures/'.$elaborated->signature));
+            $signature_elaborated->setHeight(52);
+            $signature_elaborated->setCoordinates('B'.$lastRow);
+            $drawings[] = $signature_elaborated;
+        }
+
+        if($verified?->signature) {
+            $signature_verified = new Drawing();
+            $signature_verified->setName('Signature');
+            $signature_verified->setPath(storage_path('app/public/signatures/'.$verified->signature));
+            $signature_verified->setHeight(52);
+            $signature_verified->setCoordinates('I'.$lastRow);
+            $drawings[] = $signature_verified;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)

@@ -31,5 +31,10 @@ class DatabaseSeeder extends Seeder
         $this->call(MasterTypeSeeder::class);
         $this->call(CausesSeeder::class);
         $this->call(SpecieSeeder::class);
+        // ROUTE AND PERMISSIONS
+        $this->call(AppRouteCategorieSeeder::class);
+        $this->call(AppRouteSeeder::class);
+        $this->call(ChargeCategorieSeeder::class);
+        $this->call(ChargeRouteSeeder::class);
     }
 }

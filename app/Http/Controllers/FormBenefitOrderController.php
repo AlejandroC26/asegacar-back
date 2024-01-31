@@ -45,11 +45,11 @@ class FormBenefitOrderController extends Controller
     {
         try {
             DB::beginTransaction();
-            $responsable_id = GeneralParam::onGetResponsable();
-            if(!$responsable_id) {
-                return $this->errorResponse('The record could not be saved', ['Configura un responsable en la tabla de firmas para continuar'], 409);
-            }
-            $master = MasterTable::create(['date' => $request->date, 'id_responsable' => $responsable_id, 'id_master_type' => 2]);
+            $id_operational_manager = GeneralParam::onGetGeneralParamByName('id_operational_manager');
+            if(!$id_operational_manager) 
+                return $this->errorResponse('The record could not be saved', ['Configura un jefe operativo en la tabla de firmas para continuar'], 409);
+            
+            $master = MasterTable::create(['date' => $request->date, 'id_operational_manager' => $id_operational_manager, 'id_master_type' => 2]);
             $benefitOrder = FormBenefitOrder::create(array_merge($request->only(['id_daily_payroll']), [
                 'id_master' => $master->id
             ]));
@@ -133,9 +133,10 @@ class FormBenefitOrderController extends Controller
             }
 
             $general['date'] = FormatDateHelper::onGetTextDate($request->date);
-            $general['responsable'] = $benefitOrder[0]?->master?->responsable?->fullname;
+            $general['responsable'] = $benefitOrder[0]?->master?->operational_manager?->fullname;
+            $general['signature'] = $benefitOrder[0]?->master?->operational_manager?->signature;
 
-            return Excel::download(new BenefitOrderExport($benefitOrder, '', '', $general), 'invoices.xlsx');
+            return Excel::download(new BenefitOrderExport($benefitOrder, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

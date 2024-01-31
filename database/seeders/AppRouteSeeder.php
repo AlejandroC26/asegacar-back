@@ -77,12 +77,6 @@ class AppRouteSeeder extends Seeder
         ]);
 
         AppRoutes::updateOrCreate([
-            'label' => 'Hallazgos / Antemortem',
-            'route' => 'inspeccionantemortemsospechosos',
-            'id_app_route_categories' => 4
-        ]);
-
-        AppRoutes::updateOrCreate([
             'label' => 'Registro Hembras Paridas',
             'route' => 'registrohembrasparidas',
             'id_app_route_categories' => 4

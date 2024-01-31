@@ -64,12 +64,16 @@
     <tr>
     </tr>
     <tr>
-        <td></td>
         <td><b>RESPONSABLE</b></td>
+        <td colspan="3" rowspan="3"></td>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td></td>
         <td colspan="2">{{ $general['responsable'] ?? '' }}</td>
     </tr>
     <tr>
-        <td></td>
         <td></td>
         <td colspan="2"><b>AUX. ADMINISTRATIVO</b></td>
     </tr>

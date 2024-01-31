@@ -92,4 +92,19 @@
         <td colspan="4"><b>TOTAL BOVINOS EN RECEPCION</b></td>
         <td colspan="2"> {{ $total_males + $total_females }} </td>
     </tr>
+    <tr></tr>
+    <tr>
+        <td><b>RESPONSABLE:</b></td>
+        <td colspan="2" rowspan="3"></td>
+    </tr>
+    <tr></tr>
+    <tr></tr>
+    <tr>
+        <td></td>
+        <td colspan="2">{{ $config['responsable'] }}</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td colspan="2"><b>AUX.ADMINISTRATIVO</b></td>
+    </tr>
 </table>

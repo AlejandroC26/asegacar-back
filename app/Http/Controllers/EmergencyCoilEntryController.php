@@ -67,7 +67,8 @@ class EmergencyCoilEntryController extends Controller
             $emergencyCoilEntry = EmergencyCoilEntry::find($id);
             $emergencyCoilEntryResource = EmergencyCoilEntryResource::make($emergencyCoilEntry);
             $resultArray = json_decode(json_encode($emergencyCoilEntryResource), true);
-            return Excel::download(new EmergencyCoilEntryExport(collect($resultArray)), 'invoices.xlsx');
+            $config['signature'] = $emergencyCoilEntry->owner->person->signature;
+            return Excel::download(new EmergencyCoilEntryExport(collect($resultArray), $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }

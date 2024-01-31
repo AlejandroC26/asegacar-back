@@ -26,11 +26,11 @@ class StoreGeneralParamsRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_responsable' => 'nullable|integer',
-            'id_veterinary' => 'nullable|integer',
-            'id_verified_by' => 'nullable|integer',
-            'id_supervised_by' => 'nullable|integer',
-            'id_elaborated_by' => 'nullable|integer',
+            'id_administrative_assistant' => 'nullable|integer',
+            'id_quality_assistant' => 'nullable|integer',
+            'id_operational_manager' => 'nullable|integer',
+            'id_assistant_veterinarian' => 'nullable|integer',
+            'id_quality_manager' => 'nullable|integer',
         ];
     }
 

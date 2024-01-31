@@ -18,9 +18,8 @@ class ZeroToleranceInspectionResource extends JsonResource
             'id' => $this->id,
             'id_master' => $this->id_master,
             "date" => date_format(date_create($this->master->date), 'Y-m-d'),
-            "supervised_by" => $this->master->supervised_by?->fullname,
-            "verified_by" => $this->master->verified_by?->fullname,
-            "responsable" => $this->master->responsable?->fullname,
+            "supervised_by" => $this->master->quality_assistant?->fullname,
+            "verified_by" => $this->master->assistant_veterinarian?->fullname,
 
             'id_daily_payroll' => $this->id_daily_payroll,
             "id_outlet" => $this->dailyPayroll->outlet->id,

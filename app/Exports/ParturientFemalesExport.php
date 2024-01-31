@@ -10,34 +10,33 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class ParturientFemalesExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class ParturientFemalesExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
+    private $config;
 
-    public function __construct($data)
+    public function __construct($data, $config)
     {
         $this->data = $data;
+        $this->config = $config;
     }
 
 
     public function view(): View
     {
         return view('excel.registrohembrasparidas', [
-            "data" => $this->data
+            "data" => $this->data,
+            "config" => $this->config
         ]);
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
     }
     
     public function drawings()
     {
+        $drawings = [];
+
+        $sData = $this->config['signature'];
+
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -46,8 +45,18 @@ class ParturientFemalesExport implements FromView, WithColumnFormatting, WithSty
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(5);
         $drawing->setCoordinates('B1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(44);
+            $signature->setCoordinates('B9');
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)
@@ -56,12 +65,14 @@ class ParturientFemalesExport implements FromView, WithColumnFormatting, WithSty
         // ROW
         $sheet->getRowDimension(1)->setRowHeight(70);
         $sheet->getRowDimension(6)->setRowHeight(30);
+        $sheet->getRowDimension(9)->setRowHeight(32);
+        $sheet->getRowDimension(21)->setRowHeight(30);
         //COL
         $sheet->getColumnDimension('A')->setWidth(13);
-        $sheet->getColumnDimension('B')->setWidth(15);
+        $sheet->getColumnDimension('B')->setWidth(19);
         $sheet->getColumnDimension('C')->setWidth(14);
         $sheet->getColumnDimension('D')->setWidth(11);
-        $sheet->getColumnDimension('E')->setWidth(11);
+        $sheet->getColumnDimension('E')->setWidth(17);
         $sheet->getColumnDimension('F')->setWidth(11);
         $sheet->getColumnDimension('G')->setWidth(11); 
         $sheet->getColumnDimension('H')->setWidth(11); 

@@ -12,6 +12,7 @@ use App\Models\ZeroGutsTolerance;
 use App\Traits\ApiResponse;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ZeroGutsToleranceController extends Controller
@@ -40,26 +41,31 @@ class ZeroGutsToleranceController extends Controller
     public function store(StoreZeroGutsToleranceRequest $request)
     {
         try {
+            DB::beginTransaction();
             $errors = [];
 
-            $id_verified_by = GeneralParam::onGetVerifiedBy();
-            $id_elaborated_by = GeneralParam::onGetElaboratedBy();
+            $id_assistant_veterinarian = GeneralParam::onGetGeneralParamByName('id_assistant_veterinarian');
+            $id_quality_assistant = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
+            $id_quality_manager = GeneralParam::onGetGeneralParamByName('id_quality_assistant');
 
-            if(!$id_verified_by)
-                $errors[] = 'Configura a la persona verificadora en la tabla de firmas para continuar';
-            if(!$id_elaborated_by)
-                $errors[] = 'Configura a la persona que elabora en la tabla de firmas para continuar';
+            if(!$id_assistant_veterinarian)
+                $errors[] = 'Configura un medico veterinario auxiliar en la tabla de firmas para continuar';
+            if(!$id_quality_assistant)
+                $errors[] = 'Configura un asistente de calidad en la tabla de firmas para continuar';
+            if(!$id_quality_manager)
+                $errors[] = 'Configura un jefe de calidad en la tabla de firmas para continuar';
             
             if(count($errors)) 
                 return $this->errorResponse('The record could not be saved', $errors, 409);
             
             $master = MasterTable::create(['date' => $request->date, 
-                'id_verified_by' => $id_verified_by,
-                'id_elaborated_by' => $id_elaborated_by,
+                'id_assistant_veterinarian' => $id_assistant_veterinarian,
+                'id_quality_assistant' => $id_quality_assistant,
+                'id_quality_manager' => $id_quality_manager,
                 'id_specie' => $request->id_specie,
                 'id_master_type' => 4,
             ]);
-
+            DB::commit();
             $inspections = ZeroGutsTolerance::create(array_merge($request->validated(), ['id_master' => $master->id]));
             return $this->successResponse($inspections, 'Registro realizado exitosamente');
         } catch (\Throwable $exception) {
@@ -135,8 +141,9 @@ class ZeroGutsToleranceController extends Controller
 
             $general['date'] = FormatDateHelper::onGetTextDate($request->date);
             $general['specie'] = $zeroGutsTolerance[0]->master->specie?->name;
-            $general['elaborated_by'] = $zeroGutsTolerance[0]?->master->elaborated_by->fullname;
-            $general['verified_by'] = $zeroGutsTolerance[0]?->master->verified_by->fullname;
+
+            $general['elaborated_by'] = $zeroGutsTolerance[0]?->master->quality_assistant;
+            $general['verified_by'] = $zeroGutsTolerance[0]?->master->assistant_veterinarian;
 
             return Excel::download(new ZeroGutsToleranceExport($zeroGutsTolerance, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {

@@ -9,13 +9,10 @@ use App\Http\Resources\DailyPayrollResource;
 use App\Http\Resources\ShowDailyPayrollResource;
 use App\Models\DailyPayroll;
 use App\Models\DailyPayrollMaster;
-use App\Models\GeneralParam;
-use App\Models\Guide;
 use App\Models\IncomeForm;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\Builder;
@@ -172,31 +169,31 @@ class DailyPayrollController extends Controller
             $total_males = 0;
             $total_females = 0;
 
-            $dailyPayroll = DailyPayroll::with('outlet', 'incomeForm.master.responsable')->select(
-                    'daily_payrolls.id', 
-                    'id_dp_master', 
-                    'id_outlet',
-                    'id_income_form',
-                    DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
-                    DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
-                    DB::raw("GROUP_CONCAT(distinct(income_forms.code) SEPARATOR ', ') as codes"),
-                    DB::raw("GROUP_CONCAT(distinct(guides.code) SEPARATOR ', ') as guides"),
-                    DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
-                    DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
-                    DB::raw("GROUP_CONCAT(distinct(daily_payrolls.special_order) SEPARATOR ', ') AS special_order"),
-                    'daily_payrolls.created_at'
-                )
-                ->leftJoin('outlets', 'outlets.id', 'id_outlet')
-                ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
-                ->leftJoin('guides', 'guides.id', 'id_guide')
-                ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
-                ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
-                ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
-                ->where('daily_payrolls.sacrifice_date', $request->date)
-                ->whereNotNull('id_outlet')
-                ->groupBy('id_outlet')
-                ->orderBy(DB::raw('CAST(outlets.code as SIGNED)'), 'ASC')
-                ->get();
+            $dailyPayroll = DailyPayroll::with('outlet', 'incomeForm.master')->select(
+                'daily_payrolls.id', 
+                'id_dp_master', 
+                'id_outlet',
+                'id_income_form',
+                DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
+                DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
+                DB::raw("GROUP_CONCAT(distinct(income_forms.code) SEPARATOR ', ') as codes"),
+                DB::raw("GROUP_CONCAT(distinct(guides.code) SEPARATOR ', ') as guides"),
+                DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
+                DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
+                DB::raw("GROUP_CONCAT(distinct(daily_payrolls.special_order) SEPARATOR ', ') AS special_order"),
+                'daily_payrolls.created_at'
+            )
+            ->leftJoin('outlets', 'outlets.id', 'id_outlet')
+            ->leftJoin('income_forms', 'income_forms.id', 'id_income_form')
+            ->leftJoin('guides', 'guides.id', 'id_guide')
+            ->leftJoin('colors', 'colors.id', '=', 'income_forms.id_color')
+            ->leftJoin('genders', 'genders.id', '=', 'income_forms.id_gender')
+            ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
+            ->where('daily_payrolls.sacrifice_date', $request->date)
+            ->whereNotNull('id_outlet')
+            ->groupBy('id_outlet')
+            ->orderBy(DB::raw('CAST(outlets.code as SIGNED)'), 'ASC')
+            ->get();
 
             if(!count($dailyPayroll)) {
                 return $this->errorResponse('Not found', ['No se encontraron registros en esta fecha'], 404);
@@ -209,13 +206,15 @@ class DailyPayrollController extends Controller
                 $total_females += intval($element->total_females);
             }
             
-            $general['date'] = $request->date;
-            $general['responsable'] = $dailyPayroll[0]?->incomeForm->master?->responsable?->fullname;
+            $user = $dailyPayroll[0]?->incomeForm->master?->administrative_assistant;
 
-            // return $dailyPayroll;
+            $general['date'] = $request->date;
+            $general['responsable'] = $user->fullname;
+            $general['signature'] = $user->signature;
+            
             return Excel::download(new DailyPayrollExport($dailyPayroll, $total_males, $total_females, $general), 'invoices.xlsx');
         } catch (\Throwable $exception) {
-            return $this->errorResponse('The record could not be shoed', $exception->getMessage(), 422);
+            return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
         }
     }
 }

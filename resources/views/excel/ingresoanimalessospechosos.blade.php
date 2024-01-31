@@ -13,28 +13,33 @@
     <tr>
         <td colspan="3"><strong>CODIGO: PBA-PM-PB-BOV-FOR-06</strong></td>
         <td colspan="3"><strong>VERSIÓN: 1</strong></td>
-        <td colspan="3"><strong>FECHA DE EMISION: ENERO 2021</strong></td>
-        <td colspan="2"></td>
+        <td colspan="5"><strong>FECHA DE EMISION: ENERO 2021</strong></td>
     </tr>
     <tr>
         <td colspan="11"></td>
     </tr>
     <tr>
-        <td colspan="6"><strong>FECHA:</strong>&nbsp;{{ $data['date'] }}</td>
-        <td colspan="5"><strong>HORA:</strong>&nbsp;{{ $data['time'] }} </td>
+        <td><strong>FECHA:</strong></td>
+        <td colspan="5">{{ $data['date'] }}</td>
+        <td><strong>HORA:</strong></td>
+        <td colspan="4">{{ $data['time'] }} </td>
     </tr>
     <tr>
-        <td colspan="6"><strong>SUPERVISO:</strong>&nbsp;{{ $data['supervisor'] }}</td>
-        <td colspan="5"><strong>RESPONSABLE:</strong>&nbsp;{{ $data['responsable'] }}</td>
+        <td colspan="2"><strong>SUPERVISO:</strong></td>
+        <td colspan="4">{{ $data['supervisor'] }}</td>
+        <td colspan="2"><strong>RESPONSABLE:</strong></td>
+        <td colspan="3">{{ $data['responsable'] }}</td>
     </tr>
     <tr>
         <td colspan="11"></td>
     </tr>
     <tr>
-        <td colspan="11"><strong>MEDICO VETERINARIO RESPONSABLE: {{ $data['veterinary'] }}</strong></td>
+        <td colspan="3"><strong>MEDICO VETERINARIO RESPONSABLE:</strong></td>
+        <td colspan="10"> {{ $data['veterinary'] }}</td>
     </tr>
     <tr>
-        <td colspan="11"><strong>PROPIETARIO DEL ANIMAL: {{ $data['owner'] }}</strong></td>
+        <td colspan="3"><strong>PROPIETARIO DEL ANIMAL:</strong></td>
+        <td colspan="11"> {{ $data['owner'] }}</td>
     </tr>
     <tr>
         <td colspan="11"><strong>FIRMA: </strong></td>

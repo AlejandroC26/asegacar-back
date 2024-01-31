@@ -12,20 +12,15 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithDrawings;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class BenefitOrderExport implements FromView, WithColumnFormatting, WithStyles, WithDrawings
+class BenefitOrderExport implements FromView, WithStyles, WithDrawings
 {
     private $data;
-    private $males;
-    private $females;
     private $general;
 
-    public function __construct($data, $males, $females, $general)
+    public function __construct($data, $general)
     {
         $this->data = $data;
-        $this->males = $males;
-        $this->females = $females;
         $this->general = $general;
     }
 
@@ -34,21 +29,16 @@ class BenefitOrderExport implements FromView, WithColumnFormatting, WithStyles, 
     {
         return view('excel.benefitorder', [
             "data" => $this->data,
-            "males" => $this->males,
-            "females" => $this->females,
             "general" => $this->general
         ]);
-    }
-
-    public function columnFormats(): array
-    {
-        return [
-            'L' => '@', // Aquí estableces el formato de la columna L como texto
-        ];
     }
     
     public function drawings()
     {
+        $sData = $this->general['signature'];
+        $lastRow = 5 + count($this->data);
+
+        $drawings = [];
         $drawing = new Drawing();
         $drawing->setName('Logo');
         $drawing->setDescription('This is my logo');
@@ -57,8 +47,19 @@ class BenefitOrderExport implements FromView, WithColumnFormatting, WithStyles, 
         $drawing->setOffsetY(5);
         $drawing->setOffsetX(5);
         $drawing->setCoordinates('A1');
+        $drawings[] = $drawing;
 
-        return $drawing;
+        if($sData) {
+            $signature = new Drawing();
+            $signature->setName('Signature');
+            $signature->setPath(storage_path('app/public/signatures/'.$sData));
+            $signature->setHeight(58);
+            $signature->setOffsetX(5);
+            $signature->setCoordinates('A'.$lastRow);
+            $drawings[] = $signature;
+        }
+
+        return $drawings;
     }
 
     public function styles(Worksheet $sheet)
@@ -73,10 +74,10 @@ class BenefitOrderExport implements FromView, WithColumnFormatting, WithStyles, 
         $sheet->getRowDimension(1)->setRowHeight(90);
         //COL
         $sheet->getColumnDimension('A')->setWidth(6);
-        $sheet->getColumnDimension('B')->setWidth(18);
+        $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(18);
-        $sheet->getColumnDimension('D')->setWidth(18);
-        $sheet->getColumnDimension('E')->setWidth(18);
+        $sheet->getColumnDimension('D')->setWidth(15);
+        $sheet->getColumnDimension('E')->setWidth(28);
         $sheet->getColumnDimension('F')->setWidth(18);
 
 
@@ -110,7 +111,7 @@ class BenefitOrderExport implements FromView, WithColumnFormatting, WithStyles, 
         ];
 
         
-        $sheet->getRowDimension($lastRow+1)->setRowHeight(30);
+        $sheet->getRowDimension($lastRow+1)->setRowHeight(45);
 
         $sheet->getStyle('A'.($lastRow+1).':F'.($lastRow+4))->applyFromArray(['alignment' => [
             'horizontal' => Alignment::HORIZONTAL_CENTER,
