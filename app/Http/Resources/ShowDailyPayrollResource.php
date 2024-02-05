@@ -25,6 +25,7 @@ class ShowDailyPayrollResource extends JsonResource
                 $oResponse['code'] = $oDailyPayroll->incomeForm->code;
                 $oResponse['id_product_type'] = $oDailyPayroll->id_product_type;
                 $oResponse['id_outlet'] = $oDailyPayroll->id_outlet;
+                $oResponse['number'] = $oDailyPayroll->number;
                 $oResponse['sacrifice_date'] = $oDailyPayroll->sacrifice_date;
                 $oResponse['special_order'] = $oDailyPayroll->special_order;
                 return $oResponse;

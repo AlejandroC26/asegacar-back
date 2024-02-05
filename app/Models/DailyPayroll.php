@@ -13,6 +13,7 @@ class DailyPayroll extends Model
         'id_income_form',
         'id_product_type',
         'id_outlet',
+        'number',
         'sacrifice_date',
         'special_order'
     ];

@@ -9,7 +9,7 @@ return [
   'liver' => 'Hígado',
   'lungs' => 'Pulmones',
   'legs' => 'Patas',
-  'udder' => 'Úbere',
+  'udder' => 'Úbre',
   'kidney' => 'Riñón',
   'heart' => 'Corazón',
   'booklet' => 'Librillo',

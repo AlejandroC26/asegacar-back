@@ -173,6 +173,7 @@ class DailyPayrollController extends Controller
                 'daily_payrolls.id', 
                 'id_dp_master', 
                 'id_outlet',
+                'number',
                 'id_income_form',
                 'colors.name as colors',
                 'genders.name as genders',
