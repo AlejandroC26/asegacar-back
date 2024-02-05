@@ -90,17 +90,18 @@ class DailyPayrollExport implements FromView, WithStyles, WithDrawings
         $sheet->getColumnDimension('E')->setWidth(18);
         $sheet->getColumnDimension('F')->setWidth(18);
         $sheet->getColumnDimension('G')->setWidth(16); 
+        $sheet->getColumnDimension('H')->setWidth(16); 
 
 
         // Aquí podrías agregar más estilos si los necesitas
-        $sheet->getStyle('A1:G4')->applyFromArray([
+        $sheet->getStyle('A1:H4')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
             ],
         ]);
         
-        $sheet->getStyle('A4:G6')->applyFromArray([
+        $sheet->getStyle('A4:H6')->applyFromArray([
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
                 'vertical' => Alignment::VERTICAL_CENTER,
@@ -108,7 +109,7 @@ class DailyPayrollExport implements FromView, WithStyles, WithDrawings
         ]);
         // BORDERS
         $lastRow = 5 + count($this->data);
-        $range = 'A1:G'.$lastRow;
+        $range = 'A1:H'.$lastRow;
         $styleArray = [
             'alignment' => [
                 'horizontal' => Alignment::HORIZONTAL_CENTER,
