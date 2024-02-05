@@ -62,7 +62,7 @@ class DispatchGuideExport implements FromView, WithStyles, WithDrawings
         $drawings = [];
 
         $sData = $this->config['signature'];
-        $lastRow = 29 + count($this->data);
+        $lastRow = 31 + count($this->data['inspections']);
 
         $drawing = new Drawing();
         $drawing->setName('Logo');

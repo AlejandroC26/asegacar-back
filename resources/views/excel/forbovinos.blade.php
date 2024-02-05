@@ -39,8 +39,8 @@
         <td><b>CANTIDAD</b></td>
         <td><b>COLOR</b></td>
         <td><b>SEXO</b></td>
-        <td><b>CONSECUTIVO(S)</b></td>
-        <td><b>GUÍA(S)</b></td>
+        <td><b>CONSECUTIVO</b></td>
+        <td><b>GUÍA</b></td>
         <td><b>ORDEN ESPECIAL</b></td>
     </tr>
     @php

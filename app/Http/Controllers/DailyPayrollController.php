@@ -174,13 +174,13 @@ class DailyPayrollController extends Controller
                 'id_dp_master', 
                 'id_outlet',
                 'id_income_form',
-                DB::raw("GROUP_CONCAT(distinct(colors.name) SEPARATOR ', ') as colors"),
-                DB::raw("GROUP_CONCAT(distinct(genders.name) SEPARATOR ', ') as genders"),
-                DB::raw("GROUP_CONCAT(distinct(income_forms.code) SEPARATOR ', ') as codes"),
-                DB::raw("GROUP_CONCAT(distinct(guides.code) SEPARATOR ', ') as guides"),
-                DB::raw("SUM(CASE WHEN id_gender = 1 THEN 1 END) AS total_males"),
-                DB::raw("SUM(CASE WHEN id_gender = 2 THEN 1 END) AS total_females"),
-                DB::raw("GROUP_CONCAT(distinct(daily_payrolls.special_order) SEPARATOR ', ') AS special_order"),
+                'colors.name as colors',
+                'genders.name as genders',
+                "income_forms.code as codes",
+                "guides.code as guides",
+                DB::raw("CASE WHEN id_gender = 1 THEN 1 END AS total_males"),
+                DB::raw("CASE WHEN id_gender = 2 THEN 1 END AS total_females"),
+                "daily_payrolls.special_order AS special_order",
                 'daily_payrolls.created_at'
             )
             ->leftJoin('outlets', 'outlets.id', 'id_outlet')
@@ -191,7 +191,6 @@ class DailyPayrollController extends Controller
             ->leftJoin('daily_payroll_master', 'daily_payroll_master.id', 'id_dp_master')
             ->where('daily_payrolls.sacrifice_date', $request->date)
             ->whereNotNull('id_outlet')
-            ->groupBy('id_outlet')
             ->orderBy(DB::raw('CAST(outlets.code as SIGNED)'), 'ASC')
             ->get();
 

@@ -172,7 +172,7 @@
       <td colspan="5">{{ $inspection['code'] }}</td>
       <td>{{ $inspection['sacrifice_date'] }}</td>
       <td colspan="3">{{ $inspection['cause'] }}</td>
-      <td colspan="2">{{ $inspection['value'] }}</td>
+      <td colspan="2">{{ $inspection['value'] }} {{ $inspection['field'] === 'DESPURGOS' ? 'KG' : '' }}</td>
       <td colspan="5">{{ $inspection['field'] }}</td>
     </tr>
     @endforeach
@@ -191,7 +191,7 @@
       <td colspan="3">{{ $config['vehicle']->refrigerated }}</td>
       <td colspan="2">Isotermo: {{ $config['vehicle']->isothermal }}</td>
       <td colspan="2">Temperatura promedio:</td>
-      <td colspan="4">{{ $config['vehicle']->temperature }}</td>
+      <td colspan="4">{{ $config['vehicle']->temperature }} °C</td>
     </tr>
     <tr>
       <td colspan="17"><b>5. CIERRE DE GUÍA</b></td>

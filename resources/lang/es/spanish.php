@@ -19,4 +19,5 @@ return [
   'destocking' => 'Despurgos',
   'canal' => 'Canal',
   'other_cause' => 'Otra Causa',
+  'other_organ' => 'Otro Órgano'
 ];
