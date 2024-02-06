@@ -23,7 +23,7 @@ class DailyPayrollResource extends JsonResource
             "date" => date_format(date_create($this->date), 'Y-m-d'),
             "guide" => $guide->code,
             "consecutive" => $guide->consecutive,
-            "entries" => count($this->dailyPayrolls)
+            "entries" => count($this->dailyPayrolls())
         ];
     }
 

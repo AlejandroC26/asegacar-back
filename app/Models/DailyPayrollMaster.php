@@ -41,6 +41,8 @@ class DailyPayrollMaster extends Model
     }
 
     public function dailyPayrolls() {
-        return $this->hasManyThrough(DailyPayroll::class, IncomeForm::class, 'id_dp_master', 'id_income_form', 'id', 'id');
+        return $this->incomeForms->map(function($incomeForm) {
+            return $incomeForm->dailyPayroll;
+        });
     }
 }

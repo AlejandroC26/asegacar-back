@@ -21,7 +21,7 @@ class ShowDailyPayrollResource extends JsonResource
             "date" => date_format(date_create($this->date), 'Y-m-d'),
             'id_guide' => $guide->id,
             "guide" => $guide->code,
-            "entries" => $this->dailyPayrolls->map(function($oDailyPayroll) {
+            "entries" => $this->dailyPayrolls()->map(function($oDailyPayroll) {
                 $oResponse['code'] = $oDailyPayroll->incomeForm->code;
                 $oResponse['id_product_type'] = $oDailyPayroll->id_product_type;
                 $oResponse['id_outlet'] = $oDailyPayroll->id_outlet;
