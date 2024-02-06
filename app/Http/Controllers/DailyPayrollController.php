@@ -28,7 +28,7 @@ class DailyPayrollController extends Controller
     public function index()
     {
         try {
-            $aMasterTable = DailyPayrollMaster::has('dailyPayrolls')->get();
+            $aMasterTable = DailyPayrollMaster::has('incomeForms')->get();
             return $this->successResponse(DailyPayrollResource::collection($aMasterTable));
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
