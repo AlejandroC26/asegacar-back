@@ -43,6 +43,8 @@ class DailyPayrollMaster extends Model
     public function dailyPayrolls() {
         return $this->incomeForms->map(function($incomeForm) {
             return $incomeForm->dailyPayroll;
+        })->filter(function($item) {
+            return !is_null($item);
         });
     }
 }

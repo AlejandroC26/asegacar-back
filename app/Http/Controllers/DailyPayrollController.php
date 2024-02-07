@@ -73,6 +73,7 @@ class DailyPayrollController extends Controller
     {
         try {
             $aMasterTable = DailyPayrollMaster::find($id);
+            return $aMasterTable->dailyPayrolls();
             return $this->successResponse(ShowDailyPayrollResource::make($aMasterTable), 'Listado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
@@ -149,7 +150,6 @@ class DailyPayrollController extends Controller
             $dailyPayrolls = DailyPayroll::whereDoesntHave($relation)->whereHas('incomeForm', function(Builder $query) use ($id) {
                 $query->where('id_guide', $id);
             })->get();
-
             $dailyPayrolls = $dailyPayrolls->map(function($dailyPayroll) {
                 return [
                     'id' => $dailyPayroll->id,
