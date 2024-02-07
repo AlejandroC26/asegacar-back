@@ -73,7 +73,6 @@ class DailyPayrollController extends Controller
     {
         try {
             $aMasterTable = DailyPayrollMaster::find($id);
-            return $aMasterTable->dailyPayrolls();
             return $this->successResponse(ShowDailyPayrollResource::make($aMasterTable), 'Listado exitosamente', 200);
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be showed', $exception->getMessage(), 422);
