@@ -30,7 +30,7 @@ class UpdateDailyPayrollRequest extends FormRequest
             'entries' => 'required|array',
             'entries.*.code' => 'required',
             'entries.*.id_product_type' => 'required',
-            'entries.*.id_outlet' => 'required',
+            'entries.*.id_outlet' => 'nullable',
             'entries.*.number' => 'nullable',
             'entries.*.sacrifice_date' => 'required',
             'entries.*.special_order' => 'max:1000',

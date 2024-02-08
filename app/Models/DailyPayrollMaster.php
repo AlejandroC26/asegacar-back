@@ -45,6 +45,6 @@ class DailyPayrollMaster extends Model
             return $incomeForm->dailyPayroll;
         })->filter(function($item) {
             return !is_null($item);
-        });
+        })->values();
     }
 }

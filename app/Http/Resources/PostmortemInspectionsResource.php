@@ -20,9 +20,9 @@ class PostmortemInspectionsResource extends JsonResource
             "date" => date_format(date_create($this->date), 'Y-m-d'),
 
             'id_daily_payroll' => $this->id_daily_payroll,
-            "id_outlet" => $this->dailyPayroll->outlet->id,
-            "outlet" => $this->dailyPayroll->outlet->code,
-            "code" => $this->dailyPayroll->incomeForm->code,
+            "id_outlet" => $this->dailyPayroll->outlet?->id,
+            "outlet" => $this->dailyPayroll->outlet?->code,
+            "code" => $this->dailyPayroll->incomeForm?->code,
 
             'id_head_cause' => $this->id_head_cause,
             'head' => $this->head?->name,
