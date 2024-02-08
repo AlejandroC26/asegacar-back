@@ -45,7 +45,7 @@
       <td colspan="3">Teléfono</td>
       <td colspan="3"><b>{{ $config['company']->phone }}</b></td>
       <td colspan="4">Hora de despacho</td>
-      <td colspan="7">{{ strtoupper(date('a', strtotime($config['dispatch_time']))) }}</td>
+      <td colspan="7">{{ strtoupper(date('H:i a', strtotime($config['dispatch_time']))) }}</td>
     </tr>
     <tr>
       <td colspan="17"><b>2. IDENTIFICACIÓN DEL ESTABLECIMIENTO DESTINO.</b></td>

@@ -18,6 +18,7 @@ return [
   'red_viscera' => 'Vísceras Rojas',
   'destocking' => 'Despurgos',
   'canal' => 'Canal',
+  'other' => 'Otro',
   'other_cause' => 'Otra Causa',
   'other_organ' => 'Otro Órgano'
 ];

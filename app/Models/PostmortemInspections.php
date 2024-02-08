@@ -80,7 +80,7 @@ class PostmortemInspections extends Model
         return collect($fields)->map(function($field) use ($inspection) {
             $translations = trans('spanish');
             $cause = $inspection[$field['field']];
-
+            
             $field['field'] = strtoupper($translations[$field['field']]);
             $field['cause'] = $cause->name ?? '';
             $field['sacrifice_date'] = $inspection->dailyPayroll->sacrifice_date;

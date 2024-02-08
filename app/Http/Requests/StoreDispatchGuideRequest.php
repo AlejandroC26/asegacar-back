@@ -29,8 +29,8 @@ class StoreDispatchGuideRequest extends FormRequest
         return [
             'sacrifice_date' => 'required|date',
             'closing_date' => 'required|date',
-            'closing_time' => 'required',
-            'dispatch_time' => 'required',
+            'closing_time' => 'required|date_format:H:i',
+            'dispatch_time' => 'required|date_format:H:i',
             'average_temperature' => 'required',
             'id_outlet' => 'required',
             'id_vehicle' => 'required',
