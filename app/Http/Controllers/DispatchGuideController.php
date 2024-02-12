@@ -172,15 +172,18 @@ class DispatchGuideController extends Controller
             $config['signature'] = $user?->signature;
             $config['phone'] = $user?->phone;
 
-            foreach ($dispatchGuide->dispatchGuideAnimals as $dispatchGuideAnimal) {
-                $dailyPayroll = $dispatchGuideAnimal->dailyPayroll;
+            $animalsToSacrifice = DailyPayroll::where(['id_outlet' => $dispatchGuide->id_outlet, 'sacrifice_date' => $dispatchGuide->sacrifice_date])->get();
+
+            foreach ($animalsToSacrifice as $dailyPayroll) {
                 $hasInspections = count($dailyPayroll->postmortemInspections) > 0;
                 if($hasInspections) {
                     $matchedFields  = SeizureComparison::onGetMatchesWithData(PostmortemInspections::onGetFieldsToMatch($dailyPayroll->id)); 
                     $matchedCauses  = PostmortemInspections::onGetFieldsCause($dailyPayroll->id, $matchedFields);
                     $data['inspections'] = array_merge($data['inspections'], $matchedCauses);
                 }
+            }
 
+            foreach ($dispatchGuide->dispatchGuideAnimals as $dispatchGuideAnimal) {
                 $productTypeId = $dispatchGuideAnimal->dailyPayroll->id_product_type;
                 if (!isset($data['products'][$productTypeId])) {
                     $data['products'][$productTypeId] = 0;
