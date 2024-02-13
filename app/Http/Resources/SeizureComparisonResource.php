@@ -32,6 +32,7 @@ class SeizureComparisonResource extends JsonResource
             'liver_quantity' => $this->liver_quantity,
             'lungs_quantity' => $this->lungs_quantity,
             'legs_quantity' => $this->legs_quantity,
+            'hands_quantity' => $this->hands_quantity,
             'udder_quantity' => $this->udder_quantity,
             'kidney_quantity' => $this->kidney_quantity,
             'heart_quantity' => $this->heart_quantity,
