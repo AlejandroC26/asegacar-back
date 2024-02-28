@@ -99,7 +99,7 @@ class GuideController extends Controller
         try {   
             $sFileName = $guide->file_attached;
             if($request->file('file_attached')) {
-                $sFileName = $sFileName || 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
+                $sFileName = $sFileName ? $sFileName : 'guide'.date("Ymd_Hms").'.'.$request->file('file_attached')->extension();
                 $request->file('file_attached')->storeAs('public/guide', $sFileName);
             }  
             $guide->update(array_merge($request->validated(), ['file_attached' => $sFileName]));
