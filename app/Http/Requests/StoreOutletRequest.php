@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreOutletRequest extends FormRequest
 {
@@ -26,13 +27,22 @@ class StoreOutletRequest extends FormRequest
     public function rules()
     {
         return [
-            'code' => 'unique:outlets|required',
+            'code' => Rule::unique('outlets')
+                ->where(function ($query) {$query->where('code', $this->code);})
+                ->ignore($this->route('outlet')),
             'customer' => 'max:255',
             'primary_phone' => 'max:255',
             'secondary_phone' => 'max:255',
             'establishment_name' => 'required',
             'establishment_address' => 'max:255',
             'id_city' => 'required'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'code.unique' => 'El código debe ser único en los expendios',
         ];
     }
 
