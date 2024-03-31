@@ -222,7 +222,9 @@ class AgeController extends Controller
                 $sacrificeDate = $oGuide->sacrifice_date;
                 $aResults[$sacrificeDate]["guides"][] = $oGuide->id_guide;
             }
-            return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $config), 'invoices.xlsx');
+
+            $aResults = collect($aResults)->values()->sortBy('date')->values();
+            return Excel::download(new AgeBobinsExport($aResults->toArray(), $oTotals, $oDate, $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
             return $this->errorResponse('The record could not be downloaded', $exception->getMessage(), 422);
         }
