@@ -215,15 +215,12 @@ class AgeController extends Controller
                     $aResults[$sacrificeDate]["purposes"]["milk"] += ($oRecord->id_purpose == 2) ? 1 : 0;
                     $aResults[$sacrificeDate]["purposes"]["double"] += ($oRecord->id_purpose == 3) ? 1 : 0;
                     $aResults[$sacrificeDate]["purposes"]["total"] += ($oRecord->id_purpose >= 1 && $oRecord->id_purpose <= 3) ? 1 : 0;
+                    $aResults[$sacrificeDate]["guides"] = [];
                 }
             }
             foreach ($aGuides as $oGuide) {
                 $sacrificeDate = $oGuide->sacrifice_date;
-                if(!array_key_exists($sacrificeDate, $aResults)) {
-                    $aResults[$sacrificeDate] = ["guides" => [ $oGuide->id_guide ]];
-                } else {
-                    $aResults[$sacrificeDate]["guides"][] = $oGuide->id_guide;
-                }
+                $aResults[$sacrificeDate]["guides"][] = $oGuide->id_guide;
             }
             return Excel::download(new AgeBobinsExport(array_values($aResults), $oTotals, $oDate, $config), 'invoices.xlsx');
         } catch (\Throwable $exception) {
